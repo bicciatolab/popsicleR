@@ -1,0 +1,31 @@
+Package: popsicle
+Type: Package
+Title: Pipeline of Preprocessing for Single Cell Experiment
+Version: 0.1.0
+Author: Jimmy Caroli
+Maintainer: Jimmy Caroli <jimmy.caroli@unimore.it>
+License: GPL3
+Encoding: UTF-8
+Depends:
+  Seurat,
+  reticulate,
+  R.utils,
+  dplyr,
+  ggplot2,
+  SingleR,
+  future,
+  session,
+  grid,
+  gridExtra,
+  magrittr,
+  limma,
+  patchwork, 
+  crayon, 
+  ggExtra, 
+  RColorBrewer,
+  ggplotify,
+  RANN,
+  neldermead
+Suggests:
+  scMCA
+LazyData: true
