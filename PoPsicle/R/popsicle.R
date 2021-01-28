@@ -77,13 +77,19 @@ scrubDoublets <- function(exp,
   obs_umap$scores <- doublet_scores$doublet_scores_obs
   sim_umap <- umap::umap(pca.res$pca_sim, n_neighbors=10, min_dist=0.3, random_state=0)
 
-  pdf(paste0(directory,'/02h_doublets_UMAP.pdf'), height= 15, width= 30)
-  umap1 <- ggplotify::as.grob(~plot(obs_umap$layout, pch=19, col=colors, xlab="UMAP 1", ylab="UMAP 2", main="Observed Doublets", tck= 0, labels=F, cex =1.5, cex.main = 4, cex.lab= 3))
-  umap1 <- ggplotify::as.ggplot(umap1)
-  umap2 <- ggplotify::as.grob(~plot(obs_umap$layout, pch=19, col=pal(nrow(obs_umap$data))[obs_umap$order], xlab="UMAP 1", ylab="UMAP 2", main="Doublet Score", cex=1.5, tck= 0, labels=F, cex.main = 4, cex.lab=3))
-  umap2 <- ggplotify::as.ggplot(umap2)
-  print(patchwork::wrap_plots(umap1 + umap2 + plot_layout(guides = 'collect')))
+  colors<-c("darkgrey","black")[as.factor(obs_umap$predicted)]
+  pal = colorRampPalette(c("white", "red"))
+  obs_umap$order = findInterval(obs_umap$scores, sort(obs_umap$scores))
+  sim_umap$order = findInterval(sim_umap$scores, sort(sim_umap$scores))
+
+  cat(bold(green("Plotting doublets UMAP \n")))
+  pdf(paste0(directory,'/02h_doublets_UMAP.pdf'), height= 15, width= 30,  useDingbats=FALSE)
+  old.par <- par(mfrow=c(1, 2))
+  print(plot(obs_umap$layout, pch=19, col=colors, xlab="UMAP 1", ylab="UMAP 2", main="Observed Doublets", tck= 0, labels=F, cex =1.5, cex.main = 4, cex.lab= 3))
+  print(plot(obs_umap$layout, pch=19, col=pal(nrow(obs_umap$data))[obs_umap$order], xlab="UMAP 1", ylab="UMAP 2", main="Doublet Score", cex=1.5, tck= 0, labels=F, cex.main = 4, cex.lab=3))
+  par(old.par)
   dev.off()
+  cat(paste0(silver("Plots saved in: ")),bold(silver("02.QC_Plots\\02h_doublets_UMAP.pdf \n")))
 
   return(list(scrubDoublets = predicted_doublets, doublet_scores_obs = doublet_scores$doublet_scores_obs, doublet_scores_sim = doublet_scores$doublet_scores_sim))
 
@@ -364,6 +370,7 @@ histogramDoubletScores <- function(doublet_scores_obs, doublet_scores_sim, direc
   dat_sim$clust[dat_sim$doublet_scores > predicted_threshold] <- 2
   dat_sim$clust <- factor(dat_sim$clust)
 
+  cat(bold(green("Plotting histogram of doublet scores \n")))
   p_obs <- ggplot2::ggplot(dat_obs, aes(x = doublet_scores))
   p_obs <- p_obs + geom_histogram(aes(fill = clust), binwidth = 0.02, color = "grey50")
   p_obs <- p_obs + geom_vline(xintercept = predicted_threshold, color = "blue")
@@ -379,9 +386,10 @@ histogramDoubletScores <- function(doublet_scores_obs, doublet_scores_sim, direc
   p_sim2 <- ggplot2::ggplot(dat_sim, aes(x = doublet_scores)) + stat_density(geom="line", color="red") + geom_vline(xintercept = predicted_threshold, color = "blue")
   p_sim2 <- p_sim2 + labs(x="Doublet scores", y="Density", title="") + theme_classic(base_size = 10) + theme(legend.position="none") + theme(plot.title = element_text(hjust = 0.5))
   #
-  pdf(paste0(directory,"/02j_histogram of doublet scores.pdf"),8,8)
+  pdf(paste0(directory,"/02j_histogram of doublet scores.pdf"),8,8, useDingbats=FALSE)
   gridExtra::grid.arrange(p_obs, p_sim, p_obs2, p_sim2, nrow = 2, ncol = 2)
   dev.off()
+  cat(paste0(silver("Plots saved in: ")),bold(silver("02.QC_Plots\\02j_histogram of doublet scores.pdf \n")))
 
   return(predicted_threshold)
 
@@ -478,7 +486,7 @@ plotGene <- function(genelist, umi, dir){
 
 algo_plot <- function(dir, data, type, plot_name, res){
   pdf(file.path(paste0(dir, plot_name, "_", type,".pdf")), width=10, height=10, useDingbats=FALSE)
-  print(DimPlot(data, reduction=type, group.by=paste0("RNA_snn_res.",res), label=T, pt.size=1) +
+  print(DimPlot(data, reduction=type, group.by=paste0("RNA_snn_res.",res), label=T, pt.size=1, repel=TRUE) +
           ggplot2::xlab(paste0(toupper(type), " 1")) +
           ggplot2::ylab(paste0(toupper(type), " 2")) +
           ggplot2::ggtitle(paste0("Cluster @ res ", res)) +
@@ -550,16 +558,8 @@ FTP <- function(data, directory, graph_value, dimensional_redux, H, to_be_plotte
   invisible(dev.off())
 }
 
-VLN <- function(directory, filename, data, H, feats, point=FALSE){
-  pdf(paste0(directory, filename), width=24, height=H, useDingbats=FALSE)
-          vln1 <- VlnPlot(data, features=feats[1], pt.size=point, cols="tomato") + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) + NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
-          vln2 <- VlnPlot(data, features=feats[2], pt.size=point, cols="tomato") + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) + NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
-          vln3 <- VlnPlot(data, features=feats[3], pt.size=point, cols="dodgerblue") + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) + NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
-          vln4 <- VlnPlot(data, features=feats[4], pt.size=point, cols="yellow") + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) + NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
-          vln5 <- VlnPlot(data, features=feats[5], pt.size=point, cols="firebrick") + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) + NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
-          print(patchwork::wrap_plots(vln1 | vln2 | vln3 | vln4 | vln5 + plot_layout(guides = 'collect') + NoLegend()) +
-                  plot_annotation(theme=theme(plot.title = element_text(hjust = 0.5, face="bold"))))
-  invisible(dev.off())
+VLN <- function(data, H, feats, colours=NULL, point=FALSE){
+  VlnPlot(data, features=feats, cols=colours, pt.size=point) + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA)
 }
 
 DTP <- function(data, markers, annotation){
@@ -599,7 +599,6 @@ annotation_plot <- function(directory, graph_value, data, redux, annotation, fil
   invisible(dev.off())
 }
 
-# da vedere se queste variabili sono tutte corrette
 PrePlots <- function(sample, input_data, genelist, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism="human", out_folder=getwd()){
   ### Root directory
   root <- out_folder
@@ -608,9 +607,9 @@ PrePlots <- function(sample, input_data, genelist, percentage=0.1, gene_filter=2
   QC_dir <- paste0(root,"/02.QC_Plots/")
   if (!file.exists(QC_dir)){dir.create(QC_dir, recursive=T)}
   ### PreProcessing directory
-  ################################################################################
-  ###   loading of the dataset
-  ################################################################################
+  ###########################
+  ###   dataset loading   ###
+  ###########################
   if (cellranger == TRUE){
     umi_data <- Read10X(data.dir=input_data) #check if 10X data or not
   } else {
@@ -625,25 +624,33 @@ PrePlots <- function(sample, input_data, genelist, percentage=0.1, gene_filter=2
   # min.features: Include cells where at least this many features are detected
   umi <- CreateSeuratObject(counts=umi_data, min.cells=n_cells, min.features=n_genes, project=sample)
   Starting_Cells <- ncol(umi)
-  ################################################################################
-  ###	  calculation of QC metrics
-  ################################################################################
-  ### calculate the percentage of mitochondrial genes
-  dissociation_genes <- read.table("dissociation_genes.txt", header = F, stringsAsFactors = F)$V1 #change here
-  dissociation_gene <- paste(dissociation_genes, collapse='|')
-
+  #####################################
+  ###	  calculation of QC metrics   ###
+  #####################################
+  ### calculate the percentage of mitochondria, ribosomal and dissociation genes
+  dissociation_genes <- c("ACTG1","ANKRD1","ARID5A","ATF3","ATF4","BAG3","BHLHE40","BRD2","BTG1","BTG2","CCNL1","CCRN4L","CEBPB","CEBPD","CEBPG","CSRNP1","CXCL1","CYR61","DCN","DDX3X","DDX5","DES","DNAJA1","DNAJB1","DNAJB4","DUSP1","DUSP8","EGR1","EGR2","EIF1","EIF5","ERF","ERRFI1","FAM132B","FOS","FOSB","FOSL2","GADD45A","GADD45G","GCC1","GEM","H3F3B","HIPK3","HSP90AA1","HSP90AB1","HSPA1A","HSPA1B","HSPA5","HSPA8","HSPB1","HSPE1","HSPH1","ID3","IDI1","IER2","IER3","IER5","IFRD1","IL6","IRF1","IRF8","ITPKC","JUN","JUNB","JUND","KCNE4","KLF2","KLF4","KLF6","KLF9","LITAF","LMNA","MAFF","MAFK","MCL1","MIDN","MIR22HG","MT1","MT2","MYADM","MYC","MYD88","NCKAP5L","NCOA7","NFKBIA","NFKBIZ","NOP58","NPPC","NR4A1","ODC1","OSGIN1","OXNAD1","PCF11","PDE4B","PER1","PHLDA1","PNP","PNRC1","PPP1CC","PPP1R15A","PXDC1","RAP1B","RASSF1","RHOB","RHOH","RIPK1","SAT1","SBNO2","SDC4","SERPINE1","SKIL","SLC10A6","SLC38A2","SLC41A1","SOCS3","SQSTM1","SRF","SRSF5","SRSF7","STAT3","TAGLN2","TIPARP","TNFAIP3","TNFAIP6","TPM3","TPPP3","TRA2A","TRA2B","TRIB1","TUBB4B","TUBB6","UBC","USP2","WAC","ZC3H12A","ZFAND5","ZFP36","ZFP36L1","ZFP36L2","ZYX")
+  dissociation_genes <- paste(dissociation_genes, collapse='|')
+  #
   if(organism == 'human'){
     umi[["percent_mt"]] <- PercentageFeatureSet(umi, pattern = "^MT-")
     umi[["percent_ribo"]] <- PercentageFeatureSet(umi, pattern = '^RPL|^RPS|^MRPL|^MRPS')
-    umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = dissociation_gene)
+    umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = dissociation_genes)
   } else if(organism == 'mouse') {
     umi[["percent_mt"]] <- PercentageFeatureSet(umi, pattern = "^mt-")
     umi[["percent_ribo"]] <- PercentageFeatureSet(umi, pattern ='^Rpl|^Rps|^Mrpl|^Mrps')
     umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = toLower(dissociation_genes))
   }
-  ### Violin Plot on number of gene, number of UMI and fraction of mitochondrial genes
+  ### Violin Plot on number of genes, number of UMI and fraction of mitochondrial genes
   cat(bold(green("Plotting QC Violin plots \n")))
-  popsicle:::VLN(QC_dir, "02a_violin_plots.pdf", umi, 10, feats=c("nFeature_RNA", "nCount_RNA", "percent_mt", "percent_ribo", "percent_disso"), 0.01)
+  pdf(paste0(QC_dir, "02a_violin_plots.pdf"), width=24, useDingbats=FALSE)
+  vln1 <- popsicle:::VLN(umi, 10, feats="nFeature_RNA", colours= "tomato", 0.01)+ NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
+  vln2 <- popsicle:::VLN(umi, 10, feats="nCount_RNA", colours= "tomato", 0.01)+ NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
+  vln3 <- popsicle:::VLN(umi, 10, feats="percent_mt", colours= "dodgerblue", 0.01)+ NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
+  vln4 <- popsicle:::VLN(umi, 10, feats="percent_ribo", colours= "yellow", 0.01)+ NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
+  vln5 <- popsicle:::VLN(umi, 10, feats="percent_disso", colours= "firebrick", 0.01)+ NoLegend() + theme(axis.text.x=element_text(angle=0, hjust=0.5)) + ggplot2::xlab("")
+  print(patchwork::wrap_plots(vln1 | vln2 | vln3 | vln4 | vln5 + plot_layout(guides = 'collect') + NoLegend()) +
+          plot_annotation(theme=theme(plot.title = element_text(hjust = 0.5, face="bold"))))
+  invisible(dev.off())
   cat(paste0(silver("Plots saved in: ")),bold(silver("02.QC_Plots\\02a_violin_plots.pdf \n")))
   ### Density plot
   cat(bold(green("Plotting QC Density plots \n")))
@@ -687,10 +694,11 @@ PrePlots <- function(sample, input_data, genelist, percentage=0.1, gene_filter=2
                                 plot_annotation(title = unique(as.character(umi@meta.data$orig.ident)), theme=theme(plot.title = element_text(hjust = 0.5, face="bold")), tag_levels = 'A') + NoLegend())
   invisible(dev.off())
   cat(paste0(silver("Plots saved in: ")),bold(silver("02.QC_Plots\\02c_QC_Scatter_nGene_nUMI_MTf.pdf \n")))
-  ################################################################################
-  ###   check for presence and number of selected genes
-  ################################################################################
-  # cerca nello slot counts i valori per quel gene specifico, in questo caso CD3D
+  #
+  ###########################################################
+  ###   check for presence and number of selected genes   ###
+  ###########################################################
+  #
   #umi@meta.data$[, paste0(opt$gene, '_expressed')]
   if(length(genelist)!=0){
     #for (gene in genelist)
@@ -702,14 +710,16 @@ PrePlots <- function(sample, input_data, genelist, percentage=0.1, gene_filter=2
 }
 
 FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA_hi = Inf, percent_mt_hi = 100, percent_ribo_hi = 100, percent_disso_hi = 100, out_folder=getwd()){
-  ################################################################################
-  ###   define and apply thresholds
-  ################################################################################
+  #######################################
+  ###   define and apply thresholds   ###
+  #######################################
   QC_dir <- paste0(out_folder,"/02.QC_Plots/")
   if (!file.exists(QC_dir)){dir.create(QC_dir, recursive=T)}
   # nFeature: the number of genes detected in each cell
   # nCount_RNA: the total number of molecules detected within a cell
   # percent_mt: percentage of mitochondrial genes (previously calculated)
+  # percent_ribo: percentage of ribosomal genes (previously calculated)
+  # percent_disso: percentage of dissociation genes (previously calculated)
   umi <- subset(UMI, subset = nFeature_RNA > G_RNA_low &
                               nFeature_RNA < G_RNA_hi &
                               nCount_RNA   > U_RNA_low &
@@ -737,6 +747,7 @@ FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA
   disso.dn.lim <- ggplot2::geom_vline(xintercept=percent_disso_hi, linetype="dashed", color="darkgrey")
   disso.dn.lim.y <- ggplot2::geom_hline(yintercept=percent_disso_hi, linetype="dashed", color="darkgrey")
   ### distribution of total number of gene detected per cell
+  cat(bold(green("Plotting QC final plots \n")))
   pdf(paste0(QC_dir, "/02f_final_plots.pdf"),width=20, height=10, useDingbats=FALSE)
   plot.title <- "density total genes"
   final <- ggplot2::ggplot(umi@meta.data, ggplot2::aes(x=nFeature_RNA, color=orig.ident, fill=orig.ident)) +
@@ -765,8 +776,9 @@ FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA
   final6 <- ggplot2::ggplot(umi@meta.data, ggplot2::aes(x=percent_disso, color=orig.ident, fill=orig.ident)) +
     ggplot2::geom_density(size=0.5, alpha=0.2, color="red", fill="firebrick") + ggplot2::ggtitle(plot.title) + theme(plot.title = element_text(hjust = 0.5, face ="bold")) + NoLegend() + theme(axis.title.y = element_blank(),axis.text.y = element_blank(),axis.ticks.y = element_blank()) + disso.dn.lim
   print(patchwork::wrap_plots(final4 + final5 + final6 + plot_layout(guides = 'collect')))
-  #suppressMessages(ggplot2::ggsave(paste0(QC_dir, "/02f_final_plots.pdf"),width=20, height=10, useDingbats=FALSE))
   invisible(dev.off())
+  cat(paste0(silver("Plots saved in: ")),bold(silver("02.QC_Plots\\02f_final_plots.pdf \n")))
+  cat(bold(green("Plotting QC final scatter plots \n")))
   pdf(paste0(QC_dir, "/02f_final_scatter_plots.pdf"),width=20, height=10, useDingbats=FALSE)
   plot1 <- FeatureScatter(umi, feature1="nFeature_RNA", feature2="nCount_RNA", cols="tomato") +  theme(plot.title=element_blank()) +
     genes.dn.lim + genes.up.lim + umi.dn.lim.y + umi.up.lim.y + NoLegend()
@@ -779,18 +791,17 @@ FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA
   plot5 <- FeatureScatter(umi, feature1="nCount_RNA", feature2="percent_disso", cols="firebrick") + theme(plot.title=element_blank()) +
     umi.dn.lim + umi.up.lim + disso.dn.lim.y + ggplot2::xlim(0,5000) + NoLegend()
   print(patchwork::wrap_plots(plot1 | plot2 + plot3 + plot4 + plot5+ plot_layout(guides = 'collect') + NoLegend()))
- #suppressMessages(ggplot2::ggsave(paste0(QC_dir, "/02f_final_scatter_plots.pdf"),width=4*7, height=20, useDingbats=FALSE)) #QC_dir è da settare
   invisible(dev.off())
+  cat(paste0(silver("Plots saved in: ")),bold(silver("02.QC_Plots\\02f_final_scatter_plots \n")))
+  cat(paste0(cyan("Next suggested step is Doublets Calculation, run ")),bold(cyan("Calculate Doublets \n")))
   return(umi)
 }
 
 CalculateDoublets <- function(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=getwd()){
   QC_dir <- paste0(out_folder,"/02.QC_Plots/")
   if (!file.exists(QC_dir)){dir.create(QC_dir, recursive=T)}
-  mtx_tranposed <- BiocGenerics::t(UMI@assays$RNA@counts)
   ### calculate doublets
-  #old code do_doublets(mtx_tranposed, QC_dir, 0.1, FALSE)
-  doublets <- scrubDoublets(mtx_tranposed, directory=QC_dir, expected_doublet_rate=0.1)
+  doublets <- scrubDoublets(as.matrix(UMI@assays$RNA@counts), directory=QC_dir, expected_doublet_rate=0.1)
   #return(list(scrubDoublets = predicted_doublets, doublet_scores_obs = doublet_scores$doublet_scores_obs, doublet_scores_sim = doublet_scores$doublet_scores_sim))
   names(doublets) <- c("predicted", "score_predicted", "score_simulated")
   ### if doublets exist, calculate, set to 0 otherwise
@@ -804,20 +815,24 @@ CalculateDoublets <- function(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=g
   UMI$doublets_score <- doublets$score_predicted
   UMI$doublets <- doublets$predicted
   if(dbs_remove == TRUE){
+    cat(paste0(green("Removing Doublets \n")))
     UMI <- UMI[,!UMI$doublets]
   }
   return(UMI)
+  cat(paste0(cyan("Next suggested step is data normalization, run ")),bold(cyan("Normalize \n")))
 }
 
 Normalize <- function(UMI, variable_genes=2000, out_folder=getwd()){
   PP_dir <- paste0(out_folder,"/03.PreProcessing/")
   if (!file.exists(PP_dir)){dir.create(PP_dir, recursive=T)}
   umi <- NormalizeData(object=UMI, normalization.method="LogNormalize", scale.factor=1e4)
+  cat(bold(green("Plotting Normalization graphs \n")))
   pdf(paste0(PP_dir, "/03a_total_expression_after_before_norm.pdf"), useDingbats=FALSE)
   par(mfrow = c(2,1))
   hist(colSums(as.matrix(umi@assays$RNA@counts)), breaks=100, main="Total expression before normalization", xlab="Sum of expression")
   hist(colSums(as.matrix(umi@assays$RNA@data)), breaks=100, main="Total expression after normalization", xlab="Sum of expression")
   invisible(dev.off())
+  cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing\\03a_total_expression_after_before_norm.pdf \n")))
   umi <- FindVariableFeatures(umi, selection.method = "vst", nfeatures = variable_genes)
   # Identify the 10 most highly variable genes
   top10 <- head(VariableFeatures(umi), 10)
@@ -825,9 +840,12 @@ Normalize <- function(UMI, variable_genes=2000, out_folder=getwd()){
   plot1 <- VariableFeaturePlot(umi)
   plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
   # When using repel, set xnudge and ynudge to 0 for optimal results
+  cat(bold(green("Plotting High Variables Genes \n")))
   pdf(paste0(PP_dir, "/03b_plot_FindVariableGenes.pdf"), useDingbats=FALSE)
   print(patchwork::wrap_plots(plot1 / plot2 + plot_layout(guides = 'collect')), ncol=1, nrow=2)
+  cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing\\03b_plot_FindVariableGenes.pdf \n")))
   invisible(dev.off())
+  cat(paste0(cyan("Next suggested step is calculate Cell Cycle Score, run ")),bold(cyan("CCScore \n")))
   return(umi)
 }
 
@@ -842,8 +860,10 @@ CCScore <- function(UMI, organism='human'){
     m.g2m.genes <- c("Nuf2", "Psrc1", "Ncapd2", "Ccnb2", "Smc4", "Lbr", "Tacc3", "Cenpa", "Kif23", "Cdca2", "Anp32e", "G2e3", "Cdca3", "Anln", "Cenpe", "Gas2l3", "Tubb4b", "Cenpf", "Dlgap5", "Hjurp", "Cks1brt", "Gtse1", "Bub1", "Birc5", "Ube2c", "Rangap1", "Hmmr", "Ect2", "Tpx2", "Ckap5", "Cbx5", "Nek2", "Ttk", "Cdca8", "Nusap1", "Ctcf", "Cdc20", "Cks2", "Mki67", "Tmpo", "Ckap2l", "Aurkb", "Kif2c", "Cdk1", "Kif20b", "Top2a", "Aurka", "Ckap2", "Hmgb2", "Cdc25c", "Ndc80", "Kif11")
     m.s.genes <- intersect(m.s.genes, row.names(UMI@assays$RNA@counts))
     m.g2m.genes <- intersect(m.g2m.genes, row.names(UMI@assays$RNA@counts))
+    cat(bold(green("Calculating Cell Cycle Score \n")))
     umi <- CellCycleScoring(UMI, s.features=m.s.genes, g2m.features=m.g2m.genes, set.ident=T)
   }
+  cat(paste0(cyan("Next suggested step is regression, run ")),bold(cyan("ApplyRegression")),cyan("\nIt is suggested to apply regression without providing any variables to regress and without exploring PCs (explore_PC=FALSE) to save time and computational effort.\nRegression variables can be chosen through visual inspection of this function outputs \nOnce selected, set explore_PC as TRUE and explore graphs to identify the PCs number to use in your analysis"))
   return(umi)
 }
 
@@ -858,30 +878,35 @@ ApplyRegression <- function(UMI, variables='none', explore_PC=FALSE,  out_folder
   UMI <- suppressMessages(RunTSNE(UMI, dims = 1:20))
   UMI <- suppressWarnings(RunUMAP(UMI, dims = 1:20, verbose=FALSE))
   ### Single pdf with 3 pages, 4 plots per page
+  cat(bold(green("Plotting dimensional reduction graphs with no regression \n")))
   pdf(file.path(PP_dir, "/03c_DimReduction_NoRegression.pdf"), width=14, height=12, useDingbats=FALSE)
   popsicle:::four_plots(UMI, "pca")
   popsicle:::four_plots(UMI, "tsne")
   popsicle:::four_plots(UMI, "umap")
   invisible(dev.off())
-  cycle.dir <- paste0(PP_dir,paste(unlist(variables), collapse='_')) ## sempre guardare 'variables'
+  cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing\\03c_DimReduction_NoRegression.pdf \n")))
+  cycle.dir <- paste0(PP_dir,paste(unlist(variables), collapse='_'))
   if (!file.exists(cycle.dir)){dir.create(cycle.dir)}
   ### inizio non fare se NULL ###
   if (variables != 'none'){
-    UMI <- ScaleData(object=UMI, features=all.genes, vars.to.regress=variables) ## lista passata da input funzione
+    UMI <- ScaleData(object=UMI, features=all.genes, vars.to.regress=variables)
   ### perform PCA on the scaled data.
     UMI <- RunPCA(UMI, features=UMI[["RNA"]]@var.features, npcs=20, do.print=F, verbose=FALSE)
     UMI <- suppressMessages(RunTSNE(UMI, dims = 1:20))
     UMI <- suppressWarnings(RunUMAP(UMI, dims = 1:20, verbose=FALSE))
   ### NEW (old "PCAPlot" function) PCA plots
+    cat(bold(green("Plotting dimensional reduction graphs after regression \n")))
     pdf(file.path(cycle.dir, "/03c_DimReduction_PostRegression.pdf"), width=14, height=12, useDingbats=FALSE)
     popsicle:::four_plots(UMI, "pca")
     popsicle:::four_plots(UMI, "tsne")
     popsicle:::four_plots(UMI, "umap")
     invisible(dev.off())
+    cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing\\"),silver(cycle.dir), silver("\\03c_DimReduction_NoRegression.pdf \n")))
   }
   ### fine non fare se null ####
   ### NEW (old VizPCA)
   ### se explore_PC = true ###
+  cat(bold(green("Plotting graphs to explore PCs \n")))
   if (explore_PC == TRUE){
     pdf(paste0(cycle.dir, "/03d_VizPCA_HVG.pdf"), useDingbats=FALSE)
     print(VizDimLoadings(UMI, dims = 1:2, reduction = "pca"))
@@ -891,7 +916,7 @@ ApplyRegression <- function(UMI, variables='none', explore_PC=FALSE,  out_folder
   ### Determine statistically significant principal components ###
   # 1. exploring PCs to determine relevant sources of heterogeneity (could be used in conjunction with GSEA for example)
   ### NEW function (OLD PCHeatmap)
-    pdf(paste0(cycle.dir, "/03f_PCHeatmap.pdf"), width=9, height=12, useDingbats=FALSE)  # add codice from Mattia for splitting pages
+    pdf(paste0(cycle.dir, "/03f_PCHeatmap.pdf"), width=9, height=12, useDingbats=FALSE)
     DimHeatmap(UMI, dims=1:9, cells = 500, balanced = TRUE)
     DimHeatmap(UMI, dims=10:18, cells = 500, balanced = TRUE)
     DimHeatmap(UMI, dims=19:27, cells = 500, balanced = TRUE)
@@ -907,13 +932,16 @@ ApplyRegression <- function(UMI, variables='none', explore_PC=FALSE,  out_folder
     pdf(paste0(cycle.dir, "/03h_PCElbowPlot.pdf"), useDingbats=FALSE)
     print(ElbowPlot(object=UMI, ndims=30))
     invisible(dev.off())
-  }
+    cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing\\"),silver(cycle.dir), silver("subfolder \n")))
+    cat(paste0(cyan("Once identified the PCs number to use in your analysis, perform clustering running "),bold(cyan("Calculate Cluster \n"))))
+    }
   ### fine explore_pc ###
+  cat(paste0(cyan("Next suggested step is clustering, run "),bold(cyan("Calculate Cluster"))))
   return(UMI)
 }
 
 CalculateCluster <- function(UMI, dim_pca, organism="human", immune.markers='none', PCA=TRUE, cluster_res=0.8, out_folder=getwd()){
-  #dimpca --> numero di principial components
+  #dimpca --> numero di principal components
   #cluster_res --> cluster resolution (default 0.8)
   Cluster_dir <- paste0(out_folder,"/04.Clustering/")
   if (!file.exists(Cluster_dir)){dir.create(Cluster_dir, recursive=T)}
@@ -975,7 +1003,6 @@ CalculateCluster <- function(UMI, dim_pca, organism="human", immune.markers='non
   for(algo in algos){
     popsicle:::algo_plot(Cluster_dir, UMI, algo, "04a_clusters" , cluster_res)
   }
-  ##### to check / forse usare DimPlot
   if ("doublets" %in% colnames(UMI@meta.data)){
     popsicle:::FTP(UMI, Cluster_dir, "04c_", "umap", 10, to_be_plotted=c("doublets","doublets_score"), "_doublets_umap")
     popsicle:::FTP(UMI, Cluster_dir, "04c_", "tsne", 10, to_be_plotted=c("doublets","doublets_score"), "_doublets_tsne")
@@ -988,14 +1015,13 @@ CalculateCluster <- function(UMI, dim_pca, organism="human", immune.markers='non
   top.markers.2 <- umi.markers %>% dplyr::group_by(cluster) %>% dplyr::top_n(n=2, wt=avg_logFC)
   ftp_h = 5+(0.5*length(levels((umi.markers$cluster))))
   ### visualize markers by violin plots
-  pdf(paste0(Cluster_dir, "/04b_Violin_top.markers.pdf"), width=12, height=9, useDingbats=FALSE)
+  cat(bold(green("Plotting Top Markers graphs for each cluster \n")))
+    pdf(paste0(Cluster_dir, "/04b_Violin_top.markers.pdf"), width=12, height=9, useDingbats=FALSE)
   for(cluster in unique(top.markers.2$cluster)) {
     genes <- top.markers.2$gene[top.markers.2$cluster == cluster]
-    vg1 <- VlnPlot(UMI, features=genes[1], pt.size=FALSE, ncol=1) +
-      ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) +
-      NoLegend() +
-      ggplot2::xlab("")
-    vg2 <- VlnPlot(UMI, features=genes[2], pt.size=FALSE, ncol=1) +
+    #vg1 <- popsicle:::VLN(UMI, features=genes[1], pt.size=FALSE, ncol=1) + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) + NoLegend() + ggplot2::xlab("")
+    vg1 <- popsicle:::VLN(UMI, feats=genes[1], point =FALSE) + ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) + NoLegend() + ggplot2::xlab("")
+    vg2 <- popsicle:::VLN(UMI, feats=genes[2], point =FALSE) +
       ggplot2::geom_boxplot(width=0.1, outlier.shape=NA) +
       NoLegend() +
       ggplot2::xlab(paste("Cluster",cluster))
@@ -1038,11 +1064,11 @@ CalculateCluster <- function(UMI, dim_pca, organism="human", immune.markers='non
   pdf(paste0(Cluster_dir, "/04f_heatmap_top.markers.pdf"), width=18, height=5+(0.5*length(levels((umi.markers$cluster)))), useDingbats=FALSE)
   print(DoHeatmap(UMI, features=top.markers.10$gene) + NoLegend())
   invisible(dev.off())
+  cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Clustering\\")), silver("folder \n"))
   ### Visualize common immune markers on a dimensional reduction plot
   ### filtering default immune markers list based on genes in the dataset
   ### old intersect for immune markers list with no cell line classification
   ### new intersection and subset for immune markers list with cell line classification [EDIT]
-  ### THIS WORKS ONLY FOR MOUSE RIGHT NOW
   immune.markers <- lapply(immune.markers, function(x) {x[x %in% row.names(UMI)]})
   ### remove empty lists
   immune.markers <- immune.markers[lapply(immune.markers,length)>0]
@@ -1050,14 +1076,16 @@ CalculateCluster <- function(UMI, dim_pca, organism="human", immune.markers='non
   #A set of default immune markers is available. These markers are:
   #Plotting UMAP and TSNE for immune markers
   ftp_h = 8+(0.8*length(immune.markers))
+  cat(bold(green("Plotting Proprietary list Markers graphs for each cluster \n")))
   popsicle:::FTP(UMI, Cluster_dir, "04d_", "umap", ftp_h, unlist(immune.markers), "_immune.markers")
   popsicle:::FTP(UMI, Cluster_dir, "04d_", "tsne", ftp_h, unlist(immune.markers), "_immune.markers")
   ### visualize common markers by violin plots
-  popsicle:::VLN(Cluster_dir, "/04e_Violin_immune.markers.pdf", UMI, ftp_h, unlist(immune.markers))
-  ### dotplot of immune markers for each cluster [TO CHANGE]
+  pdf(paste0(Cluster_dir, "/04e_Violin_immune.markers.pdf"), height = ftp_h, useDingbats=FALSE)
+  print(popsicle:::VLN(UMI, 10, unlist(immune.markers)))
+  dev.off()
+  ### dotplot of immune markers for each cluster
   pdf(paste0(Cluster_dir, "04f_Dotplot_immune.markers.per.cluster.pdf"), width=18, height=8, useDingbats=FALSE)
-  popsicle:::DTP(UMI, immune.markers, "seurat_clusters")
-  ### OLD DotPlot graph code
+  print(popsicle:::DTP(UMI, immune.markers, "seurat_clusters"))
   invisible(dev.off())
   ##### (TEST) assign clusters (before annotation)
   #require(Seurat)
@@ -1065,6 +1093,8 @@ CalculateCluster <- function(UMI, dim_pca, organism="human", immune.markers='non
   pdf(paste0(Cluster_dir, "/04g_Clusters_tree.pdf"), width=10, height=10, useDingbats=FALSE)
   print(PlotClusterTree(UMI))
   invisible(dev.off())
+  cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Clustering\\")), silver("folder, files are named with the prefixes 4d, 4e, 4f, 4g \n"))
+  cat(paste0(cyan("Next suggested step is annotation, run "),bold(cyan("MakeAnnotation \n"))))
   return(UMI)
 }
 
@@ -1088,9 +1118,9 @@ MakeAnnotation <- function(umi_scaled, organism, markers='none', thresh=20, out_
                              DC=c("CD1E", "FCER1A"),
                              Platelet=c("PPBP", "ITGA2B"))
     }
-    ### retrive reference dataset
+    ### retrieve reference dataset
     # returns a SummarizedExperiment object (scater package) containing matrix of log-expression values with sample-level labels
-    # other reference datasets are avaible, check the vignette
+    # other reference datasets are available, check the vignette
     ##########################################################
     ### Visualize common immune markers on a dimensional reduction plot
     ### filtering default immune markers list based on genes in the dataset
@@ -1101,16 +1131,20 @@ MakeAnnotation <- function(umi_scaled, organism, markers='none', thresh=20, out_
     markers <- markers[lapply(markers,length)>0]
     hpca.se <- suppressMessages(SingleR::HumanPrimaryCellAtlasData())
     BpEn.se <- suppressMessages(SingleR::BlueprintEncodeData())
+    cat(bold(green("Plotting single cell and cluster annotations \n")))
     umi_scaled <- popsicle:::SR_plots("hpca", hpca.se, umi_scaled, Annot_dir)
     umi_scaled <- popsicle:::SR_plots("BpEn", BpEn.se, umi_scaled, Annot_dir)
+    cat(paste0(silver("Plots saved in: ")),bold(silver("\\05.Annotation\\")), silver("folder, with the prefixes 5a and 5b \n"))
     annotations <- c("hpca.sc.main.labels","BpEn.sc.main.labels")
+    cat(bold(green("Plotting dimensional reduction graphs for each population found in the sample \n")))
     for(single_annot in annotations){
       popsicle:::annotation_plot(Annot_dir, "05c_", umi_scaled, "UMAP", single_annot, "CellPopulations")
       popsicle:::annotation_plot(Annot_dir, "05c_",  umi_scaled, "TSNE", single_annot, "CellPopulations")
-      pdf(paste0(Annot_dir, paste0("/05d_DotPlot_Immune_Markers_", single_annot, "ImmGen.pdf"), width=40, height=10, useDingbats=FALSE))
+      pdf(paste0(Annot_dir, paste0("/05d_DotPlot_Immune_Markers_", single_annot, "ImmGen.pdf")), width=20, height=10, useDingbats=FALSE)
       popsicle:::DTP(umi_scaled, markers, single_annot)
       invisible(dev.off())
     }
+    cat(paste0(silver("Plots saved in: ")),bold(silver("\\05.Annotation\\")), silver("folder, with the prefixes 05c and 05d \n"))
   } else if(organism == 'mouse') {
     require("scMCA")
     if(markers == 'none'){
@@ -1153,7 +1187,7 @@ MakeAnnotation <- function(umi_scaled, organism, markers='none', thresh=20, out_
     ### Loaded reference datasets (ImmGen)
     ### Performing data simplification
     ### simplification of labels
-    simple_assignment <- do.call(rbind,strsplit(scMCA_assignment,"(", fixed=T)) #the fuck do.call
+    simple_assignment <- do.call(rbind,strsplit(scMCA_assignment,"(", fixed=T))
     simple_assignment <- unlist(simple_assignment[,1])
     simple_assignment <- toupper(simple_assignment)
     simple_assignment <- gsub("CELLS","CELL", simple_assignment)
@@ -1166,37 +1200,43 @@ MakeAnnotation <- function(umi_scaled, organism, markers='none', thresh=20, out_
     umi_scaled$scMCA <- scMCA_assignment
     umi_scaled$scMCA_simple <- simple_assignment
     ### Plot TSNE scMCA
+    cat(bold(green("Plotting tSNE scMCA annotation \n")))
     pdf(paste0(Annot_dir, "/05a_tsne_scMCA_simple.pdf"), width=12, height=10, useDingbats=FALSE)
     print(DimPlot(umi_scaled, reduction="tsne", group.by="scMCA_simple", label=T, pt.size=1) +
             ggplot2::ggtitle(paste0("scMCA simple - "," single cell annotation")) +
             ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5)) +
             ggplot2::guides(col=ggplot2::guide_legend(ncol=1)))
     invisible(dev.off())
+    cat(paste0(silver("Plots saved in: ")),bold(silver("\\05.Annotation\\")), silver("folder, with the prefix 05a \n"))
     ### plot each cell type
     clean_labels <- umi_scaled$scMCA_simple
     ultra_rare <- names(table(clean_labels)[table(clean_labels) < thresh])
     clean_labels[clean_labels%in%ultra_rare] <- "other"
     umi_scaled$clean_labels <- clean_labels
     ### Plotting annotated populations localization in TSNE, UMAP and PCA. [scMCA]
+    cat(bold(green("Plotting scMCA dimensional reduction graphs for each population \n")))
     popsicle:::annotation_plot(Annot_dir, "05c_", umi_scaled, "PCA", "clean_labels", "scMCA_CellPopulations")
     popsicle:::annotation_plot(Annot_dir, "05c_", umi_scaled, "UMAP", "clean_labels", "scMCA_CellPopulations")
     popsicle:::annotation_plot(Annot_dir, "05c_", umi_scaled, "TSNE", "clean_labels", "scMCA_CellPopulations")
+    cat(paste0(silver("Plots saved in: ")),bold(silver("\\05.Annotation\\"), silver("folder, with the prefix 05c \n")))
     umi_scaled <- popsicle:::SR_plots("ImmGen", Ig.se, umi_scaled, Annot_dir)
     ### custom DotPlot for immune markers
-    pdf(paste0(Annot_dir, "/05d_DotPlot_Immune_Markers_ImmGen.pdf"), width=40, height=10, useDingbats=FALSE)
+    pdf(paste0(Annot_dir, "/05d_DotPlot_Immune_Markers_ImmGen.pdf"), width=20, height=10, useDingbats=FALSE)
     popsicle:::DTP(umi_scaled, markers, 'ImmGen.sc.main.labels')
     invisible(dev.off())
     ## Custom DotPlot for immune markers
-    pdf(paste0(Annot_dir, "/05d_DotPlot_Immune_Markers_scMCA.pdf"), width=40, height=10, useDingbats=FALSE)
+    pdf(paste0(Annot_dir, "/05d_DotPlot_Immune_Markers_scMCA.pdf"), width=20, height=10, useDingbats=FALSE)
     popsicle:::DTP(umi_scaled, markers, 'scMCA_simple')
     invisible(dev.off())
     # Plotting annotated populations localization in TSNE, UMAP and PCA. [ImmGen
     annotations <- c("ImmGen.sc.main.labels", "ImmGen.cl.main.labels")
+    cat(bold(green("Plotting ImmGen dimensional reduction graphs for each population \n")))
     for(single_annot in annotations){
       popsicle:::annotation_plot(Annot_dir, "05e_", umi_scaled, "PCA", single_annot, "CellPopulations")
       popsicle:::annotation_plot(Annot_dir, "05e_", umi_scaled, "UMAP", single_annot, "CellPopulations")
       popsicle:::annotation_plot(Annot_dir, "05e_", umi_scaled, "TSNE", single_annot, "CellPopulations")
     }
+    cat(paste0(silver("Plots saved in: ")),bold(silver("\\05.Annotation\\")), silver("folder, with the prefix 05e \n"))
   }
   return(umi_scaled)
 }
