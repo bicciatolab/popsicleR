@@ -8,7 +8,7 @@
 Function to make Violin plot from Seurat
 }
 \usage{
-VLN(directory, filename, data, H, feats, point=FALSE)
+VLN(directory, filename, data, H, feats, colours=NULL, point=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,7 +17,8 @@ VLN(directory, filename, data, H, feats, point=FALSE)
   \item{data}{Input data}
   \item{H}{Plot height}
   \item{feats}{Features to be plotted}
-  \item{point}{Non ricordo a cosa serve ma è FALSE}
+  \item{colours}{Colours to be plotted}
+  \item{point}{Point size}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
