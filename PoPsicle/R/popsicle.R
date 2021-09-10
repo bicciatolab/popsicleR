@@ -628,8 +628,14 @@ PrePlots <- function(sample, input_data, genelist, percentage=0.1, gene_filter=2
   ###	  calculation of QC metrics   ###
   #####################################
   ### calculate the percentage of mitochondria, ribosomal and dissociation genes
+  if(organism == 'human'){
   dissociation_genes <- c("ACTG1","ANKRD1","ARID5A","ATF3","ATF4","BAG3","BHLHE40","BRD2","BTG1","BTG2","CCNL1","CCRN4L","CEBPB","CEBPD","CEBPG","CSRNP1","CXCL1","CYR61","DCN","DDX3X","DDX5","DES","DNAJA1","DNAJB1","DNAJB4","DUSP1","DUSP8","EGR1","EGR2","EIF1","EIF5","ERF","ERRFI1","FAM132B","FOS","FOSB","FOSL2","GADD45A","GADD45G","GCC1","GEM","H3F3B","HIPK3","HSP90AA1","HSP90AB1","HSPA1A","HSPA1B","HSPA5","HSPA8","HSPB1","HSPE1","HSPH1","ID3","IDI1","IER2","IER3","IER5","IFRD1","IL6","IRF1","IRF8","ITPKC","JUN","JUNB","JUND","KCNE4","KLF2","KLF4","KLF6","KLF9","LITAF","LMNA","MAFF","MAFK","MCL1","MIDN","MIR22HG","MT1","MT2","MYADM","MYC","MYD88","NCKAP5L","NCOA7","NFKBIA","NFKBIZ","NOP58","NPPC","NR4A1","ODC1","OSGIN1","OXNAD1","PCF11","PDE4B","PER1","PHLDA1","PNP","PNRC1","PPP1CC","PPP1R15A","PXDC1","RAP1B","RASSF1","RHOB","RHOH","RIPK1","SAT1","SBNO2","SDC4","SERPINE1","SKIL","SLC10A6","SLC38A2","SLC41A1","SOCS3","SQSTM1","SRF","SRSF5","SRSF7","STAT3","TAGLN2","TIPARP","TNFAIP3","TNFAIP6","TPM3","TPPP3","TRA2A","TRA2B","TRIB1","TUBB4B","TUBB6","UBC","USP2","WAC","ZC3H12A","ZFAND5","ZFP36","ZFP36L1","ZFP36L2","ZYX")
   dissociation_genes <- paste(dissociation_genes, collapse='|')
+  } else if(organism == 'mouse') {
+  dissociation_genes <- c("ACTG1","ANKRD1","ARID5A","ATF3","ATF4","BAG3","BHLHE40","BRD2","BTG1","BTG2","CCNL1","CCRN4L","CEBPB","CEBPD","CEBPG","CSRNP1","CXCL1","CYR61","DCN","DDX3X","DDX5","DES","DNAJA1","DNAJB1","DNAJB4","DUSP1","DUSP8","EGR1","EGR2","EIF1","EIF5","ERF","ERRFI1","FAM132B","FOS","FOSB","FOSL2","GADD45A","GADD45G","GCC1","GEM","H3F3B","HIPK3","HSP90AA1","HSP90AB1","HSPA1A","HSPA1B","HSPA5","HSPA8","HSPB1","HSPE1","HSPH1","ID3","IDI1","IER2","IER3","IER5","IFRD1","IL6","IRF1","IRF8","ITPKC","JUN","JUNB","JUND","KCNE4","KLF2","KLF4","KLF6","KLF9","LITAF","LMNA","MAFF","MAFK","MCL1","MIDN","MIR22HG","MT1","MT2","MYADM","MYC","MYD88","NCKAP5L","NCOA7","NFKBIA","NFKBIZ","NOP58","NPPC","NR4A1","ODC1","OSGIN1","OXNAD1","PCF11","PDE4B","PER1","PHLDA1","PNP","PNRC1","PPP1CC","PPP1R15A","PXDC1","RAP1B","RASSF1","RHOB","RHOH","RIPK1","SAT1","SBNO2","SDC4","SERPINE1","SKIL","SLC10A6","SLC38A2","SLC41A1","SOCS3","SQSTM1","SRF","SRSF5","SRSF7","STAT3","TAGLN2","TIPARP","TNFAIP3","TNFAIP6","TPM3","TPPP3","TRA2A","TRA2B","TRIB1","TUBB4B","TUBB6","UBC","USP2","WAC","ZC3H12A","ZFAND5","ZFP36","ZFP36L1","ZFP36L2","ZYX")
+  dissociation_genes <- tools::toTitleCase(tolower(dissociation_genes))
+  dissociation_genes <- paste(dissociation_genes, collapse='|')
+  }
   #
   if(organism == 'human'){
     umi[["percent_mt"]] <- PercentageFeatureSet(umi, pattern = "^MT-")
@@ -638,7 +644,7 @@ PrePlots <- function(sample, input_data, genelist, percentage=0.1, gene_filter=2
   } else if(organism == 'mouse') {
     umi[["percent_mt"]] <- PercentageFeatureSet(umi, pattern = "^mt-")
     umi[["percent_ribo"]] <- PercentageFeatureSet(umi, pattern ='^Rpl|^Rps|^Mrpl|^Mrps')
-    umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = toLower(dissociation_genes))
+    umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = dissociation_genes)
   }
   ### Violin Plot on number of genes, number of UMI and fraction of mitochondrial genes
   cat(bold(green("Plotting QC Violin plots \n")))
@@ -863,7 +869,7 @@ CCScore <- function(UMI, organism='human'){
     cat(bold(green("Calculating Cell Cycle Score \n")))
     umi <- CellCycleScoring(UMI, s.features=m.s.genes, g2m.features=m.g2m.genes, set.ident=T)
   }
-  cat(paste0(cyan("Next suggested step is regression, run ")),bold(cyan("ApplyRegression")),cyan("\nIt is suggested to apply regression without providing any variables to regress and without exploring PCs (explore_PC=FALSE) to save time and computational effort.\nRegression variables can be chosen through visual inspection of this function outputs \nOnce selected, set explore_PC as TRUE and explore graphs to identify the PCs number to use in your analysis"))
+  cat(paste0(cyan("Next suggested step is regression, run ")),bold(cyan("ApplyRegression")),cyan("\nIt is suggested to apply regression without providing any variables to regress and without exploring PCs (explore_PC=FALSE) to save time and computational effort.\nRegression variables can be chosen through visual inspection of this function outputs \nOnce selected, set explore_PC as TRUE and explore graphs to identify the PCs number to use in your analysis \n"))
   return(umi)
 }
 
@@ -901,7 +907,7 @@ ApplyRegression <- function(UMI, variables='none', explore_PC=FALSE,  out_folder
     popsicle:::four_plots(UMI, "tsne")
     popsicle:::four_plots(UMI, "umap")
     invisible(dev.off())
-    cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing\\"),silver(cycle.dir), silver("\\03c_DimReduction_NoRegression.pdf \n")))
+    cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing dedicated subfolder \n")))
   }
   ### fine non fare se null ####
   ### NEW (old VizPCA)
@@ -932,11 +938,11 @@ ApplyRegression <- function(UMI, variables='none', explore_PC=FALSE,  out_folder
     pdf(paste0(cycle.dir, "/03h_PCElbowPlot.pdf"), useDingbats=FALSE)
     print(ElbowPlot(object=UMI, ndims=30))
     invisible(dev.off())
-    cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing\\"),silver(cycle.dir), silver("subfolder \n")))
+    cat(paste0(silver("Plots saved in: ")),bold(silver("03.PreProcessing dedicated subfolder \n")))
     cat(paste0(cyan("Once identified the PCs number to use in your analysis, perform clustering running "),bold(cyan("Calculate Cluster \n"))))
     }
   ### fine explore_pc ###
-  cat(paste0(cyan("Next suggested step is clustering, run "),bold(cyan("Calculate Cluster"))))
+  cat(paste0(cyan("Next suggested step is clustering, run "),bold(cyan("Calculate Cluster \n"))))
   return(UMI)
 }
 
@@ -1129,8 +1135,10 @@ MakeAnnotation <- function(umi_scaled, organism, markers='none', thresh=20, out_
     markers <- lapply(markers, function(x) {x[x %in% row.names(umi_scaled)]})
     ### remove empty lists
     markers <- markers[lapply(markers,length)>0]
-    hpca.se <- suppressMessages(SingleR::HumanPrimaryCellAtlasData())
-    BpEn.se <- suppressMessages(SingleR::BlueprintEncodeData())
+    #hpca.se <- suppressMessages(SingleR::HumanPrimaryCellAtlasData())
+    #BpEn.se <- suppressMessages(SingleR::BlueprintEncodeData())
+    hpca.se <- suppressMessages(celldex::HumanPrimaryCellAtlasData())
+    BpEn.se <- suppressMessages(celldex::BlueprintEncodeData())
     cat(bold(green("Plotting single cell and cluster annotations \n")))
     umi_scaled <- popsicle:::SR_plots("hpca", hpca.se, umi_scaled, Annot_dir)
     umi_scaled <- popsicle:::SR_plots("BpEn", BpEn.se, umi_scaled, Annot_dir)
