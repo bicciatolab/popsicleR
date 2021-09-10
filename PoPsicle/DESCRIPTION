@@ -25,7 +25,9 @@ Depends:
   RColorBrewer,
   ggplotify,
   RANN,
-  neldermead
+  neldermead, 
+  umap, 
+  celldex
 Suggests:
   scMCA
 LazyData: true
