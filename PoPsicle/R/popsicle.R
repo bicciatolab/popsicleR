@@ -806,15 +806,14 @@ FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA
 CalculateDoublets <- function(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=getwd()){
   QC_dir <- paste0(out_folder,"/02.QC_Plots/")
   if (!file.exists(QC_dir)){dir.create(QC_dir, recursive=T)}
+  if(dbs_thr == 'none'){
   ### calculate doublets
   doublets <- scrubDoublets(as.matrix(UMI@assays$RNA@counts), directory=QC_dir, expected_doublet_rate=0.1)
   #return(list(scrubDoublets = predicted_doublets, doublet_scores_obs = doublet_scores$doublet_scores_obs, doublet_scores_sim = doublet_scores$doublet_scores_sim))
   names(doublets) <- c("predicted", "score_predicted", "score_simulated")
   ### if doublets exist, calculate, set to 0 otherwise
   ifelse(TRUE %in% doublets$predicted, dbs_found <- table(doublets$predicted)[[2]], dbs_found <- 0)
-  if(dbs_thr == 'none'){
-    thr <- round(mean(c(min(doublets$score_predicted[doublets$predicted]),max(doublets$score_predicted[!doublets$predicted]))), 3)
-  } else {thr= dbs_thr}
+  thr <- round(mean(c(min(doublets$score_predicted[doublets$predicted]),max(doublets$score_predicted[!doublets$predicted]))), 3)
   ### Threshold definition
   doublets$predicted <- c(doublets$score_predicted > thr)
   ### add features to umi object
@@ -823,6 +822,22 @@ CalculateDoublets <- function(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=g
   if(dbs_remove == TRUE){
     cat(paste0(green("Removing Doublets \n")))
     UMI <- UMI[,!UMI$doublets]
+  }
+  }else{
+  UMI$doublets <- ifelse(UMI$doublets_score > dbs_thr, TRUE, FALSE)
+  cat(bold(green("Plotting histogram of doublet scores \n")))
+  p_obs <- ggplot2::ggplot(UMI@meta.data, aes(x = doublets_score)) + geom_histogram(aes(fill = doublets), binwidth = 0.02, color = "grey50") + geom_vline(xintercept = dbs_thr, color = "blue") + labs(x="Doublet scores", y="Counts", title="Observed Cells") + theme_classic(base_size = 10) + theme(legend.position="none") + theme(plot.title = element_text(hjust = 0.5))
+
+  p_obs2 <- ggplot2::ggplot(UMI@meta.data, aes(x = doublets_score)) + stat_density(geom="line", color="red") + geom_vline(xintercept = dbs_thr, color = "blue") + labs(x="Doublet scores", y="Density", title="") + theme_classic(base_size = 10) + theme(legend.position="none") + theme(plot.title = element_text(hjust = 0.5))
+
+  pdf(paste0(QC_dir,"/02k_histogram_of_doublet_scores_custom_threshold.pdf"),8,8, useDingbats=FALSE)
+  gridExtra::grid.arrange(p_obs, p_obs2, nrow = 1, ncol = 2)
+  dev.off()
+  cat(paste0(silver("Plots saved in: ")),bold(silver("02.QC_Plots\\02k histogram of doublet scores custom threshold.pdf \n")))
+  if(dbs_remove == TRUE){
+    cat(paste0(green("Removing Doublets \n")))
+    UMI <- UMI[,!UMI$doublets]
+  }
   }
   return(UMI)
   cat(paste0(cyan("Next suggested step is data normalization, run ")),bold(cyan("Normalize \n")))
