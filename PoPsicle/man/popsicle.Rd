@@ -9,10 +9,13 @@
 
 \packageDescription{popsicle}
 
+
 }
 \details{
 
 PoPsicle builds on the R package Seurat (v3.5) to perform most of its task, and integrates an R implementation of the Scrublet python module for the analysis of doublets presence. Furthermore, PoPsicle grants the possibility to investigate and analyze both human and mouse data, using organism specific integrated annotation packages.
+
+\figure{popsicle_logo.png}{options: width=200 alt "Figure: popsicle_logo.png" align= right}
 
 
 \bold{Functions Index:}
@@ -33,7 +36,7 @@ PoPsicle builds on the R package Seurat (v3.5) to perform most of its task, and 
 
 \bold{Maintainers}:
 \itemize{
-\item Jimmy Caroli \email{jimmy.caroli@unimore.it}
+\item Jimmy Caroli \email{jimmy.caroli@sund.ku.dk}
 \item Francesco Grandi \email{francesco.grandi1993@unimore.it}
 }
 }
