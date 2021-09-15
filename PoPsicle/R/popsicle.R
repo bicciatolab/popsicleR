@@ -813,10 +813,10 @@ CalculateDoublets <- function(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=g
   ### if doublets exist, calculate, set to 0 otherwise
   ifelse(TRUE %in% doublets$predicted, dbs_found <- table(doublets$predicted)[[2]], dbs_found <- 0)
   if(dbs_thr == 'none'){
-    dbs_thr <- round(mean(c(min(doublets$score_predicted[doublets$predicted]),max(doublets$score_predicted[!doublets$predicted]))), 3)
-  }
+    thr <- round(mean(c(min(doublets$score_predicted[doublets$predicted]),max(doublets$score_predicted[!doublets$predicted]))), 3)
+  } else {thr= dbs_thr}
   ### Threshold definition
-  doublets$predicted <- c(doublets$score_predicted > dbs_thr)
+  doublets$predicted <- c(doublets$score_predicted > thr)
   ### add features to umi object
   UMI$doublets_score <- doublets$score_predicted
   UMI$doublets <- doublets$predicted
