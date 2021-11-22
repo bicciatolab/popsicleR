@@ -11,13 +11,13 @@ Function generate PCA, UMAP and TSNE plots
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-MakeAnnotation(umi_scaled, organism, markers='none', thresh=20, out_folder=getwd())
+MakeAnnotation(UMI, organism, marker.list='none', thresh=20, out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{umi_scaled}{ The input umi object generated via Seurat}
+  \item{UMI}{ The input umi object generated via Seurat}
   \item{organism}{ Organism for the annotation. Select human or mouse}
-  \item{markers}{ Immune markers used for the plots. Must be the same used in CalculateCluster. Default uses proprietary lists.}
+  \item{marker.list}{ Markers list used for the plots. Must be the same used in CalculateCluster. Default uses proprietary lists.}
   \item{thresh}{ Rare population number threshold. Default is 20}
   \item{out_folder}{ Output folder. Default is the working directory}
 }

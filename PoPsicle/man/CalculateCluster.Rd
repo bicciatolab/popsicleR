@@ -8,14 +8,14 @@
 Calculate cluster of cells based on immune markers. Generate several plots.
 }
 \usage{
-CalculateCluster(UMI, dimpca, organism, immune.markers='none', PCA=TRUE, cluster_res=0.8, out_folder=getwd())
+CalculateCluster(UMI, dim_pca, organism, marker.list='none', PCA=TRUE, cluster_res=0.8, out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{UMI}{Input UMI object generated via Seurat}
-  \item{dimpca}{Number of principal component to take into account.}
+  \item{dim_pca}{Number of principal component to take into account.}
   \item{organism}{Input organism. Defines the immune marker list. Default is human. Can be mouse}
-  \item{immune.markers}{List of immune markers. Default is defined by the selected organism. Can be fed personal list}
+  \item{marker.list}{List of markers. Default is a immune marker list defined by the selected organism. Can be fed personal list}
   \item{PCA}{If TRUE calculates also the PCA. Default is TRUE}
   \item{cluster_res}{Cluster resolution. Default is 0.8}
   \item{out_folder}{Output folder. Default is the working directory}
