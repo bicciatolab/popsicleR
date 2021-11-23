@@ -6,7 +6,7 @@
 First function. Does a lot of things. Generate the plot in the pre-analysis section.
 }
 \usage{
-PrePlots(sample, input_data, genelist, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism="human", out_folder=getwd())
+PrePlots(sample_name, input_data, genelist, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism="human", out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
