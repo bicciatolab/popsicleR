@@ -115,7 +115,7 @@ install_github("ggjlab/scMCA")
 
 N.B. if "ggplotify" is not v0.1.0 update the package, and then run:
 
-install_github("bicciatolab/PoPsicle")
+devtools::install_github("bicciatolab/PoPsicleR",subdir = "PoPsicleR")
 
 or download the package.tar.gz file and then install it from local repository through the command:
   
