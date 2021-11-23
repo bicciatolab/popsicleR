@@ -53,7 +53,7 @@ install_github("ggjlab/scMCA")
 
 - popsicle
 
-install_github("bicciatolab/PoPsicle")
+devtools::install_github("bicciatolab/PoPsicleR",subdir = "PoPsicleR")
 
 or download the package.tar.gz file and then install it from local repository through the command:
   
