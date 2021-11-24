@@ -14,8 +14,8 @@ silvio.bicciato@unimore.it
 
 ## Table of contents
 
-- ` PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/docs/PoPsicleR_installation_guide.md/#### PoPsicleR installation in R) in R
-- ` PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/docs/#### PoPsicleR installation through conda) through `conda`
+- ` PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/blob/main/docs/PoPsicleR_installation_guide.md#popsicler-installation-in-r) in R
+- ` PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/blob/main/docs/PoPsicleR_installation_guide.md#popsicler-installation-through-conda) through `conda`
 - [Quick Start guide](https://github.com/bicciatolab/PoPsicleR/docs/Quick_Start_guide.md)
 
 ## Installation 
