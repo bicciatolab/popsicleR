@@ -7,15 +7,15 @@ Git Hub: [@bicciatolab/PoPsicleR](https://github.com/bicciatolab/PoPsicleR)
 Here we present PoPsicleR, an R package for the preprocessing and QC of single cell RNA-seq data that allows users to interactively optimize thresholds and parameters of the commonly used QC metrics. PoPsicleR builds on the preprocessing functions of the Seurat package (v3.5) for filtering, normalization, regression, clustering, annotation, and data visualization and integrates the Python module of Scrublet for doublet detection. As compared to other preprocessing and QC pipelines, PoPsicle offers specific functions to optimize filtering thresholds, design user-specific preprocessing setups, and guide inexperienced command line users through all the various steps of the preprocessing workflow. PoPsicle main assets are its efficacy in testing complex combinations of filtering thresholds in a simple manner and its lightweight computational requirements that enable scientists to process large number of cells obtained from different technologies (as 10X and Smart-seq) and species (e.g., human and mouse).
 
 #### Availability and implementation:
-PoPsicleR is written in R language and is released under a GPL License. It can be downloaded from Github (@bicciatolab/PoPsicleR)
+PoPsicleR is written in R language and is released under a GPL License. It can be downloaded from Github ([@bicciatolab/PoPsicleR](https://github.com/bicciatolab/PoPsicleR))
 #### Contact: 
 silvio.bicciato@unimore.it
 
 
 ## Table of contents
 
-- ` PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/blob/main/docs/PoPsicleR_installation_guide.md#popsicler-installation-in-r) in R
-- ` PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/blob/main/docs/PoPsicleR_installation_guide.md#popsicler-installation-through-conda) through `conda`
+- `PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/blob/main/docs/PoPsicleR_installation_guide.md#popsicler-installation-in-r) in R
+- `PoPsicleR` [installation](https://github.com/bicciatolab/PoPsicleR/blob/main/docs/PoPsicleR_installation_guide.md#popsicler-installation-through-conda) through `conda`
 - [Quick Start guide](https://github.com/bicciatolab/PoPsicleR/docs/Quick_Start_guide.md)
 
 ## Installation 
@@ -122,9 +122,7 @@ On a Linux machine, open your terminal and run:
 
 	$conda create -n PoPsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.0 r-sessioninfo=1.1.1
 
-##############################################################################################################
-################		    install environment packages		##############################
-##############################################################################################################
+##### install environment packages
 
 install some other packages from other channels through conda command: 
 
