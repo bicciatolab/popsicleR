@@ -8,8 +8,8 @@ Here we present `popsicleR`, an R package for the preprocessing and QC of single
 popsicleR is written in R language and is released under a GPL License. It can be downloaded from Github ([@bicciatolab/popsicleR](https://github.com/bicciatolab/popsicleR))
 
 #### Contact: 
-silvio.bicciato@unimore.it
 
+silvio.bicciato@unimore.it
 
 ## Table of contents
 
@@ -17,6 +17,7 @@ silvio.bicciato@unimore.it
 - `popsicleR` [installation through `conda`](https://github.com/bicciatolab/popsicleR#popsicler-installation-through-conda) 
 - [Quick Start guide](https://github.com/bicciatolab/popsicleR/docs/Quick_Start_guide.md)
 
+__________________________________________________________________
 ## popsicleR installation in R
 
 Open your R and copy and paste on your console these lines of code to install all the required packages: 
@@ -70,40 +71,45 @@ install.packages("/path/to/package_directory", repos = NULL, type="source")
 ## popsicleR installation through conda
 
 If you have already installed Anaconda, a virtual environment for popsicleR can be set either manually, installing all packages one by one, or automatically adding only a few packages once created the environment.
-Another way to set an environment is to extract it from a file.yml, we provide popsicle.yml file; in this case all anaconda required packages will be automatically installed.
 
-Below we report all the instruction to set your popsicleR environment.
+Below we report all the instruction to set your `popsicleR` environment.
 
 #### Create a popsicleR environment and install all anaconda available packages automatically
  
+ Step 1: `popsicleR` environment creation
+  
 On a Linux machine, open your terminal and run:
 
 ```bash
 	$conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.4 r-sessioninfo=1.1.1 r-seurat
 ```
+
 #### install environment packages
 
-install some other packages from other channels through conda command: 
+From command line install other packages from other channels through conda command: 
 
 ```bash
 	$conda install -n popsicleR -c r r-magrittr
-	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0
+	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0 
 ```
-Then scroll down and go to the section "install packages in R"
+
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-popsicler-environment-through-a-yml-file) to complete popsicleR installation.
 
 #### install popsicleR environment through a .yml file
 
-Be secure that "popsicleR.yml" is present in your working directory then run: 
+Another way to set a working `conda` popsicleR virtual environment  can be to extract it from a .yml file. We provide in [docs](https://github.com/bicciatolab/popsicleR/tree/main/docs) a [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) file to create your virtual environment. In this case, all anaconda required packages will be automatically installed.
+
+Thus, download [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) file, be secure that it is present in your working directory (or specify file_path) and finally, run: 
 
 ```bash
 	$conda env create -n popsicleR -f popsicleR.yml
 ```
 
-Then scroll down and go to the section "install packages in R"
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-popsicler-environment-through-a-yml-file) to complete popsicleR installation.
 
 #### install packages in R
 
-Pay attention to the released packages on anaconda.org; if needed packages are provided in anaconda repository we suggests to install it through conda command in order to avoid conflicts between packages.
+If required packages are provided in anaconda.org repository we suggests to install it through conda command in order to avoid conflicts between packages.
 
 Step 2: access the environment 
 
@@ -112,6 +118,7 @@ Once created the environment and installed all the available packages like expla
 ```bash
 	$conda activate popsicleR
 ```
+
 The last dependencies, not provided at the moment by anaconda.org, can be installed directly from R.
 
 ```r
@@ -128,6 +135,7 @@ devtools::install_github("ggjlab/scMCA")
 
 devtools::install_github("bicciatolab/popsicleR")
 ```
+
 or download the package.tar.gz file and then install it from local  repository through the command:
  
 ```
