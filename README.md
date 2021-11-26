@@ -125,7 +125,7 @@ Once created the environment, access it through the command:
 	conda activate popsicleR
 ```
 
-install `SingleR `, `celldex`and `scMCA` packages using:
+install `SingleR `, `celldex` and `scMCA` packages using:
 
 
 ```r
@@ -139,7 +139,7 @@ BiocManager::install("celldex")
 devtools::install_github("ggjlab/scMCA") 
 ```
 
-and finally install `popsicleR ` via:
+and finally, install `popsicleR ` via:
 
 ```r
 devtools::install_github("bicciatolab/popsicleR")
