@@ -84,7 +84,7 @@ On a Linux machine, open your terminal and run:
 	$conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.4 r-sessioninfo=1.1.1 r-seurat
 ```
 
-#### install environment packages
+#### Install environment packages
 
 From command line install other packages from other channels through conda command: 
 
@@ -95,7 +95,7 @@ From command line install other packages from other channels through conda comma
 
 Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
 
-#### install popsicleR environment through a .yml file
+#### Install popsicleR environment through a .yml file
 
 Another way to set a working `conda` popsicleR virtual environment  can be extracting it from a .yml file. 
 
@@ -107,9 +107,9 @@ Thus, download [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/mai
 	$conda env create -n popsicleR -f popsicleR.yml
 ```
 
-Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R consolle: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
 
-#### install packages in R
+#### Install packages in R
 
 The last dependencies, at the moment not provided by anaconda.org, can be installed directly from R.
 
