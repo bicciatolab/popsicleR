@@ -76,7 +76,7 @@ Below we report all the instruction to set your `popsicleR` environment.
 
 #### Create a popsicleR environment and install all anaconda available packages automatically
  
- Step 1: `popsicleR` environment creation
+`popsicleR` environment creation
   
 On a Linux machine, open your terminal and run:
 
