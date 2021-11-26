@@ -93,7 +93,7 @@ From command line install other packages from other channels through conda comma
 	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0 
 ```
 
-Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-popsicler-environment-through-a-yml-file) to complete popsicleR installation.
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
 
 #### install popsicleR environment through a .yml file
 
@@ -105,7 +105,7 @@ Thus, download [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/mai
 	$conda env create -n popsicleR -f popsicleR.yml
 ```
 
-Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-popsicler-environment-through-a-yml-file) to complete popsicleR installation.
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
 
 #### install packages in R
 
