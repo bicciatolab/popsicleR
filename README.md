@@ -70,7 +70,9 @@ install.packages("/path/to/package_directory", repos = NULL, type="source")
 
 ## popsicleR installation through conda
 
-If you have already installed Anaconda, a virtual environment for popsicleR can be set either manually, installing all packages one by one, or automatically adding only a few packages once created the environment.
+If you have already installed Anaconda, a virtual environment for popsicleR can be set either manually, installing all packages one by one, or automatically adding only a few 
+
+packages once created the environment.
 
 Below we report all the instruction to set your `popsicleR` environment.
 
@@ -93,11 +95,15 @@ From command line install other packages from other channels through conda comma
 	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0 
 ```
 
-Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete 
+
+popsicleR installation.
 
 #### install popsicleR environment through a .yml file
 
-Another way to set a working `conda` popsicleR virtual environment  can be to extract it from a .yml file. We provide in [docs](https://github.com/bicciatolab/popsicleR/tree/main/docs) a [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) file to create your virtual environment. In this case, all anaconda required packages will be automatically installed.
+Another way to set a working `conda` popsicleR virtual environment  can be extracting it from a .yml file. 
+
+We provide in [docs](https://github.com/bicciatolab/popsicleR/tree/main/docs) a [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) file to create your virtual environment. In this case, all anaconda required packages will be automatically installed.
 
 Thus, download [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) file, be secure that it is present in your working directory (or specify file_path) and finally, run: 
 
@@ -105,21 +111,22 @@ Thus, download [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/mai
 	$conda env create -n popsicleR -f popsicleR.yml
 ```
 
-Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete 
+
+popsicleR installation.
 
 #### install packages in R
 
-If required packages are provided in anaconda.org repository we suggests to install it through conda command in order to avoid conflicts between packages.
+The last dependencies, at the moment not provided by anaconda.org, can be installed directly from R.
 
-Step 2: access the environment 
-
-Once created the environment and installed all the available packages like explained before, you can access the popsicleR virtual environment with the command: 
+Once created the environment, access it through the command: 
 
 ```bash
 	$conda activate popsicleR
 ```
 
-The last dependencies, not provided at the moment by anaconda.org, can be installed directly from R.
+and install `SingleR `and `celldex` packages using:
+
 
 ```r
 
