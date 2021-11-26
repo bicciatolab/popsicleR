@@ -79,7 +79,7 @@ Below we report all the instruction to set your popsicleR environment.
 On a Linux machine, open your terminal and run:
 
 ```bash
-	$conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.0 r-sessioninfo=1.1.1 r-seurat
+	$conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.4 r-sessioninfo=1.1.1 r-seurat
 ```
 #### install environment packages
 
@@ -88,8 +88,6 @@ install some other packages from other channels through conda command:
 ```bash
 	$conda install -n popsicleR -c r r-magrittr
 	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0
-	$conda install -n popsicleR -c bioconda bioconductor-singler
-	$conda install -n popsicleR -c bioconda bioconductor-celldex
 ```
 Then scroll down and go to the section "install packages in R"
 
@@ -117,6 +115,13 @@ Once created the environment and installed all the available packages like expla
 The last dependencies, not provided at the moment by anaconda.org, can be installed directly from R.
 
 ```r
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("SingleR")
+BiocManager::install("celldex")
+
 library(devtools)
 install_github("ggjlab/scMCA") 
 
