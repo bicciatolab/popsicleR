@@ -74,31 +74,36 @@ Another way to set an environment is to extract it from a file.yml, we provide p
 
 Below we report all the instruction to set your popsicleR environment.
 
-
-##### Create a popsicleR environment and install all anaconda available packages automatically
+#### Create a popsicleR environment and install all anaconda available packages automatically
  
 On a Linux machine, open your terminal and run:
+
 ```bash
-	$conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.0 r-sessioninfo=1.1.1
+	$conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.0 r-sessioninfo=1.1.1 r-seurat
 ```
-##### install environment packages
+#### install environment packages
 
 install some other packages from other channels through conda command: 
 
+```bash
 	$conda install -n popsicleR -c r r-magrittr
-	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0		#limma 3.46.0
-
+	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0
+	$conda install -n popsicleR -c bioconda bioconductor-singler
+	$conda install -n popsicleR -c bioconda bioconductor-celldex
+```
 Then scroll down and go to the section "install packages in R"
 
-##### install popsicleR environment through a .yml file
+#### install popsicleR environment through a .yml file
 
 Be secure that "popsicleR.yml" is present in your working directory then run: 
 
+```bash
 	$conda env create -n popsicleR -f popsicleR.yml
+```
 
 Then scroll down and go to the section "install packages in R"
 
-#####	install packages in R (Required for each installation method)   
+#### install packages in R
 
 Pay attention to the released packages on anaconda.org; if needed packages are provided in anaconda repository we suggests to install it through conda command in order to avoid conflicts between packages.
 
@@ -106,27 +111,12 @@ Step 2: access the environment
 
 Once created the environment and installed all the available packages like explained before, you can access the popsicleR virtual environment with the command: 
 
+```bash
 	$conda activate popsicleR
-
-The last dependencies, not provided at the moment by anaconda.org, can be installed directly from R.
- 
 ```
-install.packages('Seurat')
+The last dependencies, not provided at the moment by anaconda.org, can be installed directly from R.
 
-# SingleR
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("SingleR")
-
-# celldex,  scMCA,  popsicleR:
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("celldex")
-
+```r
 library(devtools)
 install_github("ggjlab/scMCA") 
 
@@ -139,4 +129,3 @@ or download the package.tar.gz file and then install it from local  repository t
 ```
 install.packages("/path/to/package_directory", repos = NULL, type="source")
 ```
-
