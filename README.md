@@ -141,12 +141,12 @@ devtools::install_github("ggjlab/scMCA")
 
 and finally install `popsicleR ` via:
 
-```
+```r
 devtools::install_github("bicciatolab/popsicleR")
 ```
 
 If you have with this command download the package.tar.gz file and then install it from local repository through the command:
  
-```
+```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
 ```
