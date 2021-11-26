@@ -122,8 +122,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("SingleR")
 BiocManager::install("celldex")
 
-library(devtools)
-install_github("ggjlab/scMCA") 
+devtools::install_github("ggjlab/scMCA") 
 
 # N.B. if "ggplotify" is not v0.1.0 update the package, and then run:
 
