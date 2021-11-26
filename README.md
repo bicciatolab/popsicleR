@@ -70,9 +70,7 @@ install.packages("/path/to/package_directory", repos = NULL, type="source")
 
 ## popsicleR installation through conda
 
-If you have already installed Anaconda, a virtual environment for popsicleR can be set either manually, installing all packages one by one, or automatically adding only a few 
-
-packages once created the environment.
+If you have already installed Anaconda, a virtual environment for popsicleR can be set either manually, installing all packages one by one, or automatically adding only a few packages once created the environment.
 
 Below we report all the instruction to set your `popsicleR` environment.
 
@@ -95,9 +93,7 @@ From command line install other packages from other channels through conda comma
 	$conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0 
 ```
 
-Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete 
-
-popsicleR installation.
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
 
 #### install popsicleR environment through a .yml file
 
@@ -111,9 +107,7 @@ Thus, download [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/mai
 	$conda env create -n popsicleR -f popsicleR.yml
 ```
 
-Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete 
-
-popsicleR installation.
+Not all the required packages are provided in anaconda.org and the last packages must be intalled directly from R console: go to the section [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r) to complete popsicleR installation.
 
 #### install packages in R
 
