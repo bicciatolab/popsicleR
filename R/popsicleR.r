@@ -297,7 +297,7 @@ annotation_plot <- function(directory, graph_value, data, redux, annotation, fil
 #' @exportPattern "^[[:alpha:]]+"
 #' @importFrom magrittr "%>%"
 #' @export
-PrePlots <- function(sample, input_data, genelist=NULL, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism=c("human","mouse"), out_folder=getwd()){
+PrePlots <- function(sample_name, input_data, genelist=NULL, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism=c("human","mouse"), out_folder=getwd()){
   ### Root directory
   root <- out_folder
   if (!file.exists(root)){dir.create(root, recursive=T)}
@@ -330,17 +330,13 @@ PrePlots <- function(sample, input_data, genelist=NULL, percentage=0.1, gene_fil
   if(organism == 'human'){
     dissociation_genes <- paste(dissociation_genes, collapse='|')
     if (is.null(genelist)) genelist<-c("EPCAM","VIM", "COL1A1", "PECAM1", "PTPRC", "CD3D", "CD14")
-  } else if(organism == 'mouse') {
-    dissociation_genes <- tools::toTitleCase(tolower(dissociation_genes))
-    dissociation_genes <- paste(dissociation_genes, collapse='|')
-    if (is.null(genelist)) genelist<-c("Epcam","Vim", "Col1a1", "Pecam1", "Ptprc", "Cd3d", "Cd14")
-  }
-  #
-  if(organism == 'human'){
     umi[["percent_mt"]] <- PercentageFeatureSet(umi, pattern = "^MT-")
     umi[["percent_ribo"]] <- PercentageFeatureSet(umi, pattern = '^RPL|^RPS|^MRPL|^MRPS')
     umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = dissociation_genes)
   } else if(organism == 'mouse') {
+    dissociation_genes <- tools::toTitleCase(tolower(dissociation_genes))
+    dissociation_genes <- paste(dissociation_genes, collapse='|')
+    if (is.null(genelist)) genelist<-c("Epcam","Vim", "Col1a1", "Pecam1", "Ptprc", "Cd3d", "Cd14")
     umi[["percent_mt"]] <- PercentageFeatureSet(umi, pattern = "^mt-")
     umi[["percent_ribo"]] <- PercentageFeatureSet(umi, pattern ='^Rpl|^Rps|^Mrpl|^Mrps')
     umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = dissociation_genes)
@@ -666,7 +662,7 @@ ApplyRegression <- function(UMI, organism=c("human","mouse"), variables='none', 
     print(ElbowPlot(object=UMI, ndims=30))
     invisible(dev.off())
     cat(paste0(silver("Plots saved in: ")),bold(silver("02.PreProcessing dedicated subfolder \n")))
-    cat(paste0(cyan("\nOnce identified the PCs number to use in your analysis, perform clustering running "),bold(cyan("Calculate Cluster \n"))))
+    cat(paste0(cyan("\nOnce identified the PCs number to use in your analysis, perform clustering running "),bold(cyan("CalculateCluster \n"))))
   }
 
   return(UMI)
