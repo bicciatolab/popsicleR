@@ -8,11 +8,12 @@
 Function to perform the regression. Input will require variable/s on which the regression will be calculated
 }
 \usage{
-ApplyRegression((UMI, variables='none', explore_PC=FALSE,  out_folder=getwd())
+ApplyRegression(UMI, organism=c("human","mouse"), variables='none', explore_PC=FALSE, out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{UMI}{Input UMI object, generated via Seurat}
+  \item{organism}{The organism on which perfom the analysis. Can be human or mouse. Organism must be specified to calculate the Cell Cycle Score based on a tailored proprietary genelist}
   \item{variables}{List (or single digit) of variables to be regressed on. Variables can be: nFeature_RNA, nCount_RNA, percent_mt, S.Score, G2M.Score. Default is 'none' as to not apply any regression}
   \item{explore_PC}{When TRUE performs additional investigations and generates more graphs. Default is FALSE.}
   \item{out_folder}{Output folder. Default is the working directory}

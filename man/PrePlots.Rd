@@ -4,21 +4,22 @@
 \title{PrePlots}
 \description{
 Perfoms preprossing analyses and quality controls on the provided dataset.
-Reports information on the dataset and outputs plots describing quality of the data to be further analyzed. 
+Reports information on the dataset and outputs plots describing quality of the data to be further analyzed.
 }
 \usage{
-PrePlots(sample_name, input_data, genelist, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism="human", out_folder=getwd())
+PrePlots(sample_name, input_data, genelist=NULL, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism=c("human","mouse"), out_folder=getwd())
 }
+
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{sample_name}{Name of the sample investigated}
   \item{input_data}{Input folder location}
-  \item{genelist}{List of gene for singular gene plots}
+  \item{genelist}{List of gene for singular gene plots. By default is NULL and a proprietary genelist is used to generate plots. A personal genelist can be fed as characters vector}
   \item{percentage}{Percentage of cell kept in the analysis. Default is 0.1}
   \item{gene_filter}{Number of genes to keep in the analysis. Default is 200}
   \item{cellranger}{Data were generated via cellranger. Default is TRUE}
   \item{input_matrix}{Input matrix data. Not generated via cellranger. Default is NULL}
-  \item{organism}{Default is human. Can be mouse.}
+  \item{organism}{The organism on which perfom the analysis. Can be human or mouse.}
   \item{out_folder}{Output folder. Default is working directory}
 }
 \details{

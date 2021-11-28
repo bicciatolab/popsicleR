@@ -8,16 +8,18 @@
 Calculate cluster of cells based on immune markers. Clusters will be displayed across tSNE and UMAP plots.
 }
 \usage{
-CalculateCluster(UMI, dim_pca, organism, marker.list='none', PCA=TRUE, cluster_res=0.8, out_folder=getwd())
+CalculateCluster(UMI, dim_pca, organism=c("human","mouse"), marker.list='none', PCA=TRUE, cluster_res=0.8, out_folder=getwd())
 }
+
+
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{UMI}{Input UMI object generated via Seurat}
   \item{dim_pca}{Number of principal component to take into account.}
-  \item{organism}{Input organism. Defines the immune marker list. Default is human. Can be mouse}
-  \item{marker.list}{List of markers. Default is a immune marker list defined by the selected organism. Can be fed personal list}
-  \item{PCA}{If TRUE calculates also the PCA. Default is TRUE}
-  \item{cluster_res}{Cluster resolution. Default is 0.8}
+  \item{organism}{Input organism to define the marker list to use. Can be human or mouse}
+  \item{marker.list}{List of markers. Default is 'none' and a proprietary marker list is applied for the selected organism. User can fed a custom genelist specifying the file_name of a tab delimited file stored in the working directory.}
+  \item{PCA}{If TRUE calculates the PCA. Default is TRUE}
+  \item{cluster_res}{Cluster resolution. Default is 0.8. User can specify, through a character vector, multiple clustering resolution to explore. When input more than one resolution, time consuming steps (e.g. Seurat::FindAllMarkers, Clustering calculation) are not performed.}
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{
