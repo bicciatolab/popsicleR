@@ -25,7 +25,7 @@ silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 * R version: >= 3.6.3
 * Dependencies: *ape*, *celldex*, *clustree*, *crayon*, *dplyr*, *future*, *ggExtra*, *ggplot2*, *ggplotify*, *gtools*, *grid*, *gridExtra*, *limma*, *magrittrpatchwork*, *neldermead*, *RANN*, *RColorBrewer*, *reticulate*, *R.utils*, *scMCA*, *sessionumap*, *Seurat*, and *SingleR*.
 
-## popsicleR installation in R
+## Installation in R
  
 On a Windows or Linux machine, open your R/Rstudio and install all the required packages using these lines of code.
 
@@ -90,7 +90,7 @@ If you had problem with this installation procedure download the package.tar.gz 
 install.packages("/path/to/package_directory", repos = NULL, type="source")
 ```
 
-## popsicleR installation through conda
+## Installation through conda
 
 If you have already installed Anaconda, a virtual environment for popsicleR can be set either manually, installing all packages one by one, or automatically adding only a few packages once created the environment.
 
