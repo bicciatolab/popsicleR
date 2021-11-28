@@ -13,13 +13,15 @@ popsicleR is written in R language and is released under a GPL License. It can b
 
 #### Contact: 
 
-silvio.bicciato@unimore.it
+silvio.bicciato@unimore.it; mattia.forcato@unimore.it
+
 
 ## Table of contents
 
 - `popsicleR` [installation in R](https://github.com/bicciatolab/popsicleR#popsicler-installation-in-r) 
 - `popsicleR` [installation through `conda`](https://github.com/bicciatolab/popsicleR#popsicler-installation-through-conda) 
 - [Quick Start guide](https://github.com/bicciatolab/popsicleR/docs/Quick_Start_guide.md)
+- [Tutorial on example data](https://github.com/bicciatolab/popsicleR/docs/popsicleR_tutorial.html)
 
 __________________________________________________________________
 ## popsicleR installation in R
