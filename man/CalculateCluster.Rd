@@ -5,7 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Calculate cluster of cells based on immune markers. Generate several plots.
+Calculate cluster of cells based on immune markers. Clusters will be displayed across tSNE and UMAP plots.
 }
 \usage{
 CalculateCluster(UMI, dim_pca, organism, marker.list='none', PCA=TRUE, cluster_res=0.8, out_folder=getwd())

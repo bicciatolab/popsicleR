@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{FilterPlots}
 \description{
-Apply filters to input data. Creates plot with defined thresholds.
+Apply filters to input data. Creates plot with provided thresholds as input.
 }
 \usage{
 FilterPlots(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA_hi = Inf, percent_mt_hi = 100, percent_ribo_hi = 100, percent_ribo_hi = 100, out_folder=getwd())

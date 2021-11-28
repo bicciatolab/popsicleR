@@ -3,7 +3,8 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Normalize}
 \description{
-Normalization process of input data
+Perform data normalization of the provided input. User must define the number of variable genes to be investigated
+after normalization.
 }
 \usage{
 Normalize(UMI, variable_genes=2000, out_folder=getwd())

@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{CalculateDoublets}
 \description{
-Calculate doublets using external python script
+Calculate and highlights doublets in the provided dataset. Generate also plots to show distribution and percentage of them. 
 }
 \usage{
 CalculateDoublets(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=getwd())
