@@ -13,7 +13,8 @@
 }
 \details{
 
-popsicleR builds on the R package Seurat to perform most of its task, and integrates an R implementation of the Scrublet python module for the analysis of doublets presence. Furthermore, popsicleR grants the possibility to investigate and analyze both human and mouse data, using organism specific integrated annotation packages.
+popsicleR builds on the R package Seurat and extends its functionalities with new ad hoc generated plots and calculations.
+Furthermore, popsicleR grants the possibility to investigate and analyze both human and mouse data through organism specific annotation packages.
 
 \bold{Functions Index:}
 \itemize{
@@ -71,4 +72,3 @@ CalculateCluster(sample_name, 12, "human")
 
 MakeAnnotation(sample_name, organism="human")
 }
-

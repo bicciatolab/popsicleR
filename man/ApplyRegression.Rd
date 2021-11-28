@@ -5,7 +5,7 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Function to apply the regression. Input will require on which variable calculate the regression
+Function to perform the regression. Input will require variable/s on which the regression will be calculated
 }
 \usage{
 ApplyRegression((UMI, variables='none', explore_PC=FALSE,  out_folder=getwd())

@@ -5,9 +5,9 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Annotate the input umi object using Human Primary Cell Atlas and Blueprint Encode (from SingleR) if the organism selected is human.
-Annotate the input umi object using scMCA and ImmGen (from SingleR) if the organism selected is mouse.
-Function generate PCA, UMAP and TSNE plots
+Annotate the input umi object using Human Primary Cell Atlas and Blueprint Encode from SingleR (human).
+Annotate the input umi object using scMCA and ImmGen from SingleR (mouse).
+Function generates PCA, UMAP and TSNE plots
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{

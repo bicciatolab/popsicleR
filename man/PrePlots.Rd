@@ -3,7 +3,8 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{PrePlots}
 \description{
-First function. Does a lot of things. Generate the plot in the pre-analysis section.
+Perfoms preprossing analyses and quality controls on the provided dataset.
+Reports information on the dataset and outputs plots describing quality of the data to be further analyzed. 
 }
 \usage{
 PrePlots(sample_name, input_data, genelist, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism="human", out_folder=getwd())
