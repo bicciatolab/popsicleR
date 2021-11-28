@@ -1,8 +1,12 @@
-# _PopsicleR_ 
-### A flexible R Package for the pre-processing and quality control analysis of single cell RNA-seq data
-__________________________________________________________________
-#### Summary: 
-Here we present `popsicleR`, an R package for the preprocessing and QC of single cell RNA-seq data that allows users to interactively optimize thresholds and parameters of the commonly used QC metrics. `popsicleR` builds on the preprocessing functions of the Seurat package for filtering, normalization, regression, clustering, annotation, and data visualization and integrates the Python module of Scrublet for doublet detection. As compared to other preprocessing and QC pipelines, `popsicleR` offers specific functions to optimize filtering thresholds, design user-specific preprocessing setups, and guide inexperienced command line users through all the various steps of the preprocessing workflow. `popsicleR` main assets are its efficacy in testing complex combinations of filtering thresholds in a simple manner and its lightweight computational requirements that enable scientists to process large number of cells obtained from different technologies (as 10X and Smart-seq) and species (e.g., human and mouse).
+# PopsicleR 
+
+`popsicleR` is a R package that combines methods implemented in widely used pipelines to interactively perform all major pre-processing and QC steps of scRNA-seq data analysis. The package is composed of seven main functions capable of performing exploration of quality-control metrics, filtering of low-quality cells, data normalization, removal of technical and biological biases, and some basic analysis as detection of differentially expressed genes, cell clustering and cell annotation. During each step of the analysis, `popsicleR` interactively guides the user with colored text messages and saves in dedicated folders a variety of plots to investigate several QC-metrics and assess the impact of filtering and regression parameters on the identification and classification of cell populations.
+
+Key features of `popsicleR` include:
+1. Use as input of files from either the Cell Ranger pipeline of 10X Genomics or a feature-barcode matrix of raw counts generated from any microfluidic-, microwell plates-, or droplet-based scRNA-seq technology
+2. Output of graphs and colored text messages to interactively guide users along each step of the analysis
+3. Inclusion of common single-cell visualisations (as density, scatter, and violin plots and low-dimensionality embeddings) to investigate QC-metrics and pre-processing parameters
+4. Export of visualisations as PDF images for presentation or publication use
 
 #### Availability and implementation:
 popsicleR is written in R language and is released under a GPL License. It can be downloaded from Github ([@bicciatolab/popsicleR](https://github.com/bicciatolab/popsicleR))
@@ -78,8 +82,7 @@ Now you should be able to install `popsicleR` via:
 ```r
 install_github("bicciatolab/popsicleR")
 ```
-If you had problem with this installation procedure download the package.tar.gz and go to the  [popsicleR manual installation](https://github.com/bicciatolab/popsicleR/tree/main/docs/popsicleR_manual_installation.md) page: there you will find all the required packages dependencies managed and specified. Finally, install `popsicleR` from a local repository through the command:
-
+If you had problem with this installation procedure download the package.tar.gz and go to the  [popsicleR manual installation](https://github.com/bicciatolab/popsicleR/docs/popaicleR_manual_installation.md) page: there you will find all the required packages dependencies managed and specified. Finally, install `popsicleR` from a local repository through the command:
 ```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
 ```
@@ -165,4 +168,4 @@ If you have with this command download the package.tar.gz file and then install 
  
 ```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
-```
+```**
