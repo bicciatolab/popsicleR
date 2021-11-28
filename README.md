@@ -8,20 +8,22 @@ Key features of `popsicleR` include:
 3. Inclusion of common single-cell visualisations (as density, scatter, and violin plots and low-dimensionality embeddings) to investigate QC-metrics and pre-processing parameters
 4. Export of visualisations as PDF images for presentation or publication use
 
-#### Availability and implementation:
-popsicleR is written in R language and is released under a GPL License. It can be downloaded from Github ([@bicciatolab/popsicleR](https://github.com/bicciatolab/popsicleR))
-
 #### Contact: 
 
 silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 
-
 # Table of Contents
 
-- `popsicleR` [installation in R](https://github.com/bicciatolab/popsicleR#popsicler-installation-in-r) 
-- `popsicleR` [installation through `conda`](https://github.com/bicciatolab/popsicleR#popsicler-installation-through-conda) 
+- [System requirements](https://github.com/bicciatolab/popsicleR#System-requirements)
+- [Installation in R](https://github.com/bicciatolab/popsicleR#installation-in-r)
+- [Installation through `conda`](https://github.com/bicciatolab/popsicleR#installation-through-conda) 
 - [Quick Start guide](https://github.com/bicciatolab/popsicleR/main/docs/Quick_Start_guide.md)
 - [Tutorial on example data](http://htmlpreview.github.io/?https://github.com/bicciatolab/popsicleR/main/docs/popsicleR_tutorial.html)
+
+## System requirements
+
+* R version: >= 3.6.3
+* Dependencies: *ape*, *celldex*, *clustree*, *crayon*, *dplyr*, *future*, *ggExtra*, *ggplot2*, *ggplotify*, *gtools*, *grid*, *gridExtra*, *limma*, *magrittrpatchwork*, *neldermead*, *RANN*, *RColorBrewer*, *reticulate*, *R.utils*, *scMCA*, *sessionumap*, *Seurat*, and *SingleR*.
 
 ## popsicleR installation in R
  
