@@ -21,7 +21,7 @@ silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 - `popsicleR` [installation in R](https://github.com/bicciatolab/popsicleR#popsicler-installation-in-r) 
 - `popsicleR` [installation through `conda`](https://github.com/bicciatolab/popsicleR#popsicler-installation-through-conda) 
 - [Quick Start guide](https://github.com/bicciatolab/popsicleR/docs/Quick_Start_guide.md)
-- [Tutorial on example data](https://github.com/bicciatolab/popsicleR/docs/popsicleR_tutorial.html)
+- [Tutorial on example data](https://htmlpreview.github.io/?https://github.com/bicciatolab/popsicleR/docs/popsicleR_tutorial.html)
 
 __________________________________________________________________
 ## popsicleR installation in R
