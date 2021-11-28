@@ -19,51 +19,66 @@ silvio.bicciato@unimore.it
 
 __________________________________________________________________
 ## popsicleR installation in R
+ 
+On a Windows or Linux machine, open your R/Rstudio and install all the required packages using these lines of code.
 
-Open your R and copy and paste on your console these lines of code to install all the required packages: 
-
-```
-install.packages("lattice")
-install.packages("session")
-
-## install packages specific versions from source:
-   
-packagesurl <- c("https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.3-2.tar.gz","https://cran.r-project.org/src/contrib/Archive/optimbase/optimbase_1.0-9.tar.gz","https://cran.r-project.org/src/contrib/Archive/optimsimplex/optimsimplex_1.0-7.tar.gz","https://cran.r-project.org/src/contrib/Archive/neldermead/neldermead_1.0-11.tar.gz")
-
-install.packages(packagesurl, repos=NULL, type="source")
-
-## Seurat
-
-install.packages("Seurat")
-
-## SingleR
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("SingleR")
-
-## devtools
-
+```r
 install.packages("devtools")
 library("devtools")
-
-## celldex and limma: 
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("celldex")
-BiocManager::install("limma")
-
-## pheatmap, scMCA, popsicleR:
-
 install_github("cran/pheatmap") 
 install_github("ggjlab/scMCA") 
 install_github("bicciatolab/popsicleR")
 ```
-or download the package.tar.gz file and then install it from local repository through the command:
-  
+`install_github` by default try to install all dependencies; but sometimes can be needed to manually install packages from specific repository. 
+
+In this cases, as a first step, check if you have already install all/some or none of these specific packages, through:
+
+```r
+requiredPackages <- c("SingleR","limma","neldermead","celldex","Matrix","optimbase","optimsimplex") 
+
+newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
+```
+`newPackages` object return a list of not already installed packages. 
+
+To install these new packages, run:
+
+```r
+specificversionDependencies <- c("Matrix","optimbase","optimsimplex","neldermead")
+
+if (length(newPackages[newPackages %in% specificversionDependencies])>0) 
+	{
+	to_install <- newPackages[newPackages %in% specificversionDependencies]
+	reorder <- match(specificversionDependencies, to_install)
+	to_install <- to_install[reorder]
+	to_install <- to_install[!is.na(to_install)]
+	packagesurl <- c("https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.3-2.tar.gz","https://cran.r-project.org/src/contrib/Archive/optimbaseoptimbase_1.0-9.tar.gz","https://cran.r-project.org/src/contrib/Archive/optimsimplex/optimsimplex_1.0-7.tar.gz","https://cran.r-project.org/src/contrib/Archive/neldermead/neldermead_1.0-11.tar.gz")
+	for (i in 1:length(to_install))	
+		{
+		source_repo <- packagesurl[grep(to_install[i], packagesurl)]
+		install.packages(source_repo, repos=NULL, type="source")
+		} 
+
+
+BiocManagerDependencies <- c("SingleR","limma", "celldex")
+
+if (length(newPackages[newPackages %in% BiocManagerDependencies])>0) 
+	{
+		to_install <- newPackages[newPackages %in% BiocManagerDependencies]
+		reorder <- match(BiocManagerDependencies, to_install)
+		to_install <- to_install[reorder]
+		to_install <- to_install[!is.na(to_install)]
+		if (!requireNamespace("BiocManager", quietly = TRUE))
+    		install.packages("BiocManager")
+    	BiocManager::install(to_install)
+	} 
+```
+
+Now you should be able to install `popsicleR` via: 
+
+```r
+install_github("bicciatolab/popsicleR")
+```
+If you had problem with this installation procedure download the package.tar.gz and go to the  [popsicleR manual installation](https://github.com/bicciatolab/popsicleR/docs/popaicleR_manual_installation.md) page: there you will find all the required packages dependencies managed and specified. Finally, install `popsicleR` from a local repository through the command:
 ```
 install.packages("/path/to/package_directory", repos = NULL, type="source")
 ```
@@ -125,7 +140,7 @@ Once created the environment, access it through the command:
 	conda activate popsicleR
 ```
 
-install `SingleR `, `celldex` and `scMCA` packages using:
+install `SingleR`, `celldex` and `scMCA` packages using:
 
 
 ```r
@@ -139,7 +154,7 @@ BiocManager::install("celldex")
 devtools::install_github("ggjlab/scMCA") 
 ```
 
-and finally, install `popsicleR ` via:
+and finally, install `popsicleR` via:
 
 ```r
 devtools::install_github("bicciatolab/popsicleR")
