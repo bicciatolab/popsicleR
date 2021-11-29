@@ -320,7 +320,7 @@ PrePlots <- function(sample_name, input_data, genelist=NULL, percentage=0.1, gen
   n_genes <- gene_filter
   # min.cells: Include features detected in at least this many cells
   # min.features: Include cells where at least this many features are detected
-  umi <- CreateSeuratObject(counts=umi_data, min.cells=n_cells, min.features=n_genes, project=sample)
+  umi <- CreateSeuratObject(counts=umi_data, min.cells=n_cells, min.features=n_genes, project=sample_name)
   Starting_Cells <- ncol(umi)
   #####################################
   ###	  calculation of QC metrics   ###
