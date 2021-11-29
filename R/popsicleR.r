@@ -313,7 +313,7 @@ PrePlots <- function(sample_name, input_data, genelist=NULL, percentage=0.1, gen
   } else {
     umi_data <- read.table(file=input_matrix, header=T, sep="\t", row.names=1) #check if 10X data or not
   }
-  ### creation of a Seurat object
+  #### creation of a Seurat object
   # Keep all genes expressed in >= ~0.1% of cells
   # Keep all cells with at least 200 detected genes
   n_cells <- round((ncol(umi_data)*percentage)/100)
