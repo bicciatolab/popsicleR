@@ -31,7 +31,7 @@ ApplyRegression(UMI, organism=c("human","mouse"), variables='none', explore_PC=F
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{Jimmy Caroli}
+\author{Jimmy Caroli, Francesco Grandi}
 \note{
 %%  ~~further notes~~
 }
@@ -42,7 +42,9 @@ ApplyRegression(UMI, organism=c("human","mouse"), variables='none', explore_PC=F
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-ApplyRegression(umi_object, 'nFeature_RNA')
+ApplyRegression(UMI= umi_object, organism= "human", variables= 'none', explore_PC=FALSE)
+
+ApplyRegression(UMI= umi_object, organism= "human", variables= c("nCount_RNA", "percent_mt", "S.Score", "G2M.Score"), explore_PC=TRUE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

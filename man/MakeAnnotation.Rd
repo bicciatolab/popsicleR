@@ -38,7 +38,7 @@ MakeAnnotation(UMI, organism=c("human","mouse"), marker.list='none', thresh=20, 
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{Jimmy Caroli}
+\author{Jimmy Caroli. Francesco Grandi}
 \note{
 %%  ~~further notes~~
 }
@@ -49,7 +49,7 @@ MakeAnnotation(UMI, organism=c("human","mouse"), marker.list='none', thresh=20, 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-MakeAnnotation(UMI, 'human', 30)
+MakeAnnotation(umi_object, organism="human", cluster_res=0.8)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

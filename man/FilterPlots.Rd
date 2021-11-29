@@ -33,7 +33,7 @@ FilterPlots(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA_hi = Inf, p
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{Jimmy Caroli}
+\author{Jimmy Caroli, Francesco Grandi}
 \note{
 %%  ~~further notes~~
 }

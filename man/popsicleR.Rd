@@ -58,17 +58,23 @@ Useful links:
 }
 }
 \examples{
-PrePlots("sample_name", input_data= "/path/to/cellranger/output/folder", genelist=c("PTPRC","CD34","PROM1","CD3D","CD3E"))
+PrePlots('breast_single_cell', input_data="/path/to/data", 0.1, 200, cellranger = TRUE, c('TP53','PTEN'), organism="human")
 
-FilterPlots(sample_name, G_RNA_low = 500, G_RNA_hi= Inf, U_RNA_low = 0, U_RNA_hi = 37000, percent_mt_hi = 10, percent_ribo_hi= 100, percent_disso_hi = 100)
+FilterPlots(umi_object, G_RNA_low = 500, G_RNA_hi= Inf, U_RNA_low = 0, U_RNA_hi = 37000, percent_mt_hi = 10, percent_ribo_hi= 100, percent_disso_hi = 100)
 
-CalculateDoublets(sample_name, dbs_thr='none', dbs_remove=TRUE)
+## first run:
 
-Normalize(sample_name, variable_genes=2000)
+umi_object <- CalculateDoublets(umi_object, dbs_thr='none', dbs_remove=FALSE)
 
-ApplyRegression(UMI= sample_name, variables= c("nCount_RNA", "percent_mt", "S.Score", "G2M.Score"), explore_PC=TRUE)
+## second run:
 
-CalculateCluster(sample_name, 12, "human")
+CalculateDoublets(umi_object, dbs_thr=0.22, dbs_remove=FALSE)
 
-MakeAnnotation(sample_name, organism="human")
+Normalize(umi_object, variable_genes=2000)
+
+ApplyRegression(UMI= umi_object, organism= "human", variables= c("nCount_RNA", "percent_mt", "S.Score", "G2M.Score"), explore_PC=TRUE)
+
+CalculateCluster(umi_object, 12, organism= "human", cluster_res= 0.8)
+
+MakeAnnotation(umi_object, organism="human", cluster_res=0.8)
 }

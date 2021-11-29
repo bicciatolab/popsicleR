@@ -28,7 +28,7 @@ Normalize(UMI, variable_genes=2000, out_folder=getwd())
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{Jimmy Caroli}
+\author{Jimmy Caroli, Francesco Grandi}
 \note{
 %%  ~~further notes~~
 }
@@ -39,6 +39,7 @@ Normalize(UMI, variable_genes=2000, out_folder=getwd())
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+seurat_object <- Normalize(seurat_object, variable_genes=2000)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

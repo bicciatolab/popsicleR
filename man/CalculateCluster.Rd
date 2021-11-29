@@ -35,7 +35,7 @@ CalculateCluster(UMI, dim_pca, organism=c("human","mouse"), marker.list='none', 
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{Jimmy Caroli}
+\author{Jimmy Caroli, Francesco Grandi}
 \note{
 %%  ~~further notes~~
 }
@@ -46,7 +46,9 @@ CalculateCluster(UMI, dim_pca, organism=c("human","mouse"), marker.list='none', 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-CalculateCluster(umi_object, 30, "human")
+CalculateCluster(umi_object, 12, organism= "human", cluster_res=c(0.4, 0.6, 0.8))
+
+CalculateCluster(umi_object, 12, organism= "human", cluster_res= 0.8)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

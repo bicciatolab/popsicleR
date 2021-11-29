@@ -35,7 +35,7 @@ PrePlots(sample_name, input_data, genelist=NULL, percentage=0.1, gene_filter=200
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{Jimmy Caroli}
+\author{Jimmy Caroli, Francesco Grandi}
 \note{
 %%  ~~further notes~~
 }
@@ -46,7 +46,7 @@ PrePlots(sample_name, input_data, genelist=NULL, percentage=0.1, gene_filter=200
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-PrePlots('breast_single_cell', TRUE, path_to_data, 0.1, 200, c('TP53','PTEN'))
+PrePlots('breast_single_cell', input_data="/path/to/data", 0.1, 200, cellranger = TRUE, c('TP53','PTEN'), organism="human")
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
