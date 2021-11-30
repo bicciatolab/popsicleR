@@ -25,8 +25,8 @@ silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 
 ## System requirements
 
-* R version: >= 3.6.3
-* Dependencies: *ape*, *celldex*, *clustree*, *corrplot*, *crayon*, *dplyr*, *future*, *ggExtra*, *ggplot2*, *ggplotify*, *gtools*, *grid*, *gridExtra*, *limma*, *magrittr*, *patchwork*, *pheatmap*, *neldermead*, *RANN*, *RColorBrewer*, *reticulate*, *R.utils*, *scMCA*, *session*, *umap*, *Seurat*, and *SingleR*.
+* R version: >= 4.0.0
+* Dependencies: *ape*, *celldex*, *clustree*, *corrplot*, *crayon*, *dplyr*, *future*, *ggExtra*, *ggplot2*, *ggplotify*, *gtools*, *grid*, *gridExtra*, *limma*, *magrittr*, *patchwork*, *pheatmap*, *neldermead*, *RANN*, *RColorBrewer*, *reticulate*, *R.utils*, *scMCA*, *session*, *shinythemes*, *umap*, *Seurat*, and *SingleR*.
 
 ## Installation in R
 
@@ -36,7 +36,7 @@ Before installing `popsicleR`, users can run the following codes to install pack
 CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape","gtools",
 "future","grid","gridExtra","magrittr","limma","patchwork",
 "crayon","ggExtra","RColorBrewer","ggplotify","RANN","umap",
-"celldex","curl","httr","lattice","session","usethis","rcmdcheck",
+"celldex","curl","httr","lattice","session","shinythemes","usethis","rcmdcheck",
 "roxygen2","rversions","devtools","pheatmap","BiocManager")
 newPackages <- CRANdep[!(CRANdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){install.packages(newPackages)}
@@ -56,7 +56,7 @@ if(length(newPackages)){
 
 BioCdep <- c("SingleR","limma","BiocFileCache","AnnotationHub","ExperimentHub", "celldex")
 newPackages <- BioCdep[!(BioCdep %in% installed.packages()[,"Package"])]
-if(length(newPackages)){BiocManager::install(to_install)}
+if(length(newPackages)){BiocManager::install(newPackages)}
 
 if(!"scMCA"%in% installed.packages()[,"Package"]){devtools::install_github("ggjlab/scMCA")}
 
