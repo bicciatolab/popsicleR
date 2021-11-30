@@ -35,10 +35,10 @@ plotGene <- function(genelist, umi, dir){
     for(gene in genelist)
     {
       if(gene %in% row.names(umi@assays$RNA@counts)) {
-        
+
         expr_gene <- paste0(gene, "_expressed")
         umi@meta.data[, expr_gene] <- ifelse(GetAssayData(object=umi, slot="counts")[gene,]>0, "TRUE", "FALSE")
-        
+
         x.zoom.genes<-2000
         x.zoom.umi<-5000
         #genes vs mt%
@@ -52,7 +52,7 @@ plotGene <- function(genelist, umi, dir){
           ggplot2::ylim(0,100) +
           ggplot2::ggtitle(" ")+
           theme(text=element_text(size=10),axis.title=element_text(size=10))+ NoLegend()
-        
+
         up1<-FeatureScatter(umi, feature1="nCount_RNA", feature2="percent_mt", pt.size=0.2,  cells=colnames(umi)[umi@meta.data[, expr_gene]=="TRUE"], col="#00BFC4") +
           ggplot2::ggtitle(" ") +
           guides(colour = guide_legend(paste0(as.character(gene),"+")))+
@@ -65,13 +65,13 @@ plotGene <- function(genelist, umi, dir){
         print(patchwork::wrap_plots(gp3+gp4+up1+up2+plot_layout(guides = 'collect'))
               + plot_annotation(title = paste0(as.character(gene),"\n(expressed in ", vars1, " cells)"),
                                 theme = theme(plot.title = element_text(hjust = 0.5, face="bold", size =16))))
-        
+
         gu1<-FeatureScatter(umi, feature1="nFeature_RNA", feature2="nCount_RNA", pt.size=0.2, cells=colnames(umi)[umi@meta.data[, expr_gene]=="TRUE"], col="#00BFC4") +
           ggplot2::ggtitle(" ") +
           theme(text=element_text(size=10),axis.title=element_text(size=10))+ NoLegend()
-        
+
         # number of genes vs single marker expression
-        
+
         mp1<-FeatureScatter(umi, feature1="nFeature_RNA", feature2=gene, pt.size=0.2, group.by=expr_gene) +
           ggplot2::ylab(paste0(as.character(gene)," counts")) +
           ggplot2::ggtitle(" ") +
@@ -86,25 +86,25 @@ plotGene <- function(genelist, umi, dir){
         print(patchwork::wrap_plots(mp1,mp2+plot_layout(guides = 'collect'), gu1, nrow=2,ncol=2)
               + plot_annotation(title = paste0(as.character(gene),"\n(expressed in ", vars1, " cells)"),
                                 theme = theme(plot.title = element_text(hjust = 0.5, face="bold", size =16))))
-        
-        
+
+
       }
     }
     invisible(dev.off())})
   cat(paste0(silver("Plots saved in: ")),bold(silver("01.QC_Plots\\01e_QC_Scatter_Check.pdf \n")))
   cat(paste0(cyan("\nNow check the graphs, choose your thresholds and then run")),bold(cyan("FilterPlots \n")))
-  
+
 }
 
 
 algo_plot_features <- function(dir, data, type, plot_name, organism){
-  
+
   if (type=="pca"){prefix <- "pc"}else{prefix <- type}
-  
+
   pdf(file.path(paste0(dir, plot_name, "_", type, "_cell_features.pdf")), width=14, height=12, useDingbats=FALSE)
   four_plots(data, type)
-  
-  
+
+
   PreA <- FeaturePlot(data, pt.size=1, features="percent_ribo", reduction=type) + ggplot2::xlab(paste0(toupper(prefix), " 1")) + ggplot2::ylab(paste0(toupper(prefix), " 2"))
   PreB <- FeaturePlot(data, pt.size=1, features="percent_disso", reduction=type) + ggplot2::xlab(paste0(toupper(prefix), " 1")) + ggplot2::ylab(paste0(toupper(prefix), ' 2'))
   if (organism == "human") {
@@ -123,7 +123,7 @@ algo_plot_features <- function(dir, data, type, plot_name, organism){
           PreD <- FeaturePlot(data, pt.size=1, features="Gapdh", reduction=type) + ggplot2::xlab(paste0(toupper(prefix), " 1")) + ggplot2::ylab(paste0(toupper(prefix), " 2")) else PreD<-ggplot()
   }
   print(patchwork::wrap_plots(PreA, PreB, PreC, PreD, ncol=2))
-  
+
   if ("doublets" %in% colnames(data@meta.data)){
     p1 <- DimPlot(data, reduction=type, group.by = "doublets", pt.size=1, cols=c("lightgrey","black"))+
       xlab(paste0(toupper(prefix), " 1")) + ylab(paste0(toupper(prefix), " 2"))
@@ -131,7 +131,7 @@ algo_plot_features <- function(dir, data, type, plot_name, organism){
       xlab(paste0(toupper(prefix), " 1")) + ylab(paste0(toupper(prefix), " 2"))
     print(patchwork::wrap_plots(p1 | p2 + plot_layout(guides = 'collect'),nrow=2))
   }
-  
+
   invisible(dev.off())
 }
 
@@ -155,45 +155,45 @@ SR_plots <- function(db_name, annot_db, data, directory, cluster_res) { ### aggi
   sc_anal <- paste0(db_name,".sc.main.labels")
   var.sc <- SingleR(test=data@assays$RNA@data, ref=annot_db, labels=annot_db$label.main, method="single")
   data[[sc_anal]] <- var.sc$labels
-  
+
   pdf(paste0(directory, "/04a_UMAP_", sc_anal, ".pdf"), width=12, height=10, useDingbats=FALSE)
   print(UMAPPlot(data, label=T, pt.size=1, group.by=sc_anal, repel=TRUE) +
           ggplot2::ggtitle(paste0(db_name," single cell annotation")) +
           ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5)) +
           ggplot2::guides(col=ggplot2::guide_legend(ncol=1))+ xlab("UMAP 1") + ylab("UMAP 2"))
   invisible(dev.off())
-  
+
   pdf(paste0(directory, "/04a_TSNE_", sc_anal, ".pdf"), width=12, height=10, useDingbats=FALSE)
   print(DimPlot(data, reduction="tsne", group.by=sc_anal, label=T, pt.size=1, repel=T) +
           ggplot2::ggtitle(paste0(db_name," single cell annotation")) +
           ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5)) +
           ggplot2::guides(col=ggplot2::guide_legend(ncol=1))+xlab("TSNE 1") + ylab("TSNE 2"))
   invisible(dev.off())
-  
-  
+
+
   if(is.null(cluster_res)) {
     sel_cluster<-"seurat_clusters"
     cl_anal <- paste0(db_name,".cl.main.labels")
     var.cl <- SingleR(test=data@assays$RNA@data, ref=annot_db, labels=annot_db$label.main, method="cluster", clusters=data@meta.data[[sel_cluster]])
     data[[cl_anal]] <- paste0(data[[]][[sel_cluster]], ":", var.cl$labels[match(data[[]][[sel_cluster]], rownames(var.cl))])
     data@meta.data[[cl_anal]]<-factor(data@meta.data[[cl_anal]], levels=mixedsort(unique(data@meta.data[[cl_anal]])))
-    
+
     pdf(paste0(directory, "/04b_UMAP_", paste0(db_name,".cl.main.labels"), ".pdf"), width=12, height=10, useDingbats=FALSE)
-    
+
     print(UMAPPlot(data, label=T, pt.size=1, group.by=cl_anal, repel=T) +
             NoLegend() +
             ggplot2::ggtitle(paste0(db_name," cluster annotation")) +
             ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5))+ xlab("UMAP 1") + ylab("UMAP 2"))
-    
+
     invisible(dev.off())
-    
+
     pdf(paste0(directory, "/04b_TSNE_", paste0(db_name,".cl.main.labels"), ".pdf"), width=12, height=10, useDingbats=FALSE)
     print(DimPlot(data, reduction="tsne", group.by=cl_anal, label=T, pt.size=1, repel=T) +
             NoLegend() +
             ggplot2::ggtitle(paste0(db_name," cluster annotation")) +
             ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5))+xlab("TSNE 1") + ylab("TSNE 2"))
     invisible(dev.off())
-    
+
   } else {
     cl_analyses<-c()
     for (res.i in cluster_res) {
@@ -204,7 +204,7 @@ SR_plots <- function(db_name, annot_db, data, directory, cluster_res) { ### aggi
       data@meta.data[[cl_anal]]<-factor(data@meta.data[[cl_anal]], levels=mixedsort(unique(data@meta.data[[cl_anal]])))
       cl_analyses<-c(cl_analyses,cl_anal)
     } #end for
-    
+
     pdf(paste0(directory, "/04b_UMAP_", paste0(db_name,".cl.main.labels"), ".pdf"), width=12, height=10, useDingbats=FALSE)
     for (cl_anal in cl_analyses) {
       print(UMAPPlot(data, label=T, pt.size=1, group.by=cl_anal, repel=T) +
@@ -213,7 +213,7 @@ SR_plots <- function(db_name, annot_db, data, directory, cluster_res) { ### aggi
               ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5))+ xlab("UMAP 1") + ylab("UMAP 2"))
     }
     invisible(dev.off())
-    
+
     pdf(paste0(directory, "/04b_TSNE_", paste0(db_name,".cl.main.labels"), ".pdf"), width=12, height=10, useDingbats=FALSE)
     for (cl_anal in cl_analyses) {
       print(DimPlot(data, reduction="tsne", group.by=cl_anal, label=T, pt.size=1, repel=T) +
@@ -223,7 +223,7 @@ SR_plots <- function(db_name, annot_db, data, directory, cluster_res) { ### aggi
     }
     invisible(dev.off())
   } #end else
-  
+
   return(data)
 }
 
@@ -297,7 +297,7 @@ annotation_plot <- function(directory, graph_value, data, redux, annotation, fil
 #' @exportPattern "^[[:alpha:]]+"
 #' @importFrom magrittr "%>%"
 #' @export
-PrePlots <- function(sample_name, input_data, genelist=NULL, percentage=0.1, gene_filter=200, cellranger=TRUE, input_matrix=NULL, organism=c("human","mouse"), out_folder=getwd()){
+PrePlots <- function(sample_name, input_data, genelist=NULL, percentage=0.1, gene_filter=200, cellranger=TRUE, organism=c("human","mouse"), out_folder=getwd()){
   ### Root directory
   root <- out_folder
   if (!file.exists(root)){dir.create(root, recursive=T)}
@@ -309,10 +309,10 @@ PrePlots <- function(sample_name, input_data, genelist=NULL, percentage=0.1, gen
   ###   dataset loading   ###
   ###########################
   if (cellranger == TRUE){
-    umi_data <- Read10X(data.dir=input_data) #check if 10X data or not
+    umi_data <- Read10X(data.dir=input_data) #check if CellRanger output
   } else {
-    umi_data <- read.table(file=input_matrix, header=T, sep="\t", row.names=1) #check if 10X data or not
-  }
+    umi_data <- read.table(file=input_data, header=T, sep="\t", row.names=1)
+  } #else stop(red("Please check your input file. Must be a CellRanger output or a .txt matrix with gene names in the first column and cell names in the first row \n"))
   #### creation of a Seurat object
   # Keep all genes expressed in >= ~0.1% of cells
   # Keep all cells with at least 200 detected genes
@@ -340,7 +340,7 @@ PrePlots <- function(sample_name, input_data, genelist=NULL, percentage=0.1, gen
     umi[["percent_mt"]] <- PercentageFeatureSet(umi, pattern = "^mt-")
     umi[["percent_ribo"]] <- PercentageFeatureSet(umi, pattern ='^Rpl|^Rps|^Mrpl|^Mrps')
     umi[["percent_disso"]] <- PercentageFeatureSet(umi, pattern = dissociation_genes)
-  }
+  } else {stop("organism must be human or mouse")}
   ### Violin Plot on number of genes, number of UMI and fraction of mitochondrial genes
   cat(bold(green("\nPlotting QC Violin plots \n")))
   suppressWarnings({pdf(paste0(QC_dir, "01a_QC_violin_plots.pdf"), width=24, useDingbats=FALSE)
@@ -425,7 +425,7 @@ FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA
   umi <- UMI
   umi$filtered <- umi$nFeature_RNA <= G_RNA_low | umi$nFeature_RNA >= G_RNA_hi | umi$percent_mt >= percent_mt_hi | umi$nCount_RNA >=  U_RNA_hi | umi$nCount_RNA <=  U_RNA_low | umi$percent_ribo >= percent_ribo_hi| umi$percent_disso >= percent_disso_hi
   cat(bold(green("The selected thresholds will filter",sum(umi$filtered) ,"cells\n")))
-  
+
   ### set thresholds vlines and hlines for ggplot
   genes.dn.lim <- ggplot2::geom_vline(xintercept=G_RNA_low, linetype="dashed", color="darkgrey")
   genes.up.lim <- ggplot2::geom_vline(xintercept=G_RNA_hi, linetype="dashed", color="darkgrey")
@@ -476,7 +476,7 @@ FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA
     print(patchwork::wrap_plots(final4 + final5 + final6 + plot_layout(guides = 'collect')))})
   invisible(dev.off())
   cat(paste0(silver("\nPlots saved in: ")),bold(silver("01.QC_Plots\\01f_final_Hist_plots.pdf \n")))
-  
+
   cat(bold(green("Plotting QC final scatter plots \n")))
   suppressWarnings({pdf(paste0(QC_dir, "/01g_final_Scatter_plots.pdf"),width=20, height=10, useDingbats=FALSE)
     plot1 <- FeatureScatter(umi, feature1="nFeature_RNA", feature2="nCount_RNA", pt.size = 0.3, group.by = "filtered")+ scale_color_manual(values = c("tomato", "#666666")) +  theme(plot.title=element_blank()) +
@@ -499,7 +499,7 @@ FilterPlots <- function(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA
                   percent_mt   < percent_mt_hi &
                   percent_ribo < percent_ribo_hi &
                   percent_disso < percent_disso_hi)
-  
+
   cat(paste0(cyan("\nNext suggested step is Doublets Calculation, run")),bold(cyan("Calculate Doublets \n")))
   cat(paste0(bold(cyan("\nWARNING: \n")),cyan("It is strictly recommended to previously run that step setting "), bold(cyan("dbs_thr ='none' ")),cyan("and "), bold(cyan("dbs_remove= FALSE. \n")), cyan("Once checked the graphs it is possible to re-run this step specifying a custom threshold \nthrough the 'dbs_thr' parameter and removing all the cells identified as doublets setting 'dbs_remove' parameter as TRUE. \n")))
   return(umi)
@@ -522,7 +522,7 @@ CalculateDoublets <- function(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=g
     ### add features to umi object
     UMI$doublets_score <- doublets$score_predicted
     UMI$doublets <- doublets$predicted
-    
+
     UMI2 <- NormalizeData(UMI, verbose=FALSE)
     UMI2 <- FindVariableFeatures(UMI2, selection.method="vst", nfeatures=2000, verbose=FALSE)
     UMI2 <- ScaleData(UMI2, vars.to.regress=NULL, verbose=FALSE)
@@ -583,11 +583,11 @@ Normalize <- function(UMI, variable_genes=2000, out_folder=getwd()){
 
 #' @export
 ApplyRegression <- function(UMI, organism=c("human","mouse"), variables='none', explore_PC=FALSE,  out_folder=getwd()){
-  
-  if(all(variables!='none') & !all(variables %in% colnames(UMI@meta.data))) {stop("specified variables are not in metadata")}
+
+  if(all(variables!='none') & !all(variables %in% colnames(UMI@meta.data))) {stop(red("ERROR: Specified variables are not in metadata field"))}
   PP_dir <- file.path(out_folder,"02.PreProcessing")
   suppressWarnings(if (!file.exists(PP_dir)){dir.create(PP_dir, recursive=T)})
-  
+
   if(!all(c("S.Score", "G2M.Score")%in%colnames(UMI@meta.data))){
     cat(bold(green("Calculating Cell Cycle Score \n")))
     if(organism == 'human') {
@@ -602,7 +602,7 @@ ApplyRegression <- function(UMI, organism=c("human","mouse"), variables='none', 
       UMI <- CellCycleScoring(UMI, s.features=m.s.genes, g2m.features=m.g2m.genes, set.ident=T)
     } else {stop("organism must be human or mouse")}
   }#end if
-  
+
   ### scaling and regression
   all.genes <- rownames(UMI)
   if (all(variables == 'none')){
@@ -638,7 +638,7 @@ ApplyRegression <- function(UMI, organism=c("human","mouse"), variables='none', 
     invisible(dev.off())
     cat(paste0(silver("Plots saved in: ")),bold(silver("02.PreProcessing dedicated subfolder \n")))
   }
-  
+
   ### PC exploration
   if (explore_PC == TRUE){
     cat(bold(green("Plotting graphs to explore PCs \n")))
@@ -664,16 +664,16 @@ ApplyRegression <- function(UMI, organism=c("human","mouse"), variables='none', 
     cat(paste0(silver("Plots saved in: ")),bold(silver("02.PreProcessing dedicated subfolder \n")))
     cat(paste0(cyan("\nOnce identified the PCs number to use in your analysis, perform clustering running "),bold(cyan("CalculateCluster \n"))))
   }
-  
+
   return(UMI)
 }
 
 #' @export
 CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.list='none', PCA=TRUE, cluster_res=0.8, out_folder=getwd()){
-  #dimpca --> numero di principal components
+  #dimpca --> number of principal components
   #cluster_res --> cluster resolution (default 0.8)
-  
-  
+
+
   Cluster_dir <- paste0(out_folder,"/03.Clustering/")
   if (!file.exists(Cluster_dir)){dir.create(Cluster_dir, recursive=T)}
   if(organism == 'human') {
@@ -727,24 +727,24 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
       markers <-read.table(paste0(signature_dir,"/",marker.list),sep="\t",header=T)
       marker.list <- as.list(markers)
     }
-  }
+  }else {stop("organism must be human or mouse")}
   ### Performing scaling and clustering based on provided inputs
   UMI <- RunUMAP(UMI, dims = 1:dim_pca, verbose=FALSE)
   UMI <- RunTSNE(UMI, dims = 1:dim_pca, verbose=FALSE)
   UMI <- FindNeighbors(UMI, dims = 1:dim_pca)
   UMI <- FindClusters(UMI, resolution = cluster_res)
-  
+
   ### plot clusters
   if(PCA == TRUE){
     algos <- c("umap","tsne","pca")
   }else{
     algos <- c("umap","tsne")
   }
-  
+
   for(algo in algos){
     algo_plot_clusters(Cluster_dir, UMI, algo, "03a", cluster_res)
   }
-  
+
   ### clustree analysis
   if (length(cluster_res)>1) {
     metadata<-UMI@meta.data
@@ -756,7 +756,7 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
     print(clustree(metadata, prefix = "RNA_snn_res."))
     dev.off()
   }
-  
+
   ### phylo tree
   pdf(paste0(Cluster_dir, "/03c_clusters_phylogenetic_tree.pdf"), width=10, height=10, useDingbats=FALSE)
   for(res.i in cluster_res) {
@@ -766,16 +766,16 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
     plot.phylo(x = data.tree, direction = "rightwards", main=paste0("phylogenetic tree of clusters @ res", res.i))
   }
   invisible(dev.off())
-  
+
   ### plot cell features
   for(algo in algos){
     algo_plot_features(Cluster_dir, UMI, algo, "03d", organism)
   }
-  
+
   ### Finding differentially expressed features (cluster biomarkers)
   # find markers for every cluster compared to all remaining cells, report only the positive ones
   # Finding cluster markers
-  
+
   ### if only one resolution has been specified
   if (length(cluster_res)==1) {
     umi.markers <- FindAllMarkers(UMI, only.pos=TRUE, min.pct=0.25, logfc.threshold=0.25)
@@ -784,10 +784,10 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
     umi.markers <- umi.markers[umi.markers$p_val_adj<=0.05,]
     top.markers.2 <- umi.markers %>% dplyr::group_by(cluster) %>% dplyr::top_n(n=2, wt=get(FC_col))
     ftp_h = 5+(0.5*length(levels((umi.markers$cluster))))
-    
+
     ### visualize markers by violin plots
     cat(bold(green("Plotting Top Markers graphs for each cluster \n")))
-    
+
     pdf(paste0(Cluster_dir, "/03e_Violin_Top_marker_genes.pdf"), width=12, height=9, useDingbats=FALSE)
     for(cluster in unique(top.markers.2$cluster)) {
       genes <- top.markers.2$gene[top.markers.2$cluster == cluster]
@@ -803,7 +803,7 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
       print(patchwork::wrap_plots(vg1, vg2, ncol=1))
     }
     invisible(dev.off())
-    
+
     ### Visualize TOP markers on a dimensional reduction plot
     pdf(paste0(Cluster_dir, "/03f_umap_Top_marker_genes.pdf"), width=14, height=7, useDingbats=FALSE)
     for(cluster in unique(top.markers.2$cluster)) {
@@ -820,7 +820,7 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
       print(patchwork::wrap_plots(vg1, vg2, ncol=2))
     }
     invisible(dev.off())
-    
+
     ### TSNE Top Markers
     pdf(paste0(Cluster_dir, "/03f_tsne_Top_marker_genes.pdf"), width=14, height=7, useDingbats=FALSE)
     for(cluster in unique(top.markers.2$cluster)) {
@@ -837,27 +837,27 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
       print(patchwork::wrap_plots(vg1, vg2, ncol=2))
     }
     invisible(dev.off())
-    
+
     ### Plotting cluster biomarkers
     ### expression heatmap
     top.markers.10 <- umi.markers %>% dplyr::group_by(cluster) %>% dplyr::top_n(n = 10, wt = get(FC_col))
     pdf(paste0(Cluster_dir, "/03g_heatmap_top.markers.pdf"), width=18, height=5+(0.5*length(levels((umi.markers$cluster)))), useDingbats=FALSE)
-    print(DoHeatmap(UMI, features=top.markers.10$gene, slot="data") + NoLegend())
+    print(DoHeatmap(UMI, features=top.markers.10$gene, slot="scale.data") + NoLegend())
     invisible(dev.off())
   }
-  
+
   ### Visualize given marker list on a dimensional reduction plot
-  
+
   marker.list <- lapply(marker.list, function(x) {x[x %in% row.names(UMI)]})
   ### remove empty lists
   marker.list <- marker.list[lapply(marker.list,length)>0]
-  
+
   #Plotting UMAP and TSNE for immune markers
   ftp_h = 8+(0.8*length(marker.list))
   cat(bold(green("Plotting Markers graphs for each cluster \n")))
   popsicleR:::FTP(UMI, Cluster_dir, "03h_", "umap", ftp_h, unlist(marker.list), "_marker_list")
   popsicleR:::FTP(UMI, Cluster_dir, "03h_", "tsne", ftp_h, unlist(marker.list), "_marker_list")
-  
+
   # larghezza va proporzionata al num di cluster. altezza al num di marker
   vln_w<-length(levels(UMI$seurat_clusters))*2
   vln_h<-round((length(unlist(marker.list))/4)*3)
@@ -868,19 +868,19 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
   }
   dev.off()
   # manca  valore risoluzione nel plot
-  
+
   markers.unlisted <-as.character(unlist(marker.list))
   width_calc<-floor(length(markers.unlisted)/2.5)
   width_sig<-ifelse(width_calc<10, 10, width_calc)
   width_sig<-ifelse(width_sig>16, 16, width_sig)
-  
+
   ### dotplot of immune markers for each cluster
   pdf(paste0(Cluster_dir, "03j_Dotplot_marker_list.pdf"), width=width_sig, height=10, useDingbats=FALSE)
   for(res.i in cluster_res) {
     print(DTP(UMI, marker.list, paste0("RNA_snn_res.",res.i)))
   }
   invisible(dev.off())
-  
+
   cat(paste0(silver("Plots saved in: ")),bold(silver("\\03.Clustering\\")), silver("folder \n"))
   cat(paste0(cyan("Next suggested step is annotation, run "),bold(cyan("MakeAnnotation \n"))))
   return(UMI)
@@ -893,7 +893,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     #cat(paste0(red("Clustering at selected resolution has not been calculated yet. Please change resolution or run "),bold(red("CalculateCluster \n"))))
     stop("Clustering at selected resolution has not been calculated yet. Please change resolution or run CalculateCluster")
   }
-  
+
   if (!file.exists(Annot_dir)){dir.create(Annot_dir, recursive=T)}
   if(organism == 'human'){
     if(marker.list == 'none'){
@@ -931,7 +931,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     width_calc<-floor(length(markers.unlisted)/2.5)
     width_sig<-ifelse(width_calc<10, 10, width_calc)
     width_sig<-ifelse(width_sig>16, 16, width_sig)
-    
+
     hpca.se <- suppressMessages(celldex::HumanPrimaryCellAtlasData())
     BpEn.se <- suppressMessages(celldex::BlueprintEncodeData())
     cat(bold(green("Plotting single cell and cluster annotations \n")))
@@ -949,7 +949,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     }
     ### corrplot
     for(single_annot in annotations){
-      
+
       pdf(paste0(Annot_dir, paste0("04e_Corrplot_clusters_vs_", single_annot, ".pdf")), width=8, height=7, useDingbats=FALSE)
       for (res in cluster_res ) {
         res.col<-paste0("RNA_snn_res.",res)
@@ -961,8 +961,8 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
       }
       invisible(dev.off())
     }
-    
-    
+
+
     cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\")), silver("folder, with the prefixes 04c and 04d \n"))
   } else if(organism == 'mouse') {
     require("scMCA")
@@ -1007,7 +1007,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     width_calc<-floor(length(markers.unlisted)/2.5)
     width_sig<-ifelse(width_calc<10, 10, width_calc)
     width_sig<-ifelse(width_sig>16, 16, width_sig)
-    
+
     ### singleR with ImmGen
     Ig.se <- suppressMessages(SingleR::ImmGenData())
     UMI <- popsicleR:::SR_plots("ImmGen", Ig.se, UMI, Annot_dir, cluster_res)
@@ -1016,7 +1016,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     matrice_norm <- as.matrix(GetAssayData(UMI))
     mca_result <- scMCA(scdata = matrice_norm, numbers_plot = 3)
     scMCA_assignment <- mca_result$scMCA
-    
+
     ### Performing data simplification
     ### simplification of labels
     simple_assignment <- do.call(rbind,strsplit(scMCA_assignment,"(", fixed=T))
@@ -1046,12 +1046,12 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     ultra_rare <- names(table(clean_labels)[table(clean_labels) < thresh])
     clean_labels[clean_labels%in%ultra_rare] <- "other"
     UMI$clean_labels <- clean_labels
-    
+
     ### Plotting annotated populations localization in TSNE, UMAP and PCA. [scMCA]
     cat(bold(green("Plotting dimensional reduction graphs for each population \n")))
     popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "UMAP", "clean_labels", "scMCA_CellPopulations")
     popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "TSNE", "clean_labels", "scMCA_CellPopulations")
-    
+
     # Plotting annotated populations localization in TSNE, UMAP and PCA. [ImmGen]
     annotations <- c("ImmGen.sc.main.labels")
      for(single_annot in annotations){
@@ -1060,19 +1060,19 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
       pdf(paste0(Annot_dir, paste0("04d_DotPlot_Markers_", single_annot, ".pdf")), width=width_sig, height=10, useDingbats=FALSE)
       print(popsicleR:::DTP(UMI, marker.list, single_annot))
       invisible(dev.off())
-    }    
+    }
 
     ## Custom DotPlot for markers
     pdf(paste0(Annot_dir, "/04d_DotPlot_Markers_scMCA.pdf"), width=width_sig, height=10, useDingbats=FALSE)
-    popsicleR:::DTP(UMI, marker.list, 'scMCA_simple')
+    print(popsicleR:::DTP(UMI, marker.list, "scMCA_simple"))
     invisible(dev.off())
 
     cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\"), silver("folder, with the prefix 04c and 04d\n")))
-       
+
 
     ### corrplot
-    for(single_annot in c(annotations,'scMCA_simple')){
-      
+    for(single_annot in c(annotations,"scMCA_simple")){
+
       pdf(paste0(Annot_dir, paste0("04e_Corrplot_clusters_vs_", single_annot, ".pdf")), width=8, height=7, useDingbats=FALSE)
       for (res in cluster_res ) {
         res.col<-paste0("RNA_snn_res.",res)
@@ -1084,10 +1084,10 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
       }
       invisible(dev.off())
     }
-    
-    
+
+
     #cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\")), silver("folder\n"))
-  }
+  }else {stop("organism must be human or mouse")}
   return(UMI)
 }
 
@@ -1117,52 +1117,52 @@ scrubDoublets <- function(exp,
                           z_score = TRUE,
                           n_prin_comps = 30,
                           verbose = TRUE){
-  
+
   if (is.null(n_neighbors)) n_neighbors <- round(0.5 * sqrt(ncol(exp)))
-  
+
   if (verbose) message(green("\nPreprocessing..."))
   E_obs <- t(exp) ### E_obs, ncell * ngene
   total_counts_obs <- apply(E_obs, 1, sum)
-  
+
   E_obs_norm <- pipeline_normalize(E_obs, total_counts_obs)
   gene_filter <- pipeline_get_filter(E_obs_norm)
   E_obs <- E_obs[,gene_filter]
   E_obs_norm <- E_obs_norm[,gene_filter]
-  
+
   if (verbose) message(green("Simulating doublets..."))
   simulateDoublets.res <- simulateDoublets(E_obs, total_counts_obs, sim_doublet_ratio, synthetic_doublet_umi_subsampling)
   E_sim <- simulateDoublets.res$E_sim
   total_counts_sim <- simulateDoublets.res$total_counts_sim
   E_obs_norm <- pipeline_normalize(E_obs, total_counts_obs, postnorm_total = 1e6)
   E_sim_norm <- pipeline_normalize(E_sim, total_counts_sim, postnorm_total = 1e6)
-  
+
   if (log_transform) {
     E_obs_norm <- pipeline_log_transform(E_obs_norm)
     E_sim_norm <- pipeline_log_transform(E_sim_norm)
   }
-  
+
   if (z_score) {
     gene_mean <- apply(E_obs_norm, 2, mean)
     gene_std <- apply(E_obs_norm, 2, sd)
     E_obs_norm <- pipeline_zscore(E_obs_norm, gene_mean, gene_std)
     E_sim_norm <- pipeline_zscore(E_sim_norm, gene_mean, gene_std)
   }
-  
+
   pca.res <- pipeline_pca(E_obs_norm, E_sim_norm, n_prin_comps)
-  
+
   if (verbose) message(green("Calculating doublet scores..."))
   doublet_scores <- calculateDoubletScores(pca.res$pca_obs, pca.res$pca_sim, n_neighbors)
-  
+
   if (is.null(doublet_score_threshold)) {
     if (verbose) message(green("Histogram of doublet scores..."))
     predicted_threshold <- histogramDoubletScores(doublet_scores$doublet_scores_obs, doublet_scores$doublet_scores_sim, directory)
     doublet_score_threshold <- predicted_threshold
   }
-  
+
   if (verbose) message(green("Call transcriptomes as doublets..."))
   predicted_doublets <- callDoublets(doublet_scores$doublet_scores_obs, doublet_scores$doublet_scores_sim, expected_doublet_rate, doublet_score_threshold, verbose)
   return(list(scrubDoublets = predicted_doublets, doublet_scores_obs = doublet_scores$doublet_scores_obs, doublet_scores_sim = doublet_scores$doublet_scores_sim))
-  
+
 }
 
 ##################################################
@@ -1172,19 +1172,19 @@ scrubDoublets <- function(exp,
 scrubDoublets_resetThreshold <- function(scrubDoublets_res,
                                          doublet_score_threshold = NULL,
                                          verbose = TRUE){
-  
+
   if(is.null(doublet_score_threshold)) message("Please set doublet_score_threshold.")
   else{
     Ld_obs <- scrubDoublets_res$doublet_scores_obs
     Ld_sim <- scrubDoublets_res$doublet_scores_sim
     threshold <- doublet_score_threshold
-    
+
     predicted_doublets <- Ld_obs > threshold
-    
+
     detected_doublet_rate <- sum(Ld_obs > threshold) / length(Ld_obs)
     detectable_doublet_fraction <- sum(Ld_sim>threshold) / length(Ld_sim)
     overall_doublet_rate <- detected_doublet_rate / detectable_doublet_fraction
-    
+
     if (verbose) {
       message(paste0("Set threshold at doublet score = ", round(doublet_score_threshold,2)))
       message(paste0("Detected doublet rate = ", 100*round(detected_doublet_rate,4), "%"))
@@ -1192,11 +1192,11 @@ scrubDoublets_resetThreshold <- function(scrubDoublets_res,
       message("Overall doublet rate:")
       message(paste0("Estimated  = ", 100*round(overall_doublet_rate,4), "%"))
     }
-    
+
     return(list(scrubDoublets = predicted_doublets, doublet_scores_obs = Ld_obs, doublet_scores_sim = Ld_sim))
-    
+
   }
-  
+
 }
 
 
@@ -1205,23 +1205,23 @@ scrubDoublets_resetThreshold <- function(scrubDoublets_res,
 ############################
 
 pipeline_normalize <- function(E, total_counts, postnorm_total = NULL){
-  
+
   if (is.null(postnorm_total)){
     total_counts_mean <- mean(total_counts)
   } else {
     total_counts_mean <- postnorm_total
   }
-  
+
   ncell <- nrow(E)
   w <- matrix(0, ncell, ncell)
   diag(w) <- total_counts_mean / total_counts
   Enorm <- w %*% E
-  
+
   return(Enorm)
 }
 
 pipeline_get_filter <- function(Enorm, min_counts = 3, min_cells = 3, min_gene_variability_pctl = 85){
-  
+
   vscores.res <- get_vscores(Enorm)
   ix2 <- vscores.res$Vscores > 0
   Vscores <- vscores.res$Vscores[ix2]
@@ -1230,29 +1230,29 @@ pipeline_get_filter <- function(Enorm, min_counts = 3, min_cells = 3, min_gene_v
   FF_gene <- vscores.res$FF_gene[ix2]
   min_vscore <- quantile(Vscores, min_gene_variability_pctl/100)
   ix <- (apply(Enorm[,gene_ix]>=min_counts, 2, sum) >= min_cells) & (Vscores >= min_vscore)
-  
+
   return(gene_ix[ix])
 }
 
 get_vscores <- function(Enorm, min_mean = 0, nBins = 50, fit_percentile = 0.1, error_wt = 1){
-  
+
   ncell <- nrow(Enorm)
   mu_gene <- apply(Enorm, 2, mean)
   gene_ix <- c(1:ncol(Enorm))[mu_gene > min_mean]
   mu_gene <- mu_gene[gene_ix]
-  
+
   tmp <- Enorm[,gene_ix]
   tmp <- tmp^2
   var_gene <- apply(tmp, 2, mean) - mu_gene^2
   FF_gene <- var_gene / mu_gene
-  
+
   data_x <- log(mu_gene)
   data_y <- log(FF_gene / mu_gene)
-  
+
   tmp <- runningquantile(data_x, data_y, fit_percentile, nBins)
   x <- tmp$xOut[!is.na(tmp$yOut)]
   y <- tmp$yOut[!is.na(tmp$yOut)]
-  
+
   gLog <- function(x0, x1, x2) log(x1 * exp(-x0) + x2)
   tmp <- log(FF_gene[mu_gene>0])
   tmp <- hist(tmp, breaks=seq(min(tmp), max(tmp), l=201), plot=F)
@@ -1265,22 +1265,22 @@ get_vscores <- function(Enorm, min_mean = 0, nBins = 50, fit_percentile = 0.1, e
   b0 <- 0.1
   b <- neldermead::fminsearch(errFun, b0)$simplexopt$x[1,]
   a <- c / (1+b) - 1
-  
+
   v_scores <- FF_gene / ((1+a)*(1+b) + b*mu_gene)
-  
+
   return(list(Vscores=v_scores, gene_ix=gene_ix, mu_gene=mu_gene, FF_gene=FF_gene, a=a, b=b))
 }
 
 runningquantile <- function(x, y, p, nBins){
-  
+
   ind <- order(x)
   x <- x[ind]
   y <- y[ind]
-  
+
   dx <- (x[length(x)] - x[1]) / nBins
   xOut <- seq(x[1]+dx/2, x[length(x)]-dx/2, len=nBins)
   yOut <- rep(0, length(xOut))
-  
+
   for (i in 1:length(xOut)){
     ind <- (x >= (xOut[i]-dx/2)) & (x < (xOut[i]+dx/2))
     if (sum(ind)>0){
@@ -1295,9 +1295,9 @@ runningquantile <- function(x, y, p, nBins){
       }
     }
   }
-  
+
   return(list(xOut=xOut, yOut=yOut))
-  
+
 }
 
 pipeline_log_transform <- function(E, pseudocount = 1){
@@ -1306,23 +1306,23 @@ pipeline_log_transform <- function(E, pseudocount = 1){
 }
 
 pipeline_zscore <- function(E, gene_mean, gene_std){
-  
+
   E <- t(sweep(E, 2, gene_mean))
-  
+
   nrow <- nrow(E)
   w <- matrix(0, nrow, nrow)
   diag(w) <- 1 / gene_std
   X <- w %*% E
-  
+
   return(t(X))
 }
 
 pipeline_pca <- function(X_obs, X_sim, n_prin_comps){
-  
+
   pca <- prcomp(X_obs, rank.=n_prin_comps)
   pca_obs <- pca$x
   pca_sim <- scale(X_sim, pca$center, pca$scale) %*% pca$rotation
-  
+
   return(list(pca_obs = pca_obs, pca_sim = pca_sim))
 }
 
@@ -1334,20 +1334,20 @@ simulateDoublets <- function(E_obs,
                              tatal_counts_obs,
                              sim_doublet_ratio = 2.0,
                              synthetic_doublet_umi_subsampling = 1.0){
-  
+
   n_obs <- nrow(E_obs)
   n_sim <- round(n_obs * sim_doublet_ratio)
-  
+
   pair_ix <- matrix(,n_sim,2)
   for(i in 1:n_sim){
     pair_ix[i,] <- sample(1:n_obs,2)
   }
-  
+
   E1 <- E_obs[pair_ix[,1],]
   E2 <- E_obs[pair_ix[,2],]
   tots1 <- tatal_counts_obs[pair_ix[,1]]
   tots2 <- tatal_counts_obs[pair_ix[,2]]
-  
+
   if (synthetic_doublet_umi_subsampling < 1){
     simulateDoublets.tmp <- subsampleCounts(E1 + E2, synthetic_doublet_umi_subsampling, tots1+tots2)
     E_sim <- simulateDoublets.tmp[[1]]
@@ -1356,9 +1356,9 @@ simulateDoublets <- function(E_obs,
     E_sim <- E1 + E2
     total_counts_sim <- tots1 + tots2
   }
-  
+
   return(list(E_sim = E_sim, total_counts_sim = total_counts_sim, pair_ix = pair_ix))
-  
+
 }
 
 subsampleCounts <- function(E, rate, original_totals){
@@ -1367,7 +1367,7 @@ subsampleCounts <- function(E, rate, original_totals){
   unsampled_orig_totals <- original_totals - current_totals
   unsampled_downsamp_totals <- rbinom(length(unsampled_orig_totals), round(unsampled_orig_totals), rate)
   final_downsamp_totals <- current_totals + unsampled_downsamp_totals
-  
+
   return(list(E, final_downsamp_totals))
 }
 
@@ -1381,44 +1381,44 @@ calculateDoubletScores <- function(pca_obs,
                                    expected_doublet_rate = 0.06,
                                    stdev_doublet_rate = 0.02,
                                    distance_metric = "euclidean"){
-  
+
   n_obs <- nrow(pca_obs)
   n_sim <- nrow(pca_sim)
   manifold <- rbind(pca_obs, pca_sim)
   doub_labels <- c(rep(0, n_obs), rep(1, n_sim))
-  
+
   # Find k_adj nearest neighbors
   k_adj <- round(n_neighbors * (1+n_sim/n_obs))
   #if (distance_metric %in% c("euclidean")) neighbors <- get.knn(manifold, k = k_adj)$nn.index
   if (distance_metric %in% c("euclidean")) neighbors <- RANN::nn2(manifold,k = k_adj)$nn.idx[,-1]
-  
+
   # Calculate doublet score based on ratio of simulated cell neighbors vs. observed cell neighbors
   doub_neigh_mask <- matrix(doub_labels[neighbors] == 1, nrow(neighbors), ncol(neighbors))
   n_sim_neigh <- apply(doub_neigh_mask, 1, sum)
   n_obs_neigh <- k_adj - n_sim_neigh
-  
+
   rho <- expected_doublet_rate
   r <- n_sim / n_obs
   nd <- n_sim_neigh
   ns <- n_obs_neigh
   N <- k_adj
-  
+
   # Bayesian
   q <- (nd+1)/(N+2)
   Ld <- q*rho/r/(1-rho-q*(1-rho-rho/r))
-  
+
   se_q <- sqrt(q*(1-q)/(N+3))
   se_rho <- stdev_doublet_rate
-  
+
   se_Ld <- q*rho/r / (1-rho-q*(1-rho-rho/r))**2 * sqrt((se_q/q*(1-rho))**2 + (se_rho/rho*(1-q))**2)
-  
+
   doublet_scores_obs <- Ld[doub_labels == 0]
   doublet_scores_sim <- Ld[doub_labels == 1]
   doublet_errors_obs <- se_Ld[doub_labels==0]
   doublet_errors_sim <- se_Ld[doub_labels==1]
-  
+
   return(list(doublet_scores_obs = doublet_scores_obs, doublet_scores_sim = doublet_scores_sim, doublet_errors_obs = doublet_errors_obs, doublet_errors_sim = doublet_errors_sim))
-  
+
 }
 
 ###################################################################
@@ -1426,31 +1426,31 @@ calculateDoubletScores <- function(pca_obs,
 ###################################################################
 
 histogramDoubletScores <- function(doublet_scores_obs, doublet_scores_sim, directory){
-  
+
   # estimate the threshold based on kmeans cluster
   km <- kmeans(doublet_scores_sim, centers=2)
   clust <- as.factor(km$cluster)
   predicted_threshold <- (max(doublet_scores_sim[clust==1]) + min(doublet_scores_sim[clust==2]))/2
-  
+
   dat_obs <- data.frame(doublet_scores = doublet_scores_obs, clust = rep(1, length(doublet_scores_obs)))
   dat_obs$clust[dat_obs$doublet_scores > predicted_threshold] <- 2
   dat_obs$clust <- factor(dat_obs$clust)
-  
+
   dat_sim <- data.frame(doublet_scores = doublet_scores_sim, clust = rep(1, length(doublet_scores_sim)))
   dat_sim$clust[dat_sim$doublet_scores > predicted_threshold] <- 2
   dat_sim$clust <- factor(dat_sim$clust)
-  
+
   cat(bold(green("\nPlotting histogram of doublet scores \n")))
   p_obs <- ggplot2::ggplot(dat_obs, aes(x = doublet_scores))
   p_obs <- p_obs + geom_histogram(aes(fill = clust), binwidth = 0.02, color = "grey50")
   p_obs <- p_obs + geom_vline(xintercept = predicted_threshold, color = "blue")
   p_obs <- p_obs + labs(x="Doublet scores", y="Counts", title="Observed Cells") + theme_classic(base_size = 10) + theme(legend.position="none") + theme(plot.title = element_text(hjust = 0.5))
-  
+
   p_sim <- ggplot2::ggplot(dat_sim, aes(x = doublet_scores))
   p_sim <- p_sim + geom_histogram(aes(fill = clust), binwidth = 0.02, color = "grey50")
   p_sim <- p_sim + geom_vline(xintercept = predicted_threshold, color = "blue")
   p_sim <- p_sim + labs(x="Doublet scores", y="Counts", title="Simulated Doublets") + theme_classic(base_size = 10) + theme(legend.position="none") + theme(plot.title = element_text(hjust = 0.5))
-  
+
   p_obs2 <- ggplot2::ggplot(dat_obs, aes(x = doublet_scores)) + stat_density(geom="line", color="red") + geom_vline(xintercept = predicted_threshold, color = "blue")
   p_obs2 <- p_obs2 + labs(x="Doublet scores", y="Density", title="") + theme_classic(base_size = 10) + theme(legend.position="none") + theme(plot.title = element_text(hjust = 0.5))
   p_sim2 <- ggplot2::ggplot(dat_sim, aes(x = doublet_scores)) + stat_density(geom="line", color="red") + geom_vline(xintercept = predicted_threshold, color = "blue")
@@ -1460,9 +1460,9 @@ histogramDoubletScores <- function(doublet_scores_obs, doublet_scores_sim, direc
   gridExtra::grid.arrange(p_obs, p_sim, p_obs2, p_sim2, nrow = 2, ncol = 2)
   dev.off()
   cat(paste0(silver("Plots saved in: ")),bold(silver("01.QC_Plots\\01i_histogram of doublet scores.pdf \n")))
-  
+
   return(predicted_threshold)
-  
+
 }
 
 ###################################################
@@ -1474,17 +1474,17 @@ callDoublets <- function(doublet_scores_obs,
                          expected_doublet_rate,
                          doublet_score_threshold,
                          verbose){
-  
+
   Ld_obs <- doublet_scores_obs
   Ld_sim <- doublet_scores_sim
   threshold <- doublet_score_threshold
-  
+
   predicted_doublets <- Ld_obs > threshold
-  
+
   detected_doublet_rate <- sum(Ld_obs > threshold) / length(Ld_obs)
   detectable_doublet_fraction <- sum(Ld_sim>threshold) / length(Ld_sim)
   overall_doublet_rate <- detected_doublet_rate / detectable_doublet_fraction
-  
+
   if (verbose) {
     message(paste0("Set threshold at doublet score = ", round(doublet_score_threshold,2)))
     message(paste0("Detected doublet rate = ", 100*round(detected_doublet_rate,4), "%"))
@@ -1493,7 +1493,7 @@ callDoublets <- function(doublet_scores_obs,
     message(paste0("Expected   = ", 100*round(expected_doublet_rate,4), "%"))
     message(paste0("Estimated  = ", 100*round(overall_doublet_rate,4), "%"))
   }
-  
+
   return(predicted_doublets)
-  
+
 }
