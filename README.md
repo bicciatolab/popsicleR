@@ -27,50 +27,46 @@ silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 ## System requirements
 
 * R version: >= 3.6.3
-* Dependencies: *ape*, *celldex*, *clustree*, *corrplot*, *crayon*, *dplyr*, *future*, *ggExtra*, *ggplot2*, *ggplotify*, *gtools*, *grid*, *gridExtra*, *limma*, *magrittr*, *patchwork*, *neldermead*, *RANN*, *RColorBrewer*, *reticulate*, *R.utils*, *scMCA*, *session*, *umap*, *Seurat*, and *SingleR*.
+* Dependencies: *ape*, *celldex*, *clustree*, *corrplot*, *crayon*, *dplyr*, *future*, *ggExtra*, *ggplot2*, *ggplotify*, *gtools*, *grid*, *gridExtra*, *limma*, *magrittr*, *patchwork*, *pheatmap*, *neldermead*, *RANN*, *RColorBrewer*, *reticulate*, *R.utils*, *scMCA*, *session*, *umap*, *Seurat*, and *SingleR*.
 
 ## Installation in R
- 
-On a Windows or Linux machine, *popsicleR* and all required packages can be installed using the following script in R/RStudio:
+
+Before installing `popsicleR`, users can run the following codes to install packages from CRAN, CRAN archive, Bioconductor, and Github required as dependencies:
 
 ```r
-install.packages("devtools")
-library("devtools")
-install_github("cran/pheatmap") 
-install_github("ggjlab/scMCA") 
-install_github("bicciatolab/popsicleR")
-```
+CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape","gtools",
+			"future","grid","gridExtra","magrittr","limma","patchwork",
+			"crayon","ggExtra","RColorBrewer","ggplotify","RANN","umap",
+			"celldex","curl","httr","lattice","session","usethis","rcmdcheck",
+			"roxygen2","rversions","devtools","pheatmap","BiocManager")
+newPackages <- CRANdep[!(CRANdep %in% installed.packages()[,"Package"])]
+if(length(newPackages)){install.packages(newPackages)}
 
-In case some dependencies are not installed automatically, you can install them by referring to the following scripts. After installing them successfully, you can install `popsicleR`.
-
-```r
-requiredPackages <- c("SingleR","limma","neldermead","celldex","Matrix","optimbase","optimsimplex") 
-
-newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
-
-specificversionDependencies <- c("Matrix","optimbase","optimsimplex","neldermead")
-
-if (length(newPackages[newPackages %in% specificversionDependencies])>0){
-	to_install <- newPackages[newPackages %in% specificversionDependencies]
-	reorder <- match(specificversionDependencies, to_install)
-	to_install <- to_install[reorder]
-	to_install <- to_install[!is.na(to_install)]
-	packagesurl <- c("https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.3-2.tar.gz","https://cran.r-project.org/src/contrib/Archive/optimbase/optimbase_1.0-9.tar.gz","https://cran.r-project.org/src/contrib/Archive/optimsimplex/optimsimplex_1.0-7.tar.gz","https://cran.r-project.org/src/contrib/Archive/neldermead/neldermead_1.0-11.tar.gz")
-	for (i in 1:length(to_install)) {
-		source_repo <- packagesurl[grep(to_install[i], packagesurl)]
+CRANarcdep <- c("Matrix","optimbase","optimsimplex","neldermead")
+newPackages <- CRANarcdep[!(CRANarcdep %in% installed.packages()[,"Package"])]
+if(length(newPackages)){
+	packagesurl <- c("https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.3-2.tar.gz",
+					"https://cran.r-project.org/src/contrib/Archive/optimbase/optimbase_1.0-9.tar.gz",
+					"https://cran.r-project.org/src/contrib/Archive/optimsimplex/optimsimplex_1.0-7.tar.gz",
+					"https://cran.r-project.org/src/contrib/Archive/neldermead/neldermead_1.0-11.tar.gz")
+	for (i in 1:length(newPackages)){
+		source_repo <- packagesurl[grep(newPackages[i], packagesurl)]
 		install.packages(source_repo, repos=NULL, type="source")
 	} 
 }
 
-BiocManagerDependencies <- c("SingleR","limma","BiocFileCache","AnnotationHub","ExperimentHub", "celldex")
-if (length(newPackages[newPackages %in% BiocManagerDependencies])>0) {
-	to_install <- newPackages[newPackages %in% BiocManagerDependencies]
-	reorder <- match(BiocManagerDependencies, to_install)
-	to_install <- to_install[reorder]
-	to_install <- to_install[!is.na(to_install)]
-	if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-	BiocManager::install(to_install)
-}
+BioCdep <- c("SingleR","limma","BiocFileCache","AnnotationHub","ExperimentHub", "celldex")
+newPackages <- BioCdep[!(BioCdep %in% installed.packages()[,"Package"])]
+if(length(newPackages)){BiocManager::install(to_install)}
+
+if(!"scMCA"%in% installed.packages()[,"Package"]){devtools::install_github("ggjlab/scMCA")}
+
+```
+ 
+Once installed all dependencies, you can install `popsicleR` with the following script:
+
+```r
+devtools::install_github("bicciatolab/popsicleR")
 ```
 
 In case of any issue with this installation procedure, it is possible to download the package.tar.gz and follow the instructions reported in the [popsicleR manual installation](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR_manual_installation.md) to installed all required package dependencies. Finally, `popsicleR` can be installed from a local repository with the following script:
@@ -143,4 +139,4 @@ or from a local repository:
  
 ```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
-```**
+```
