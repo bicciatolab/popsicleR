@@ -69,7 +69,7 @@ Once installed all dependencies, you can install `popsicleR` with the following 
 devtools::install_github("bicciatolab/popsicleR")
 ```
 
-In case of any issue with this installation procedure, it is possible to download the package.tar.gz and follow the instructions reported in the [popsicleR manual installation](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR_manual_installation.md) to installed all required package dependencies. Finally, `popsicleR` can be installed from a local repository with the following script:
+In case of any issue with installation of `popsicleR` via `install_github`, it is possible to download the package.tar.gz and install `popsicleR` from the local repository with the following script:
 
 ```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
