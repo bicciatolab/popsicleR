@@ -19,7 +19,7 @@ CalculateCluster(UMI, dim_pca, organism=c("human","mouse"), marker.list='none', 
   \item{organism}{Input organism to define the marker list to use. Can be human or mouse}
   \item{marker.list}{List of markers. Default is 'none' and a proprietary marker list is applied for the selected organism. User can fed a custom genelist specifying the file_name of a tab delimited file stored in the working directory.}
   \item{PCA}{If TRUE calculates the PCA. Default is TRUE}
-  \item{cluster_res}{Cluster resolution. Default is 0.8. User can specify, through a character vector, multiple clustering resolution to explore. When input more than one resolution, time consuming steps (e.g. Seurat::FindAllMarkers, Clustering calculation) are not performed.}
+  \item{cluster_res}{Cluster resolution. Default is 0.8. User can specify, through a vector, multiple clustering resolution to explore. When input more than one resolution, time consuming steps (e.g. Seurat::FindAllMarkers) are not performed.}
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{

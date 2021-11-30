@@ -26,9 +26,11 @@ CalculateDoublets(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=getwd())
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+The main function used to identify doublets has been modified from the R code provided at https://rdrr.io/github/ChengxiangQiu/rscrublet/ by Chengxiang Qiu \email{<cxqiu@uw.edu>} based on the method implemented in the python module Scrublet
+
+Samuel L. Wolock, Romain Lopez, Allon M. Klein, "Scrublet: Computational Identification of Cell Doublets in Single-Cell Transcriptomic Data" (2019). \emph{Cell System}, Volume \bold{8},--281-291--.e9,ISSN 2405-4712,\url{https://doi.org/10.1016/j.cels.2018.11.005.}
 }
-\author{Jimmy Caroli, Francesco Grandi}
+\author{Jimmy Caroli, Francesco Grandi, Chengxiang Qiu}
 \note{
 %%  ~~further notes~~
 }
