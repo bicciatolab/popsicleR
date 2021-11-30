@@ -35,10 +35,10 @@ Before installing `popsicleR`, users can run the following codes to install pack
 
 ```r
 CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape","gtools",
-			"future","grid","gridExtra","magrittr","limma","patchwork",
-			"crayon","ggExtra","RColorBrewer","ggplotify","RANN","umap",
-			"celldex","curl","httr","lattice","session","usethis","rcmdcheck",
-			"roxygen2","rversions","devtools","pheatmap","BiocManager")
+"future","grid","gridExtra","magrittr","limma","patchwork",
+"crayon","ggExtra","RColorBrewer","ggplotify","RANN","umap",
+"celldex","curl","httr","lattice","session","usethis","rcmdcheck",
+"roxygen2","rversions","devtools","pheatmap","BiocManager")
 newPackages <- CRANdep[!(CRANdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){install.packages(newPackages)}
 
@@ -46,9 +46,9 @@ CRANarcdep <- c("Matrix","optimbase","optimsimplex","neldermead")
 newPackages <- CRANarcdep[!(CRANarcdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){
 	packagesurl <- c("https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.3-2.tar.gz",
-					"https://cran.r-project.org/src/contrib/Archive/optimbase/optimbase_1.0-9.tar.gz",
-					"https://cran.r-project.org/src/contrib/Archive/optimsimplex/optimsimplex_1.0-7.tar.gz",
-					"https://cran.r-project.org/src/contrib/Archive/neldermead/neldermead_1.0-11.tar.gz")
+	"https://cran.r-project.org/src/contrib/Archive/optimbase/optimbase_1.0-9.tar.gz",
+	"https://cran.r-project.org/src/contrib/Archive/optimsimplex/optimsimplex_1.0-7.tar.gz",
+	"https://cran.r-project.org/src/contrib/Archive/neldermead/neldermead_1.0-11.tar.gz")
 	for (i in 1:length(newPackages)){
 		source_repo <- packagesurl[grep(newPackages[i], packagesurl)]
 		install.packages(source_repo, repos=NULL, type="source")
