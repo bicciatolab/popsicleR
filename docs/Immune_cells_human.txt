@@ -1,0 +1,10 @@
+Immune	HSC	Adult_sc	T_cell	CD4	T_ProB	T_B_CD.subset	Treg	CD8	ProB	B_cell	Plasma.Cell	Immature.B	NK	Monocyte	DC	Platelet	Erithrocyte	Endothelial	Epithelial	Fibroblast
+PTPRC	CD34	PROM1	CD3D	CD4	IL7R	CCR7	FOXP3	CD8A	MS4A1	CD19	IGHD	CD79A	GNLY	CD14	CD1E	PPBP	CD235A	MCAM	CDH1	VIM
+			CD3E							CD22	IGHM	CD38	NKG7	LYZ	FCER1A	ITGA2B	GYPA	VCAM1	CD326	PDGFRA
+			TNFRSF4											CST3			HBA-A1	VWF	EPCAM	PDGFRB
+														FCGR3A			HBA-A2	PECAM1		
+														MS4A7				SELE		
+																		CD93		
+																		NECTIN3		
+																		TEK		
+																				
