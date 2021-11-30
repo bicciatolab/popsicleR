@@ -21,7 +21,7 @@ silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 - [System requirements](https://github.com/bicciatolab/popsicleR#System-requirements)
 - [Installation in R](https://github.com/bicciatolab/popsicleR#installation-in-r)
 - [Installation through `conda`](https://github.com/bicciatolab/popsicleR#installation-through-conda) 
-- [Tutorial on example data](http://htmlpreview.github.io/?https://github.com/bicciatolab/popsicleR/main/docs/popsicleR_tutorial.html)
+- [Tutorial on example data](https://raw.githack.com/bicciatolab/popsicleR/main/docs/popsicleR_tutorial.html)
 
 ## System requirements
 
