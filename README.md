@@ -8,7 +8,7 @@ Key features of `popsicleR` include:
 3. Inclusion of common single-cell visualisations (as density, scatter, and violin plots and low-dimensionality embeddings) to investigate QC metrics and pre-processing parameters
 4. Export of visualisations as PDF images for presentation or publication use
 
-<img src="https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR_workflow.png" width="70%" alt="popsicleR-workflow" align=center>
+<img src="https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR_workflow.png" width="40%" alt="popsicleR-workflow" align=center>
 
 #### Contact: 
 
