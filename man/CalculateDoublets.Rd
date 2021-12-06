@@ -16,14 +16,17 @@ CalculateDoublets(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=getwd())
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+CalculateDoublets by default returns two graphs in the "01.QC_Plots" folder:
+
+the first (01h) allows the visualization of the cell doublets and of the doublet scores on a UMAP projection.
+
+the second (01i) returns histograms of observed and simulated doublet score distributions and the value of the automatically detected threshold for the simulated doublet score.
+
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns a Seurat Object after doublets calculation.
+
+If "dbs_remove = TRUE", cells labeled as doublets are removed from the object.
 }
 \references{
 The main function used to identify doublets has been modified from the R code provided at https://rdrr.io/github/ChengxiangQiu/rscrublet/ by Chengxiang Qiu \email{<cxqiu@uw.edu>} based on the method implemented in the python module Scrublet

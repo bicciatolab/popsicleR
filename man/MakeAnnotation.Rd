@@ -22,18 +22,24 @@ MakeAnnotation(UMI, organism=c("human","mouse"), marker.list='none', thresh=20, 
   \item{organism}{ The organism on which perfom the analysis. Can be human or mouse.}
   \item{marker.list}{ Markers list used for the plots. Must be the same used in CalculateCluster. Default uses proprietary lists.}
   \item{thresh}{ Rare population number threshold. Default is 20}
-  \item{cluster_res}{ Defines on which cluster resolution perform the annotation. Must be a clustering resolution already calculated by CalculateCluster in the previous step. Default is NULL. }
+  \item{cluster_res}{ Defines on which cluster resolution perform the annotation. Must be a clustering resolution already calculated by CalculateCluster in the previous step. Default is NULL.}
   \item{out_folder}{ Output folder. Default is the working directory}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+MakeAnnotation by default returns several graphs in the "04.Annotation" dedicated subfolder:
+
+graphs 04a, show single-cell annotations for each reference on reduced spaces projections (t-SNE and UMAP). Cells are colored according to the assigned cell type.
+
+graphs 04b, show cluster annotations for each reference on reduced spaces projections (t-SNE and UMAP). Cells are colored according to the assigned cell type.
+
+graphs 04c, report single-cell annotations for each reference on reduced spaces projections (t-SNE and UMAP). Cells are colored in red according to the assigned cell type. Each cell type is displayed individually.
+
+graphs 04d, return dot plots reporting, in the cell types assigned using the different references, the markers genelist expression.
+
+graphs 04e, are pie-chart plots displaying, for each cluster, the proportion of cells annotated with a specific label based on the different references.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns a Seurat Object after annotation.
 }
 \references{
 %% ~put references to the literature/web site here ~

@@ -19,14 +19,21 @@ ApplyRegression(UMI, organism=c("human","mouse"), variables='none', explore_PC=F
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+ApplyRegression by default returns several graphs in the "02.PreProcessing" dedicated subfolder:
+
+graph 02c, when variables on which perform regression are not specified returns, in the "No_Regression" folder, projections on reduced spaces (PCA, t-SNE, and UMAP using 20 principal components) to observe data distribution without regression.
+When variables to regress are specified returns projections on reduced spaces to inspect the effect of variable regression.
+
+graph 02d displays top genes associated with principal components.
+
+graph 02e shows a heatmap focusing on a principal component. Both cells and genes are sorted by their principal component scores.
+
+graph 02f returns the results of the JackStraw analysis for PCA significance.
+
+graph 02g reports the standard deviations of the principle components for easy identification of an elbow in the graph. This elbow often corresponds well with the significant PCs and is much faster to run.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns a Seurat Object after regression.
 }
 \references{
 %% ~put references to the literature/web site here ~

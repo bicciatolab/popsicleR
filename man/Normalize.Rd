@@ -16,14 +16,14 @@ Normalize(UMI, variable_genes=2000, out_folder=getwd())
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Normalize by default returns two graphs in the "02.PreProcessing" folder:
+
+the first graph (02a) shows expression before and after the normalization step,
+
+while the second (02b) highlights the highly variable genes.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns a Seurat Object after normalization process.
 }
 \references{
 %% ~put references to the literature/web site here ~

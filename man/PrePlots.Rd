@@ -22,14 +22,16 @@ PrePlots(sample_name, input_data, genelist=NULL, percentage=0.1, gene_filter=200
   \item{out_folder}{Output folder. Default is working directory}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+PrePlots by default returns several graphs in the "01.QC_Plots" folder:
+
+violin (1a), density (1b), and scatter (1c) plots on number of genes (nFeature_RNA), number of UMI (nCount_RNA), the percentage of reads that map to the mitochondrial genome (percent_mt), to ribosomal (percent_ribo) and dissociation genes (percent_disso).
+
+PrePlots also returns the distributions (1d) and the cell abundance (1e) of specific cell populations identified by a list of user-defined marker genes.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns a Seurat Object generated from input data.
+
+Genes expressed in less than 10 percent of cells and cells that express less than 200 genes are filtered-out from input data.
 }
 \references{
 %% ~put references to the literature/web site here ~

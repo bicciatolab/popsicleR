@@ -23,14 +23,30 @@ CalculateCluster(UMI, dim_pca, organism=c("human","mouse"), marker.list='none', 
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+CalculateCluster by default returns several graphs in the "03.Clustering" dedicated subfolder:
+
+graphs 03a, show for each user-provided clustering resolution projections on reduced spaces (PCA, t-SNE, and UMAP) colored according to the clustering.
+
+graph 03b, computed only when more clustering resolution are provided, displays a clustering tree that shows how cells are assigned to the clusters at the various clustering resolutions
+
+graph 03c, reports a phylogenetic tree showing correlation between the identified clusters for each clustering resolution.
+
+graphs 03d, explore data distribution based on QC features, MALAT1 and GAPDH expression and doublets estimation through projections on reduced spaces (PCA, t-SNE, and UMAP) final embeddings.
+
+graph 03e, computed only when a single clustering resolution is provided by the user, returns violin plots reporting the expression of the 2 top marker genes for each cluster.
+
+graphs 03f, computed only when a single clustering resolution is provided by the user, report the expression of the 2 top marker genes for each cluster on reduced spaces projections (t-SNE and UMAP).
+
+graph 03g, computed only when a single clustering resolution is provided by the user, plots a heatmap that resume for each cluster the top10-markers expression values.
+
+graphs 03h, show marker genes expression on reduced spaces projections (t-SNE and UMAP).
+
+graph 03i, returns violin plots of marker genes expression for each clustering resolution provided.
+
+graph 03j, displays dot plots reporting marker genes expression in the identified clusters for each user-provided clustering resolution.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns a Seurat Object after clustering.
 }
 \references{
 %% ~put references to the literature/web site here ~
