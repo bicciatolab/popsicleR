@@ -1,5 +1,5 @@
 ###########################################################################################
-### PopsicleR
+### popsicleR
 ###########################################################################################
 
 plotGene <- function(genelist, umi, dir){
@@ -858,7 +858,7 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
   popsicleR:::FTP(UMI, Cluster_dir, "03h_", "umap", ftp_h, unlist(marker.list), "_marker_list")
   popsicleR:::FTP(UMI, Cluster_dir, "03h_", "tsne", ftp_h, unlist(marker.list), "_marker_list")
 
-  # larghezza va proporzionata al num di cluster. altezza al num di marker
+  # width proportional to the number of clusters, height proportional to the markers number
   vln_w<-length(levels(UMI$seurat_clusters))*2
   vln_h<-round((length(unlist(marker.list))/4)*3)
   ### visualize common markers by violin plots
@@ -937,7 +937,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     cat(bold(green("Plotting single cell and cluster annotations \n")))
     UMI <- SR_plots("hpca", hpca.se, UMI, Annot_dir, cluster_res)
     UMI <- SR_plots("BpEn", BpEn.se, UMI, Annot_dir, cluster_res)
-    cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\")), silver("folder, with the prefixes 4a and 4b \n"))
+
     annotations <- c("hpca.sc.main.labels","BpEn.sc.main.labels")
     cat(bold(green("Plotting dimensional reduction graphs for each population found in the sample \n")))
     for(single_annot in annotations){
@@ -963,7 +963,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     }
 
 
-    cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\")), silver("folder, with the prefixes 04c and 04d \n"))
+    cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\")), silver("folder \n"))
   } else if(organism == 'mouse') {
     require("scMCA")
     if(marker.list == 'none'){
@@ -1008,9 +1008,12 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     width_sig<-ifelse(width_calc<10, 10, width_calc)
     width_sig<-ifelse(width_sig>16, 16, width_sig)
 
-    ### singleR with ImmGen
-    Ig.se <- suppressMessages(SingleR::ImmGenData())
+    ### singleR with ImmGen and MouseRNAseq
+    Ig.se <- suppressMessages(celldex::ImmGenData())
+    mouseRNA.se <- suppressMessages(celldex::MouseRNAseqData())
+    cat(bold(green("Plotting single cell and cluster annotations \n")))
     UMI <- popsicleR:::SR_plots("ImmGen", Ig.se, UMI, Annot_dir, cluster_res)
+    UMI <- popsicleR:::SR_plots("MouseRNAseq", mouseRNA.se, UMI, Annot_dir, cluster_res)
 
     ### run scMCA
     matrice_norm <- as.matrix(GetAssayData(UMI))
@@ -1031,15 +1034,19 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     simple_assignment <- gsub("NK CELL","NK",simple_assignment)
     UMI$scMCA <- scMCA_assignment
     UMI$scMCA_simple <- simple_assignment
-    ### Plot TSNE scMCA
-    cat(bold(green("Plotting tSNE scMCA annotation \n")))
-    pdf(paste0(Annot_dir, "/04a_tsne_scMCA_simple.pdf"), width=12, height=10, useDingbats=FALSE)
+    ### Plot TSNE and UMAP with scMCA annotation
+    pdf(paste0(Annot_dir, "/04a_TSNE_scMCA_simple.pdf"), width=12, height=10, useDingbats=FALSE)
     print(DimPlot(UMI, reduction="tsne", group.by="scMCA_simple", label=T, pt.size=1) +
             ggplot2::ggtitle(paste0("scMCA simple - "," single cell annotation")) +
             ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5)) +
             ggplot2::guides(col=ggplot2::guide_legend(ncol=1)))
     invisible(dev.off())
-    cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\")), silver("folder, with the prefix 04a \n"))
+    pdf(paste0(Annot_dir, "/04a_UMAP_scMCA_simple.pdf"), width=12, height=10, useDingbats=FALSE)
+    print(DimPlot(UMI, reduction="umap", group.by="scMCA_simple", label=T, pt.size=1) +
+            ggplot2::ggtitle(paste0("scMCA simple - "," single cell annotation")) +
+            ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5)) +
+            ggplot2::guides(col=ggplot2::guide_legend(ncol=1)))
+    invisible(dev.off())
 
     ### plot each cell type
     clean_labels <- UMI$scMCA_simple
@@ -1049,12 +1056,12 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
 
     ### Plotting annotated populations localization in TSNE, UMAP and PCA. [scMCA]
     cat(bold(green("Plotting dimensional reduction graphs for each population \n")))
-    popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "UMAP", "clean_labels", "scMCA_CellPopulations")
-    popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "TSNE", "clean_labels", "scMCA_CellPopulations")
+    popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "UMAP", "clean_labels", "CellPopulations_scMCA")
+    popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "TSNE", "clean_labels", "CellPopulations_scMCA")
 
     # Plotting annotated populations localization in TSNE, UMAP and PCA. [ImmGen]
-    annotations <- c("ImmGen.sc.main.labels")
-     for(single_annot in annotations){
+    annotations <- c("ImmGen.sc.main.labels", "MouseRNAseq.sc.main.labels")
+    for(single_annot in annotations){
       popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "UMAP", single_annot, "CellPopulations")
       popsicleR:::annotation_plot(Annot_dir, "04c_", UMI, "TSNE", single_annot, "CellPopulations")
       pdf(paste0(Annot_dir, paste0("04d_DotPlot_Markers_", single_annot, ".pdf")), width=width_sig, height=10, useDingbats=FALSE)
@@ -1067,7 +1074,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     print(popsicleR:::DTP(UMI, marker.list, "scMCA_simple"))
     invisible(dev.off())
 
-    cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\"), silver("folder, with the prefix 04c and 04d\n")))
+    cat(paste0(silver("Plots saved in: "),bold(silver("\\04.Annotation\\")), silver(" folder \n")))
 
 
     ### corrplot
@@ -1085,8 +1092,6 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
       invisible(dev.off())
     }
 
-
-    #cat(paste0(silver("Plots saved in: ")),bold(silver("\\04.Annotation\\")), silver("folder\n"))
   }else {stop("organism must be human or mouse")}
   return(UMI)
 }
