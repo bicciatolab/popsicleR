@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Normalize}
 \description{
-Perform data normalization of the provided input. User must define the number of variable genes to be investigated
+Perform data normalization on the provided input. User must define the number of variable genes to be investigated
 after normalization.
 }
 \usage{
@@ -11,12 +11,12 @@ Normalize(UMI, variable_genes=2000, out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{UMI}{Input UMI object generated via Seurat}
+  \item{UMI}{Input UMI object generated via previous popsicleR functions}
   \item{variable_genes}{Number of highly variable genes investigated after normalization. Default is 2000}
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{
-Normalize by default returns two graphs in the "02.PreProcessing" folder:
+Normalize returns two graphs in the "02.PreProcessing" folder:
 
 the first graph (02a) shows expression before and after the normalization step,
 
@@ -39,7 +39,7 @@ Returns a Seurat Object after normalization process.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-seurat_object <- Normalize(seurat_object, variable_genes=2000)
+Normalize(seurat_object, variable_genes=2000)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

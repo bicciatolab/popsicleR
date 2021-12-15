@@ -3,20 +3,20 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{CalculateDoublets}
 \description{
-Calculate and highlights doublets in the provided dataset. Generate also plots to show distribution and percentage of them.
+Calculates, highlights and optionally removes doublets in the provided dataset. This function should be run twice sequentially, first time to explore doublets distribution and subsequently to set the appropriate threshold for doublets assignment.
 }
 \usage{
 CalculateDoublets(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{UMI}{Input UMI object generated via Seurat}
+  \item{UMI}{Input UMI object generated either via previous popsicleR funtions or CalculateDoublets function}
   \item{dbs_thr}{Doublets threshold. Default is auto calculated}
   \item{dbs_remove}{Remove doublets if TRUE. Default is TRUE}
   \item{out_folder}{Output folder. Default is the working directory}
 }
 \details{
-CalculateDoublets by default returns two graphs in the "01.QC_Plots" folder:
+CalculateDoublets returns two graphs in the "01.QC_Plots" folder:
 
 the first (01h) allows the visualization of the cell doublets and of the doublet scores on a UMAP projection.
 
