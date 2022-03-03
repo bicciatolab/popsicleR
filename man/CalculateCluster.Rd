@@ -45,7 +45,7 @@ graph 03i, returns violin plots of marker genes expression for each clustering r
 
 graph 03j, displays dot plots reporting marker genes expression in the identified clusters for each user-provided clustering resolution.
 
-Graphs from 03e to 03g are computed only when a single clustering resolution is provided by the user
+Graphs from 03e to 03g are computed only when a single clustering resolution is provided by the user. popsicleR also provides a .txt file containing a marker list for each cluster. This file is computed only when a single clustering resolution is specified.
 }
 \value{
 Returns a Seurat Object after clustering.

@@ -6,12 +6,14 @@
 Calculates, highlights and optionally removes doublets in the provided dataset. This function should be run twice sequentially, first time to explore doublets distribution and subsequently to set the appropriate threshold for doublets assignment.
 }
 \usage{
-CalculateDoublets(UMI, dbs_thr='none', dbs_remove=TRUE, out_folder=getwd())
+CalculateDoublets(UMI, method=c("scrublet","scDblFinder"), dbs_thr='none', dbs_rate=NULL, dbs_remove=TRUE, out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{UMI}{Input UMI object generated either via previous popsicleR funtions or CalculateDoublets function}
-  \item{dbs_thr}{Doublets threshold. Default is auto calculated}
+  \item{method}{Method to use for doublets calculation. It can be "scrublet" or "scDblFinder". Default is "scrublet"}
+  \item{dbs_thr}{Doublets threshold. Default is auto calculated. Used only if method = "scrublet"}
+  \item{dbs_rate}{Expected doublets rate. Default is auto calculated. Used only if method = "scDblFinder"}
   \item{dbs_remove}{Remove doublets if TRUE. Default is TRUE}
   \item{out_folder}{Output folder. Default is the working directory}
 }
@@ -20,7 +22,7 @@ CalculateDoublets returns two graphs in the "01.QC_Plots" folder:
 
 the first (01h) allows the visualization of the cell doublets and of the doublet scores on a UMAP projection.
 
-the second (01i) returns histograms of observed and simulated doublet score distributions and the value of the automatically detected threshold for the simulated doublet score.
+the second (01i), computed only if method = "scrublet", returns histograms of observed and simulated doublet score distributions and the value of the automatically detected threshold for the simulated doublet score.
 
 }
 \value{
@@ -29,9 +31,11 @@ Returns a Seurat Object after doublets calculation.
 If "dbs_remove = TRUE", cells labeled as doublets are removed from the object.
 }
 \references{
-The main function used to identify doublets has been modified from the R code provided at https://rdrr.io/github/ChengxiangQiu/rscrublet/ by Chengxiang Qiu \email{<cxqiu@uw.edu>} based on the method implemented in the python module Scrublet
+The main function used to identify doublets with Scrublet has been modified from the R code provided at https://rdrr.io/github/ChengxiangQiu/rscrublet/ by Chengxiang Qiu \email{<cxqiu@uw.edu>} based on the method implemented in the python module Scrublet
 
 Samuel L. Wolock, Romain Lopez, Allon M. Klein, "Scrublet: Computational Identification of Cell Doublets in Single-Cell Transcriptomic Data" (2019). \emph{Cell System}, Volume \bold{8},--281-291--.e9,ISSN 2405-4712,\url{https://doi.org/10.1016/j.cels.2018.11.005.}
+
+Germain PL, Lun A, Macnair W and Robinson MD. Doublet identification in single-cell sequencing data using scDblFinder. \emph{F1000Research} (2021), 10:979 \url{https://doi.org/10.12688/f1000research.73600.1}
 }
 \author{Jimmy Caroli, Francesco Grandi, Chengxiang Qiu}
 \note{
@@ -45,10 +49,10 @@ Samuel L. Wolock, Romain Lopez, Allon M. Klein, "Scrublet: Computational Identif
 }
 \examples{
 ## first run:
-umi_object <- CalculateDoublets(umi_object, dbs_thr='none', dbs_remove=FALSE)
+umi_object <- CalculateDoublets(umi_object, method = "scrublet", dbs_thr='none', dbs_remove=FALSE)
 
 ## second run:
-CalculateDoublets(umi_object, dbs_thr=0.22, dbs_remove=FALSE)
+CalculateDoublets(umi_object, method = "scrublet", dbs_thr=0.22, dbs_remove=FALSE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
