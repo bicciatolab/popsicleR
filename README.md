@@ -37,7 +37,7 @@ CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape",
 "future","grid","gridExtra","magrittr","limma","patchwork",
 "crayon","ggExtra","RColorBrewer","ggplotify","RANN","umap",
 "celldex","curl","httr","lattice","session","shinythemes","usethis","rcmdcheck",
-"roxygen2","rversions","devtools","pheatmap","BiocManager", "corrplot")
+"roxygen2","rversions","devtools","pheatmap","BiocManager","corrplot")
 newPackages <- CRANdep[!(CRANdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){install.packages(newPackages)}
 
@@ -85,7 +85,7 @@ The following comands allow setting the `popsicleR` environment.
 To create the `popsicleR` environment on a Linux machine, open the terminal and run:
 
 ```bash
-conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-seuratobject=4.0.4 r-sessioninfo=1.1.1 r-seurat
+conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-corrplot=0.92 r-seuratobject=4.0.4 r-sessioninfo=1.1.1 r-seurat
 ```
 
 #### Install environment packages
@@ -116,7 +116,7 @@ Once created the environment, access it through the command:
 conda activate popsicleR
 ```
 
-and install `SingleR`, `celldex` and `scMCA` packages using:
+and install `SingleR`, `celldex`, `scDblFinder` and `scMCA` packages using:
 
 ```r
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -124,6 +124,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
 BiocManager::install("SingleR")
 BiocManager::install("celldex")
+BiocManager::install("scDblFinder")
 
 devtools::install_github("ggjlab/scMCA") 
 ```
