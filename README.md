@@ -30,7 +30,7 @@ silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 
 ## Installation in R
 
-Before installing `popsicleR`, users can run the following codes to install packages from CRAN, CRAN archive, Bioconductor, and Github required as dependencies:
+Before installing `popsicleR`, users can run the following codes to install packages from CRAN, CRAN archive, Bioconductor, and Github required as dependencies. We recommend skipping updates when prompted by R.
 
 ```r
 CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape","gtools",
@@ -40,7 +40,8 @@ CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape",
 "roxygen2","rversions","devtools","pheatmap","BiocManager","corrplot")
 newPackages <- CRANdep[!(CRANdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){install.packages(newPackages)}
-
+```
+```r
 CRANarcdep <- c("Matrix","optimbase","optimsimplex","neldermead")
 newPackages <- CRANarcdep[!(CRANarcdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){
@@ -53,11 +54,13 @@ if(length(newPackages)){
 		install.packages(source_repo, repos=NULL, type="source")
 	} 
 }
-
+```
+```r
 BioCdep <- c("SingleR","limma","BiocFileCache","AnnotationHub","ExperimentHub", "celldex", "scDblFinder")
 newPackages <- BioCdep[!(BioCdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){BiocManager::install(newPackages)}
-
+```
+```r
 if(!"scMCA"%in% installed.packages()[,"Package"]){devtools::install_github("ggjlab/scMCA")}
 
 ```
