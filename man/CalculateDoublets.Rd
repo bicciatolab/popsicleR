@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{CalculateDoublets}
 \description{
-Calculates, highlights and optionally removes doublets in the provided dataset. This function should be run twice sequentially, first time to explore doublets distribution and subsequently to set the appropriate threshold for doublets assignment.
+Calculates, highlights and optionally removes doublets in the provided dataset. This function can be run twice sequentially, first time to explore doublets graphs and subsequently to set the appropriate threshold for doublets identification.
 }
 \usage{
 CalculateDoublets(UMI, method=c("scrublet","scDblFinder"), dbs_thr='none', dbs_rate=NULL, dbs_remove=TRUE, out_folder=getwd())
