@@ -41,6 +41,9 @@ CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape",
 newPackages <- CRANdep[!(CRANdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){install.packages(newPackages)}
 
+```
+
+```r
 CRANarcdep <- c("Matrix","optimbase","optimsimplex","neldermead")
 newPackages <- CRANarcdep[!(CRANarcdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){
@@ -54,6 +57,9 @@ if(length(newPackages)){
 	} 
 }
 
+```
+
+```r
 BioCdep <- c("scDblFinder","SingleR","limma","BiocFileCache","AnnotationHub",
 "ExperimentHub","celldex")
 newPackages <- BioCdep[!(BioCdep %in% installed.packages()[,"Package"])]
