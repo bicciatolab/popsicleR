@@ -65,6 +65,10 @@ BioCdep <- c("scDblFinder","SingleR","limma","BiocFileCache","AnnotationHub",
 newPackages <- BioCdep[!(BioCdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){BiocManager::install(newPackages)}
 
+```
+
+```r
+
 if(!"scMCA"%in% installed.packages()[,"Package"]){devtools::install_github("ggjlab/scMCA")}
 
 ```
