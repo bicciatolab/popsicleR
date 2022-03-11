@@ -54,7 +54,8 @@ if(length(newPackages)){
 	} 
 }
 
-BioCdep <- c("scDblFinder","SingleR","limma","BiocFileCache","AnnotationHub","ExperimentHub","celldex")
+BioCdep <- c("scDblFinder","SingleR","limma","BiocFileCache","AnnotationHub",
+"ExperimentHub","celldex")
 newPackages <- BioCdep[!(BioCdep %in% installed.packages()[,"Package"])]
 if(length(newPackages)){BiocManager::install(newPackages)}
 
