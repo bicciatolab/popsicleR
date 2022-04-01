@@ -18,7 +18,7 @@ silvio.bicciato@unimore.it; mattia.forcato@unimore.it
 
 #### Citation:
 
-F. Grandi, J. Caroli, O. Romano, M. Marchionni, M. Forcato, S. Bicciato, popsicleR: a R Package for pre-processing and quality control analysis of single cell RNA-seq data, Journal of Molecular Biology (2022),  doi: [10.1016/j.jmb.2022.167560](https://doi.org/10.1016/j.jmb.2022.167560)
+F. Grandi, J. Caroli, O. Romano, M. Marchionni, M. Forcato, S. Bicciato, popsicleR: a R Package for pre-processing and quality control analysis of single cell RNA-seq data, _Journal of Molecular Biology_ (2022),  doi: [10.1016/j.jmb.2022.167560](https://doi.org/10.1016/j.jmb.2022.167560)
 
 # Table of Contents
 
