@@ -6,7 +6,7 @@
 Apply filters to input data. Creates plot with provided thresholds as input.
 }
 \usage{
-FilterPlots(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA_hi = Inf, percent_mt_hi = 100, percent_ribo_hi = 100, percent_ribo_hi = 100, out_folder=getwd())
+FilterPlots(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA_hi = Inf, percent_mt_hi = 100, percent_ribo_hi = 100, percent_disso_hi = 100, out_folder=getwd())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,9 +15,9 @@ FilterPlots(UMI, G_RNA_low = 0, G_RNA_hi = Inf, U_RNA_low = 0, U_RNA_hi = Inf, p
   \item{G_RNA_hi}{Maximum number of genes detected in each cell. Default is Infinite}
   \item{U_RNA_low}{Minimum number of molecules detected within a cell. Default is 0}
   \item{U_RNA_hi}{Maximum number of molecules detected within a cell. Default is Infinite}
-  \item{percent_mt}{Maximum percentage of mitochondrial genes. Default is 100}
-  \item{percent_ribo}{Maximum percentage of ribosomal genes. Default is 100}
-  \item{percent_disso}{Maximum percentage of dissociation genes. Default is 100}
+  \item{percent_mt_hi}{Maximum percentage of mitochondrial genes. Default is 100}
+  \item{percent_ribo_hi}{Maximum percentage of ribosomal genes. Default is 100}
+  \item{percent_disso_hi}{Maximum percentage of dissociation genes. Default is 100}
   \item{out_folder}{Output folder. Default is working directory}
 }
 \details{
