@@ -116,7 +116,7 @@ Since not all required packages are provided in anaconda.org, some packages must
 
 #### Install `popsicleR` environment through a .yml file
 
-`conda popsicleR` environment can also be extracted from a [popsicleR.yml file](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml). In this case, all anaconda required packages will be automatically installed. After downloading the [popsicleR.yml file](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) in the working directory (or on a specific file_path), run:
+`conda popsicleR` environment can also be extracted from a [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) file. In this case, all anaconda required packages will be automatically installed. After downloading the [popsicleR.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR.yml) file in the working directory (or on a specific file_path), run:
 
 ```bash
 conda env create -n popsicleR -f popsicleR.yml
