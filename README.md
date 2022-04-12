@@ -131,9 +131,11 @@ Once created the environment, access it through the command:
 conda activate popsicleR
 ```
 
-and install `SingleR`, `celldex`, `scDblFinder` and `scMCA` packages using:
+and install `session`, `SingleR`, `celldex`, `scDblFinder` and `scMCA` packages using:
 
 ```r
+install.packages("session")
+
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
