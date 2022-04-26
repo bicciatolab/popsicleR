@@ -1,7 +1,7 @@
 Package: popsicleR
 Type: Package
 Title: Pipeline of Preprocessing for Single Cell Experiment
-Version: 0.1.8
+Version: 0.2.0
 Author: Francesco Grandi, Jimmy Caroli, Oriana Romano, Matteo Marchionni, Mattia Forcato and Silvio Bicciato
 Description: Here we present popsicleR, a flexible R package aimed at providing most of the necessary quality controls and preliminary information for complete and detailed analysis of single cell RNA-seq data. In its workflow, popsicleR integrates all the pivotal steps necessary to assess sample quality, apply data tailored filters and perform doublets calculation and annotation analysis.
 License: GPL3
@@ -12,7 +12,7 @@ Depends:
   R.utils,
   dplyr,
   ggplot2,
-  corrplot, 
+  corrplot,
   clustree,
   ape,
   gtools,
@@ -23,14 +23,14 @@ Depends:
   gridExtra,
   magrittr,
   limma,
-  patchwork, 
-  crayon, 
-  ggExtra, 
+  patchwork,
+  crayon,
+  ggExtra,
   RColorBrewer,
   ggplotify,
   RANN,
-  neldermead, 
-  umap, 
+  neldermead,
+  umap,
   celldex,
   scDblFinder,
   scMCA

@@ -48,11 +48,17 @@ Germain PL, Lun A, Macnair W and Robinson MD. Doublet identification in single-c
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-## first run:
+## first run using scrublet:
 umi_object <- CalculateDoublets(umi_object, method = "scrublet", dbs_thr='none', dbs_remove=FALSE)
 
-## second run:
-CalculateDoublets(umi_object, method = "scrublet", dbs_thr=0.22, dbs_remove=FALSE)
+## second run using scrublet:
+CalculateDoublets(umi_object, method = "scrublet", dbs_thr=0.22, dbs_remove=TRUE)
+
+## first run using scDblFinder:
+umi_object <- CalculateDoublets(umi_object, method = "scDblFinder", dbs_rate=NULL, dbs_remove=FALSE)
+
+## second run using scDblFinder:
+CalculateDoublets(umi_object, method = "scDblFinder", dbs_rate=0.22, dbs_remove=TRUE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -17,7 +17,7 @@ CalculateCluster(UMI, dim_pca, organism=c("human","mouse"), marker.list='none', 
   \item{UMI}{Input UMI object generated via ApplyRegression function}
   \item{dim_pca}{Number of principal component to use for clustering and embeddings calculation.}
   \item{organism}{Input organism to define the marker list to use. Can be human or mouse}
-  \item{marker.list}{List of markers. Default is 'none' and a proprietary marker list is applied for the selected organism. User can fed a custom genelist specifying the file_name of a tab delimited file stored in the working directory.}
+  \item{marker.list}{List of markers. Default is 'none' and a proprietary marker list is applied for the selected organism. User can fed a custom genelist specifying the file_name of a tab delimited file stored in the working directory; first row must be a header.}
   \item{PCA}{If TRUE plots also the PCA embeddings, else only tSNE and UMAP are shown. Default is TRUE}
   \item{cluster_res}{Cluster resolution. Default is 0.8. User can specify, through a numeric vector, multiple clustering resolution to explore. When more than one resolution are specified, time consuming steps (e.g. Seurat::FindAllMarkers) are not performed.}
   \item{out_folder}{Output folder. Default is the working directory}
