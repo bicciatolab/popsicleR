@@ -16,6 +16,8 @@
 popsicleR builds on the R package Seurat and extends its functionalities with new ad hoc generated plots and calculations.
 Furthermore, popsicleR grants the possibility to investigate and analyze both human and mouse data through organism specific annotation packages.
 
+\figure{popsicle_logo.png}{options: width=200 alt "Figure: Logo_popsicleR_def.png" align= right}
+
 \bold{Functions Index:}
 \itemize{
 \item \code{\link{PrePlots}}
