@@ -91,7 +91,7 @@ In case of any issue with installation of `popsicleR` via `install_github`, it i
 ```bash
  wget https://github.com/bicciatolab/popsicleR/archive/main.tar.gz
 ```
-Then, extract the main directory (if necessary, rename the package folder from "popsicleR-main" to "popsicleR"). Moreover, the package can be manually downloaded from https://github.com/bicciatolab/popsicleR/docs/popsicleR-0.2.1.tar.gz ; in these two cases `popsicleR`must be installed from the local repository with the following script:
+Then, extract the main directory (if necessary, rename the package folder from "popsicleR-main" to "popsicleR") and install `popsicleR` from the local repository with the following script:
 
 ```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
