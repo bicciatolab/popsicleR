@@ -1,8 +1,6 @@
 # popsicleR
 
-<p align="right">
-<img src="https://github.com/bicciatolab/popsicleR/blob/main/man/figures/Logo_popsicleR.png" width="40%" alt="popsicleR-workflow">
-</p>
+<img src="="https://github.com/bicciatolab/popsicleR/blob/main/man/figures/Logo_popsicleR.png" width=20% height= 20% alt="Logo_popsicleR"  align= "right">
 
 `popsicleR` is a R package that combines methods implemented in widely used pipelines to interactively perform all major pre-processing and QC steps of scRNA-seq data analysis. The package is composed of seven functions capable of performing exploration of quality-control metrics, filtering of low-quality cells, data normalization, removal of technical and biological biases, and some basic analysis as detection of differentially expressed genes, cell clustering and cell annotation. During each step of the analysis, `popsicleR` interactively guides the user with colored text messages and saves in dedicated folders a variety of plots to investigate several QC metrics and assess the impact of filtering and regression parameters on the identification and classification of cell populations.
 
