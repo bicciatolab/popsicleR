@@ -25,7 +25,7 @@ F. Grandi, J. Caroli, O. Romano, M. Marchionni, M. Forcato, S. Bicciato, popsicl
 # Table of Contents
 
 - [System requirements](https://github.com/bicciatolab/popsicleR#System-requirements)
-- [Installation in R](https://github.com/bicciatolab/popsicleR#installation)
+- [Installation](https://github.com/bicciatolab/popsicleR#installation)
 - [Tutorial on example data](https://raw.githack.com/bicciatolab/popsicleR/main/docs/popsicleR_tutorial.html)
 
 ## System requirements
