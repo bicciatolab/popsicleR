@@ -36,66 +36,7 @@ F. Grandi, J. Caroli, O. Romano, M. Marchionni, M. Forcato, S. Bicciato, popsicl
 
 ## Installation in R
 
-Before installing `popsicleR`, users must run the following codes to install packages required as dependencies from CRAN, CRAN archive, Bioconductor, and Github. During this stage, we recommend skipping updates and the installation of `Rtools` when prompted by R.
-
-```r
-CRANdep <- c("Seurat","reticulate","R.utils","dplyr","ggplot2","clustree","ape","gtools",
-"future","grid","gridExtra","magrittr","limma","patchwork",
-"crayon","ggExtra","RColorBrewer","ggplotify","RANN","umap",
-"celldex","curl","httr","lattice","shinythemes","usethis","rcmdcheck",
-"roxygen2","rversions","devtools","pheatmap","BiocManager","corrplot")
-newPackages <- CRANdep[!(CRANdep %in% installed.packages()[,"Package"])]
-if(length(newPackages)){install.packages(newPackages)}
-
-```
-
-```r
-CRANarcdep <- c("Matrix","optimbase","optimsimplex","neldermead","session")
-newPackages <- CRANarcdep[!(CRANarcdep %in% installed.packages()[,"Package"])]
-if(length(newPackages)){
-	packagesurl <- c("https://cran.r-project.org/src/contrib/Archive/Matrix/Matrix_1.3-2.tar.gz",
-	"https://cran.r-project.org/src/contrib/Archive/optimbase/optimbase_1.0-9.tar.gz",
-	"https://cran.r-project.org/src/contrib/Archive/optimsimplex/optimsimplex_1.0-7.tar.gz",
-	"https://cran.r-project.org/src/contrib/Archive/neldermead/neldermead_1.0-11.tar.gz",
-	"https://cran.r-project.org/src/contrib/Archive/session/session_1.0.3.tar.gz")
-	for (i in 1:length(newPackages)){
-		source_repo <- packagesurl[grep(newPackages[i], packagesurl)]
-		install.packages(source_repo, repos=NULL, type="source")
-	}
-}
-
-```
-
-```r
-BioCdep <- c("SingleR","limma","BiocFileCache","AnnotationHub",
-"ExperimentHub","celldex","scDblFinder")
-newPackages <- BioCdep[!(BioCdep %in% installed.packages()[,"Package"])]
-if(length(newPackages)){BiocManager::install(newPackages)}
-
-```
-
-```r
-
-if(!"scMCA"%in% installed.packages()[,"Package"]){devtools::install_github("ggjlab/scMCA")}
-
-```
-
-Once installed all dependencies, `popsicleR` can be installed with the following script:
-
-```r
-devtools::install_github("bicciatolab/popsicleR")
-```
-
-In case of any issue with installation of `popsicleR` via `install_github`, it is possible to download the package.tar.gz using the bash command:
-
-```bash
- wget https://github.com/bicciatolab/popsicleR/archive/main.tar.gz
-```
-Finally, extract the main directory (if necessary, rename the package folder from "popsicleR-main" to "popsicleR") and install `popsicleR` from the local repository with the following script:
-
-```r
-install.packages("/path/to/package_directory", repos = NULL, type="source")
-```
+In order to avoid conflicts between package dependencies we provide here a comprehensive guide to install `popsicleR` through Anaconda platform.
 
 ## Installation through conda
 
@@ -138,12 +79,12 @@ Once created the environment, access it through the command:
 ```bash
 conda activate popsicleR
 ```
+Before installing `popsicleR`, users must run the following codes to install packages required as dependencies. 
+During this stage, we recommend skipping updates and the installation of `Rtools` when prompted by R. 
 
-and install `session`, `SingleR`, `celldex`, `scDblFinder` and `scMCA` packages using:
+Thus, open `R` and install the dependencies `SingleR`, `celldex`, `scDblFinder` from Bioconductor and `scMCA`  from Github using:
 
 ```r
-install.packages("session")
-
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -156,13 +97,25 @@ BiocManager::install("scDblFinder")
 devtools::install_github("ggjlab/scMCA")
 ```
 
+Before the last step, install `session` and `dbplyr` packages directly from CRAN archive using devtools.
+
+```r
+devtools::install_version("session", version = "1.0.3", repos = "https://cran.r-project.org/")
+devtools::install_version("dbplyr", version = "2.3.4", repos = "https://cran.r-project.org/")
+```
+
 Finally, use the following scripts to install `popsicleR` from Github :
 
 ```r
 devtools::install_github("bicciatolab/popsicleR")
 ```
+In case of any issue with installation of `popsicleR` via `install_github`, it is possible to download the package.tar.gz using the bash command:
 
-or from a local repository:
+```bash
+ wget https://github.com/bicciatolab/popsicleR/archive/main.tar.gz
+```
+
+Lately, extract the main directory (if necessary, rename the package folder from "popsicleR-main" to "popsicleR") and install `popsicleR` from the local repository with the following script:
 
 ```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
