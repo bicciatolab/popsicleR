@@ -25,8 +25,7 @@ F. Grandi, J. Caroli, O. Romano, M. Marchionni, M. Forcato, S. Bicciato, popsicl
 # Table of Contents
 
 - [System requirements](https://github.com/bicciatolab/popsicleR#System-requirements)
-- [Installation in R](https://github.com/bicciatolab/popsicleR#installation-in-r)
-- [Installation through `conda`](https://github.com/bicciatolab/popsicleR#installation-through-conda)
+- [Installation in R](https://github.com/bicciatolab/popsicleR#installation)
 - [Tutorial on example data](https://raw.githack.com/bicciatolab/popsicleR/main/docs/popsicleR_tutorial.html)
 
 ## System requirements
@@ -34,11 +33,9 @@ F. Grandi, J. Caroli, O. Romano, M. Marchionni, M. Forcato, S. Bicciato, popsicl
 * R version: >= 4.0.0
 * Dependencies: *ape*, *celldex*, *clustree*, *corrplot*, *crayon*, *dplyr*, *future*, *ggExtra*, *ggplot2*, *ggplotify*, *gtools*, *grid*, *gridExtra*, *limma*, *magrittr*, *patchwork*, *pheatmap*, *neldermead*, *RANN*, *RColorBrewer*, *reticulate*, *R.utils*, *scDblFinder*, *scMCA*, *session*, *shinythemes*, *umap*, *Seurat*, and *SingleR*.
 
-## Installation in R
+## Installation
 
 In order to avoid conflicts between package dependencies we provide here a comprehensive guide to install `popsicleR` through Anaconda platform.
-
-## Installation through conda
 
 If Anaconda is already installed, a virtual environment for `popsicleR` can be set either manually, installing all packages one by one, or automatically adding only selected packages once created the environment.
 
