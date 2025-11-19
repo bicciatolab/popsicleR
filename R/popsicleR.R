@@ -2,15 +2,70 @@
 ### popsicleR
 ###########################################################################################
 
+###########################################################################################
+### Seurat version compatibility helpers
+###########################################################################################
+
+#' Get Assay Data with version compatibility
+#'
+#' @description
+#' Wrapper function for GetAssayData that handles differences between Seurat versions.
+#' In Seurat 5+, the 'slot' parameter was replaced with 'layer'.
+#'
+#' @param object Seurat object
+#' @param assay Assay name (default: "RNA")
+#' @param slot_or_layer The slot/layer name (e.g., "counts", "data", "scale.data")
+#'
+#' @return Matrix from the specified assay slot/layer
+#'
+#' @keywords internal
+GetAssayData_compat <- function(object, assay = "RNA", slot_or_layer = "data") {
+  seurat_version <- packageVersion("Seurat")
+  
+  if (compareVersion(as.character(seurat_version), "5.0.0") >= 0) {
+    # Seurat 5+: use 'layer' parameter
+    return(GetAssayData(object, assay = assay, layer = slot_or_layer))
+  } else {
+    # Seurat < 5: use 'slot' parameter
+    return(GetAssayData(object, assay = assay, slot = slot_or_layer))
+  }
+}
+
+#' DoHeatmap with version compatibility
+#'
+#' @description
+#' Wrapper function for DoHeatmap that handles differences between Seurat versions.
+#' In Seurat 5+, the 'slot' parameter was replaced with 'layer'.
+#'
+#' @param object Seurat object
+#' @param features Features to plot
+#' @param slot_or_layer The slot/layer name (default: "scale.data")
+#' @param ... Additional arguments passed to DoHeatmap
+#'
+#' @return ggplot object
+#'
+#' @keywords internal
+DoHeatmap_compat <- function(object, features, slot_or_layer = "scale.data", ...) {
+  seurat_version <- packageVersion("Seurat")
+  
+  if (compareVersion(as.character(seurat_version), "5.0.0") >= 0) {
+    # Seurat 5+: use 'layer' parameter
+    return(DoHeatmap(object, features = features, layer = slot_or_layer, ...))
+  } else {
+    # Seurat < 5: use 'slot' parameter
+    return(DoHeatmap(object, features = features, slot = slot_or_layer, ...))
+  }
+}
+
 plotGene <- function(genelist, umi, dir){
   ### Density plot
   suppressWarnings({pdf(file.path(dir, paste0("01d_QC_Hist_Check.pdf")), useDingbats=FALSE)
     cat(bold(green("Plotting QC per gene Histograms \n")))
     for(gene in genelist)
     {
-      if(gene %in% row.names(GetAssayData(umi, assay = "RNA", slot = "counts"))) {
+      if(gene %in% row.names(GetAssayData_compat(umi, assay = "RNA", slot_or_layer = "counts"))) {
         expr_gene <- paste0(gene, "_expressed")
-        umi@meta.data[, expr_gene] <- ifelse(GetAssayData(object=umi, slot="counts")[gene,]>0, "TRUE", "FALSE")
+        umi@meta.data[, expr_gene] <- ifelse(GetAssayData_compat(object=umi, slot_or_layer="counts")[gene,]>0, "TRUE", "FALSE")
         plot.title <- "Density total genes"
         p1 <- ggplot2::ggplot(umi@meta.data, ggplot2::aes(x=nFeature_RNA, color=get(expr_gene), fill = get(expr_gene))) + ggplot2::geom_density(size=0.5, alpha=0.2) + ggplot2::ggtitle(plot.title) + theme(plot.title = element_text(hjust = 0.5, face ="bold")) + theme(axis.title.y = element_blank(),axis.text.y = element_blank(),axis.ticks.y = element_blank())
         p1 <- p1 + guides(color=guide_legend("Expressed:"), fill =guide_legend("Expressed:")) + theme(legend.title = element_text(face = "bold"),legend.title.align = 0.5)
@@ -34,10 +89,10 @@ plotGene <- function(genelist, umi, dir){
     cat(bold(green("Plotting QC per gene Scatter plots \n")))
     for(gene in genelist)
     {
-      if(gene %in% row.names(GetAssayData(umi, assay = "RNA", slot = "counts"))) {
+      if(gene %in% row.names(GetAssayData_compat(umi, assay = "RNA", slot_or_layer = "counts"))) {
 
         expr_gene <- paste0(gene, "_expressed")
-        umi@meta.data[, expr_gene] <- ifelse(GetAssayData(object=umi, slot="counts")[gene,]>0, "TRUE", "FALSE")
+        umi@meta.data[, expr_gene] <- ifelse(GetAssayData_compat(object=umi, slot_or_layer="counts")[gene,]>0, "TRUE", "FALSE")
 
         x.zoom.genes<-2000
         x.zoom.umi<-5000
@@ -151,7 +206,7 @@ algo_plot_clusters<- function(dir, data, type, plot_name, res){
 
 SR_plots <- function(db_name, annot_db, data, directory, cluster_res) { ### aggiungere BBpar per settare diversi core
   sc_anal <- paste0(db_name,".sc.main.labels")
-  var.sc <- SingleR(test=GetAssayData(data, assay = "RNA", slot = "data"), ref=annot_db, labels=annot_db$label.main, method="single")
+  var.sc <- SingleR(test=GetAssayData_compat(data, assay = "RNA", slot_or_layer = "data"), ref=annot_db, labels=annot_db$label.main, method="single")
   data[[sc_anal]] <- var.sc$labels
 
   pdf(paste0(directory, "/04a_UMAP_", sc_anal, ".pdf"), width=12, height=10, useDingbats=FALSE)
@@ -172,7 +227,7 @@ SR_plots <- function(db_name, annot_db, data, directory, cluster_res) { ### aggi
   if(is.null(cluster_res)) {
     sel_cluster<-"seurat_clusters"
     cl_anal <- paste0(db_name,".cl.main.labels")
-    var.cl <- SingleR(test=GetAssayData(data, assay = "RNA", slot = "data"), ref=annot_db, labels=annot_db$label.main, method="cluster", clusters=data@meta.data[[sel_cluster]])
+    var.cl <- SingleR(test=GetAssayData_compat(data, assay = "RNA", slot_or_layer = "data"), ref=annot_db, labels=annot_db$label.main, method="cluster", clusters=data@meta.data[[sel_cluster]])
     data[[cl_anal]] <- paste0(data[[]][[sel_cluster]], ":", var.cl$labels[match(data[[]][[sel_cluster]], rownames(var.cl))])
     data@meta.data[[cl_anal]]<-factor(data@meta.data[[cl_anal]], levels=mixedsort(unique(data@meta.data[[cl_anal]])))
 
@@ -196,7 +251,7 @@ SR_plots <- function(db_name, annot_db, data, directory, cluster_res) { ### aggi
     cl_analyses<-c()
     for (res.i in cluster_res) {
       sel_cluster<-paste0("RNA_snn_res.",res.i)
-      var.cl <- SingleR(test=GetAssayData(data, assay = "RNA", slot = "data"), ref=annot_db, labels=annot_db$label.main, method="cluster", clusters=data@meta.data[[sel_cluster]])
+      var.cl <- SingleR(test=GetAssayData_compat(data, assay = "RNA", slot_or_layer = "data"), ref=annot_db, labels=annot_db$label.main, method="cluster", clusters=data@meta.data[[sel_cluster]])
       cl_anal <- paste0(db_name,".cl.main.labels.res",res.i)
       data[[cl_anal]] <- paste0(data[[]][[sel_cluster]], ":", var.cl$labels[match(data[[]][[sel_cluster]], rownames(var.cl))])
       data@meta.data[[cl_anal]]<-factor(data@meta.data[[cl_anal]], levels=mixedsort(unique(data@meta.data[[cl_anal]])))
@@ -673,7 +728,7 @@ CalculateDoublets <- function(UMI, method=c("scrublet","scDblFinder"), dbs_thr='
   ### calculate doublets with scrublet
 
   if(dbs_thr == 'none'| !"scrublet_score" %in% colnames(UMI@meta.data)){
-    doublets <- scrubDoublets(as.matrix(GetAssayData(UMI, assay = "RNA", slot = "counts")), directory=QC_dir, expected_doublet_rate=0.1)
+    doublets <- scrubDoublets(as.matrix(GetAssayData_compat(UMI, assay = "RNA", slot_or_layer = "counts")), directory=QC_dir, expected_doublet_rate=0.1)
     names(doublets) <- c("predicted", "score_predicted", "score_simulated")
     ### if doublets exist, calculate, set to 0 otherwise
     ifelse(TRUE %in% doublets$predicted, dbs_found <- table(doublets$predicted)[[2]], dbs_found <- 0)
@@ -790,8 +845,8 @@ Normalize <- function(UMI, variable_genes=2000, out_folder=getwd()){
   cat(bold(green("\nPlotting Normalization graphs \n")))
   pdf(paste0(PP_dir, "/02a_total_expression_after_before_norm.pdf"), useDingbats=FALSE)
   par(mfrow = c(2,1))
-  hist(colSums(as.matrix(GetAssayData(umi, assay = "RNA", slot = "counts"))), breaks=100, main="Total expression before normalization", xlab="Sum of expression")
-  hist(colSums(as.matrix(GetAssayData(umi, assay = "RNA", slot = "data"))), breaks=100, main="Total expression after normalization", xlab="Sum of expression")
+  hist(colSums(as.matrix(GetAssayData_compat(umi, assay = "RNA", slot_or_layer = "counts"))), breaks=100, main="Total expression before normalization", xlab="Sum of expression")
+  hist(colSums(as.matrix(GetAssayData_compat(umi, assay = "RNA", slot_or_layer = "data"))), breaks=100, main="Total expression after normalization", xlab="Sum of expression")
   invisible(dev.off())
   cat(paste0(silver("Plots saved in: ")),bold(silver("02.PreProcessing\\02a_total_expression_after_before_norm.pdf \n")))
   umi <- FindVariableFeatures(umi, selection.method = "vst", nfeatures = variable_genes)
@@ -867,14 +922,14 @@ ApplyRegression <- function(UMI, organism=c("human","mouse"), variables='none', 
   if(!all(c("S.Score", "G2M.Score")%in%colnames(UMI@meta.data))){
     cat(bold(green("Calculating Cell Cycle Score \n")))
     if(organism == 'human') {
-      cc.genes$s.genes <- intersect(cc.genes$s.genes, row.names(GetAssayData(UMI, assay = "RNA", slot = "counts")))
-      cc.genes$g2m.genes <- intersect(cc.genes$g2m.genes, row.names(GetAssayData(UMI, assay = "RNA", slot = "counts")))
+      cc.genes$s.genes <- intersect(cc.genes$s.genes, row.names(GetAssayData_compat(UMI, assay = "RNA", slot_or_layer = "counts")))
+      cc.genes$g2m.genes <- intersect(cc.genes$g2m.genes, row.names(GetAssayData_compat(UMI, assay = "RNA", slot_or_layer = "counts")))
       UMI <- CellCycleScoring(UMI, s.features=cc.genes$s.genes, g2m.features=cc.genes$g2m.genes, set.ident=T)
     } else if(organism == 'mouse'){
       m.s.genes <- c("Mcm4", "Exo1", "Slbp", "Gmnn", "Cdc45", "Msh2", "Mcm6", "Rrm2", "Pold3", "Blm", "Ubr7", "Mcm5", "Clspn", "Hells", "Nasp", "Rpa2", "Rad51ap1", "Tyms", "Rrm1", "Rfc2", "Prim1", "Brip1", "Usp1", "Ung", "Pola1", "Mcm2", "Fen1", "Tipin", "Pcna", "Cdca7", "Uhrf1", "Casp8ap2", "Cdc6", "Dscc1", "Wdr76", "E2f8", "Dtl", "Ccne2", "Atad2", "Gins2", "Chaf1b", "Pcna-ps2")
       m.g2m.genes <- c("Nuf2", "Psrc1", "Ncapd2", "Ccnb2", "Smc4", "Lbr", "Tacc3", "Cenpa", "Kif23", "Cdca2", "Anp32e", "G2e3", "Cdca3", "Anln", "Cenpe", "Gas2l3", "Tubb4b", "Cenpf", "Dlgap5", "Hjurp", "Cks1brt", "Gtse1", "Bub1", "Birc5", "Ube2c", "Rangap1", "Hmmr", "Ect2", "Tpx2", "Ckap5", "Cbx5", "Nek2", "Ttk", "Cdca8", "Nusap1", "Ctcf", "Cdc20", "Cks2", "Mki67", "Tmpo", "Ckap2l", "Aurkb", "Kif2c", "Cdk1", "Kif20b", "Top2a", "Aurka", "Ckap2", "Hmgb2", "Cdc25c", "Ndc80", "Kif11")
-      m.s.genes <- intersect(m.s.genes, row.names(GetAssayData(UMI, assay = "RNA", slot = "counts")))
-      m.g2m.genes <- intersect(m.g2m.genes, row.names(GetAssayData(UMI, assay = "RNA", slot = "counts")))
+      m.s.genes <- intersect(m.s.genes, row.names(GetAssayData_compat(UMI, assay = "RNA", slot_or_layer = "counts")))
+      m.g2m.genes <- intersect(m.g2m.genes, row.names(GetAssayData_compat(UMI, assay = "RNA", slot_or_layer = "counts")))
       UMI <- CellCycleScoring(UMI, s.features=m.s.genes, g2m.features=m.g2m.genes, set.ident=T)
     } else {stop("organism must be human or mouse")}
   }#end if
@@ -1179,7 +1234,7 @@ CalculateCluster <- function(UMI, dim_pca, organism=c("human","mouse"), marker.l
     ### expression heatmap
     top.markers.10 <- umi.markers %>% dplyr::group_by(cluster) %>% dplyr::top_n(n = 10, wt = get(FC_col))
     pdf(paste0(Cluster_dir, "/03g_heatmap_top.markers.pdf"), width=18, height=5+(0.5*length(levels((umi.markers$cluster)))), useDingbats=FALSE)
-    print(DoHeatmap(UMI, features=top.markers.10$gene, slot="scale.data") + NoLegend())
+    print(DoHeatmap_compat(UMI, features=top.markers.10$gene, slot_or_layer="scale.data") + NoLegend())
     invisible(dev.off())
   }
 
@@ -1427,7 +1482,7 @@ MakeAnnotation <- function(UMI, organism=c("human","mouse"), marker.list='none',
     UMI <- popsicleR:::SR_plots("MouseRNAseq", mouseRNA.se, UMI, Annot_dir, cluster_res)
 
     ### run scMCA
-    matrice_norm <- as.matrix(GetAssayData(UMI))
+    matrice_norm <- as.matrix(GetAssayData_compat(UMI))
     mca_result <- scMCA(scdata = matrice_norm, numbers_plot = 3)
     scMCA_assignment <- mca_result$scMCA
 
