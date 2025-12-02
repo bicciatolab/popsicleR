@@ -35,6 +35,8 @@ F. Grandi, J. Caroli, O. Romano, M. Marchionni, M. Forcato, S. Bicciato, popsicl
 
 ## Installation
 
+The current stable version of **popsicleR** is v0.3.0
+
 In order to avoid conflicts between package dependencies we provide here a comprehensive guide to install `popsicleR` through Anaconda platform.
 
 If Anaconda is already installed, a virtual environment for `popsicleR` can be set either manually, installing all packages one by one, or automatically adding only selected packages once created the environment.
