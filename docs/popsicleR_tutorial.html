@@ -249,7 +249,7 @@ div.tocify {
 <hr />
 <style type="text/css">
 #TOC {
-  #right: 200px;
+  right: 200px;
   margin: 110px 0px 25px 0px;
 }
 </style>
@@ -279,7 +279,7 @@ setwd(main.dir)</code></pre>
 populations.markers &lt;-  c(&quot;EPCAM&quot;,&quot;VIM&quot;,&quot;COL1A1&quot;,&quot;PECAM1&quot;,&quot;PTPRC&quot;,&quot;CD3D&quot;,&quot;CD14&quot;,&quot;SFTPC&quot;)
 
 # Create a Seurat object from the raw data and visualize QC metrics
-sample.umi &lt;- PrePlots(sample = sample.name, input_data = input.data.dir, genelist = populations.markers, percentage = 0.1, gene_filter = 200, cellranger = TRUE, organism = &quot;human&quot;, out_folder = main.dir)</code></pre>
+sample.umi &lt;- PrePlots(sample_name = sample.name, input_data = input.data.dir, genelist = populations.markers, percentage = 0.1, gene_filter = 200, cellranger = TRUE, organism = &quot;human&quot;, out_folder = main.dir)</code></pre>
 <pre><code>## 
 ## Plotting QC Violin plots</code></pre>
 <pre><code>## Plots saved in:  01.QC_Plots\01a_QC_violin_plots.pdf 
@@ -540,7 +540,7 @@ sample.umi &lt;- CalculateCluster(UMI = sample.umi, dim_pca = 12, organism = &qu
 </div>
 <p><br />
 </p>
-<p>In case a single resolution is indicated, <code>CalculateCluster</code> uses the <code>FindAllMarkers</code> function of <code>Seurat</code> to determine the differentially expressed genes in the comparison between cells in each cluster and all remaining cells (cluster markers). <code>FindAllMarkers</code> is applied with the minimum fraction of cells <code>min.pct</code> in either of the two populations set to <code>0.25</code> and limiting the test to genes showing, on average, at least <code>logfc.threshold = 0.25</code> fold difference between the two groups of cells. The function returns a table, in the form of a tab-delimited file (named as <code>03_markers@res(cluster_res).txt</code>), containing, for each cluster, a list of its putative markers and their associated statistics. Expression values of the top 10 markers of each cluster are used to generate a heatmap and the expression of the top 2 markers is visualized through t-SNE, UMAP, and violin plots (<b>Figure 16</b>). In this example we select a cluster resolution equal to 0.8 (i.e.,<code>cluster_res =0.8</code>) and a list of generic markers for immune cells (<code>markers = &quot;Immune_cells_human.txt&quot;</code>) saved in the current directory as a tab delimited file (available <a href="https://github.com/bicciatolab/popsicleR/blob/main/docs/Immune_cells_human.txt">here</a>).</p>
+<p>In case a single resolution is indicated, <code>CalculateCluster</code> uses the <code>FindAllMarkers</code> function of <code>Seurat</code> to determine the differentially expressed genes in the comparison between cells in each cluster and all remaining cells (cluster markers). <code>FindAllMarkers</code> is applied with the minimum fraction of cells <code>min.pct</code> in either of the two populations set to <code>0.25</code> and limiting the test to genes showing, on average, at least <code>logfc.threshold = 0.25</code> fold difference between the two groups of cells. The function returns a table, in the form of a tab-delimited file (named as <code>03_markers@res(cluster_res).txt</code>), containing, for each cluster, a list of its putative markers and their associated statistics. Expression values of the top 10 markers of each cluster are used to generate a heatmap and the expression of the top 2 markers is visualized through t-SNE, UMAP, and violin plots (<b>Figure 16</b>). In this example we select a cluster resolution equal to 0.8 (i.e.,<code>cluster_res =0.8</code>) and a list of generic markers for immune cells (<code>markers = &quot;Immune_cells_human.txt&quot;</code>) saved in the current directory as a tab delimited file (available <a href="https://https://github.com/bicciatolab/popsicleR/tree/main/docs/Immune_cells_human.txt">here</a>).</p>
 <pre class="r"><code># Clustering at a single resolution
 sample.umi &lt;- CalculateCluster(UMI = sample.umi, dim_pca = 12, organism = &quot;human&quot;, marker.list = &quot;Immune_cells_human.txt&quot;, PCA = TRUE, cluster_res = 0.8, out_folder=main.dir)</code></pre>
 <pre><code>## Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
