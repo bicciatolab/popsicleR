@@ -46,19 +46,8 @@ The following comands allow setting the `popsicleR` environment.
 To create the `popsicleR` environment on a Linux machine, open the terminal and run:
 
 ```bash
-conda create -n popsicleR -c conda-forge r-base=4.0.3 r-umap=0.2.7.0 r-neldermead=1.0_11 r-rann=2.6.1 r-rcolorbrewer=1.1_2 r-ggextra=0.9 r-ggplotify=0.1.0 r-crayon=1.4.0 r-patchwork=1.1.1 r-magrittr=1.5 r-gridextra=2.3 r-dplyr=1.0.4 r-ggplot2=3.3.3 r-devtools=2.3.2 r-r.utils=2.10.1 r-future=1.21.0 r-reticulate=1.18 r-pheatmap=1.0.12 r-shinythemes=1.2.0 r-rcurl=1.98_1.2 r-corrplot=0.92 r-locfit=1.5_9.4 r-clustree=0.4.4 r-ape=5.6 r-seuratobject=4.0.4 r-sessioninfo=1.1.1 r-seurat
+conda create -n popsicleR -c conda-forge r-base r-umap r-neldermead r-rann r-rcolorbrewer r-ggextra r-ggplotify r-crayon r-patchwork r-magrittr r-gridextra r-dplyr r-ggplot2 r-devtools r-r.utils r-future r-reticulate r-pheatmap r-shinythemes r-rcurl r-corrplot r-locfit r-clustree r-ape r-sessioninfo r-seurat bioconda::bioconductor-singler bioconda::bioconductor-limma bioconda::bioconductor-celldex bioconda::bioconductor-scdblfinder r::r-session r-matrixstats=1.1.0 r-igraph=1.5.0
 ```
-
-#### Install environment packages
-
-From command line, use the following `conda`  commands to install packages from other channels:
-
-```bash
-conda install -n popsicleR -c r r-magrittr
-conda install -n popsicleR -c bioconda bioconductor-limma=3.46.0
-```
-
-Since not all required packages are provided in anaconda.org, some packages must be intalled directly from the R console, as described in [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r).
 
 #### Install `popsicleR` environment through a .yml file
 
@@ -68,52 +57,44 @@ Since not all required packages are provided in anaconda.org, some packages must
 conda env create -n popsicleR -f popsicleR.yml
 ```
 
-Since not all required packages are provided in anaconda.org, some packages must be intalled directly from the R console, as described in [install packages in R](https://github.com/bicciatolab/popsicleR#install-packages-in-r).
+#### Install popsicleR package from Github
 
-#### Install packages in R
 Once created the environment, access it through the command:
 
 ```bash
 conda activate popsicleR
 ```
-Before installing `popsicleR`, users must run the following codes to install packages required as dependencies. 
-During this stage, we recommend skipping updates and the installation of `Rtools` when prompted by R. 
 
-Thus, open `R` and install the dependencies `SingleR`, `celldex`, `scDblFinder` from Bioconductor and `scMCA`  from Github using:
-
-```r
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("SingleR")
-BiocManager::install("celldex")
-BiocManager::install("scDblFinder")
-```
+Before proceeding with the installation of popsicleR, scMCA package must be installed from Github repository.
+Thus, open `R` and use the following scripts to install `scMCA` package from Github:
 
 ```r
+install.packages("stringi")
 devtools::install_github("ggjlab/scMCA")
 ```
 
-Before the last step, install `session` and `dbplyr` packages directly from CRAN archive using devtools.
-
-```r
-devtools::install_version("session", version = "1.0.3", repos = "https://cran.r-project.org/")
-devtools::install_version("dbplyr", version = "2.3.4", repos = "https://cran.r-project.org/")
-```
-
-Finally, use the following scripts to install `popsicleR` from Github :
+Then, **popsicleR** package can be, similarly, installed from Github:
 
 ```r
 devtools::install_github("bicciatolab/popsicleR")
 ```
-In case of any issue with installation of `popsicleR` via `install_github`, it is possible to download the package.tar.gz using the bash command:
+
+In case of any issue with installation of `popsicleR` via `install_github`, it is possible to download the package.tar.gz from [here](https://github.com/bicciatolab/popsicleR/popsicleR_0.3.0.tar.gz) using the bash command:
 
 ```bash
- wget https://github.com/bicciatolab/popsicleR/archive/main.tar.gz
+ wget https://github.com/bicciatolab/popsicleR/popsicleR_0.3.0.tar.gz
 ```
 
 Lately, extract the main directory (if necessary, rename the package folder from "popsicleR-main" to "popsicleR") and install `popsicleR` from the local repository with the following script: 
 
 ```r
 install.packages("/path/to/package_directory", repos = NULL, type="source")
+```
+
+#### Backward compatibility with Seurat version 4
+
+Recently, **popsicleR** was updated to work with Seurat version 5.X, to ensure compatibility with the newest Seurat releases. If the old version of Seurat 4 is desired, install the conda environment using a different .yml file. After downloading the [popsicleR_Seurat4.yml](https://github.com/bicciatolab/popsicleR/blob/main/docs/popsicleR_Seurat4.yml) file in the working directory (or on a specific file_path), run:
+
+```bash
+conda env create -n popsicleR -f popsicleR_Seurat4.yml
 ```
