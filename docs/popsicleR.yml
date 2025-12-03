@@ -78,12 +78,12 @@ dependencies:
   - harfbuzz=11.4.5=h15599e2_0
   - icu=75.1=he02047a_0
   - jq=1.8.1=h73b1eb8_0
-  - kernel-headers_linux-64=6.12.0=he073ed8_3
+  - kernel-headers_linux-64=4.18.0=he073ed8_8
   - keyutils=1.6.3=hb9d3cd8_0
   - krb5=1.21.3=h659f571_0
   - ld_impl_linux-64=2.45=default_hbd61a6d_104
   - lerc=4.0.0=h0aef613_1
-  - libblas=3.11.0=2_h4a7cf45_openblas
+  - libblas=3.11.0=3_h4a7cf45_openblas
   - libcurl=8.17.0=h4e3cde8_0
   - libdeflate=1.25=h17f619e_0
   - libedit=3.1.20250104=pl5321h7949ede_0
@@ -102,7 +102,7 @@ dependencies:
   - libgomp=15.2.0=he0feb66_14
   - libiconv=1.18=h3b78370_2
   - libjpeg-turbo=3.1.2=hb03c661_0
-  - liblapack=3.11.0=2_h47877c9_openblas
+  - liblapack=3.11.0=3_h47877c9_openblas
   - liblzma=5.8.1=hb9d3cd8_2
   - libmpdec=4.0.0=hb9d3cd8_0
   - libnghttp2=1.67.0=had1ee68_0
@@ -384,7 +384,7 @@ dependencies:
   - readline=8.2=h8c095d6_2
   - sed=4.9=h6688a6e_0
   - setuptools=80.9.0=pyhff2d567_0
-  - sysroot_linux-64=2.39=hc4b9eeb_3
+  - sysroot_linux-64=2.28=h4ee821c_8
   - tk=8.6.13=noxft_ha0e22de_103
   - tktable=2.10=h8d826fa_7
   - toml=0.10.2=pyhcf101f3_3

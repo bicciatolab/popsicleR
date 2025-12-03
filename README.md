@@ -81,7 +81,7 @@ Then, **popsicleR** package can be, similarly, installed from Github:
 devtools::install_github("bicciatolab/popsicleR")
 ```
 
-In case of any issue with installation of `popsicleR` via `install_github`, it is possible to download the package.tar.gz from [here](https://github.com/bicciatolab/popsicleR/popsicleR_0.3.0.tar.gz) using the bash command:
+In case of any issue with installation of `popsicleR` via `install_github`, it is possible to download the package.tar.gz from [here](https://github.com/bicciatolab/popsicleR/blob/main/popsicleR_0.3.0.tar.gz) using the bash command:
 
 ```bash
  wget https://github.com/bicciatolab/popsicleR/popsicleR_0.3.0.tar.gz
